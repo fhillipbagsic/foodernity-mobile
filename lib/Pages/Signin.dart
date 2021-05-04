@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/styles.dart';
 
 class Signin extends StatelessWidget {
   @override
@@ -14,13 +15,13 @@ class Signin extends StatelessWidget {
           child: Column(
             children: [
               Text('Sign in to Foodernity'),
-              phoneNumberField(),
-              passwordField(),
-              forgotPassword(),
-              signinButton(),
+              _phoneNumberField(),
+              _passwordField(),
+              _forgotPassword(),
+              _signinButton(),
               Text('or'),
-              googleButton(),
-              noAccount(),
+              _googleButton(),
+              _noAccount(),
             ],
           ),
         ),
@@ -29,28 +30,31 @@ class Signin extends StatelessWidget {
   }
 }
 
-Widget phoneNumberField() {
+Widget _phoneNumberField() {
   return (TextField(
     decoration: InputDecoration(
         border: OutlineInputBorder(), labelText: 'Phone Number'),
   ));
 }
 
-Widget passwordField() {
+Widget _passwordField() {
   return (TextField(
     decoration:
         InputDecoration(border: OutlineInputBorder(), labelText: 'Password'),
   ));
 }
 
-Widget forgotPassword() {
+Widget _forgotPassword() {
   return (Align(
     alignment: Alignment.centerRight,
-    child: Text('Forgot Password?'),
+    child: Text(
+      'Forgot Password?',
+      style: TextStyle(color: ColorPrimary),
+    ),
   ));
 }
 
-Widget signinButton() {
+Widget _signinButton() {
   return (ElevatedButton(
     onPressed: () {},
     child: Row(
@@ -60,10 +64,10 @@ Widget signinButton() {
   ));
 }
 
-Widget googleButton() {
+Widget _googleButton() {
   return (OutlinedButton(
       onPressed: () {},
-      style: OutlinedButton.styleFrom(side: BorderSide(color: Colors.blue)),
+      style: OutlinedButton.styleFrom(side: BorderSide(color: ColorPrimary)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -76,6 +80,6 @@ Widget googleButton() {
       )));
 }
 
-Widget noAccount() {
+Widget _noAccount() {
   return (Text('No account yet? Sign up here'));
 }
