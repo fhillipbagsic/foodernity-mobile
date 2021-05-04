@@ -6,12 +6,12 @@ import 'package:my_app/styles.dart';
 class Listings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
+    //var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
-          physics: ClampingScrollPhysics(),
+          //physics: ClampingScrollPhysics(),
           slivers: [
             NavigationBar(
               title: 'Donations',
@@ -78,15 +78,34 @@ class ListingsContainer extends StatelessWidget {
         mainAxisSpacing: 5.0,
         crossAxisCount: 2,
         children: [
-          _listingItem(),
-          _listingItem(),
-          _listingItem(),
-          _listingItem(),
-          _listingItem(),
-          _listingItem(),
-          _listingItem(),
-          _listingItem(),
-          _listingItem()
+          _listingItem('Pancit Canton Noodles',
+              'https://c1.staticflickr.com/5/4158/33593402264_bedafb79d1_c.jpg'),
+          _listingItem('Assorted Canned Goods',
+              'https://cf.shopee.com.my/file/090a18a75c04ad1d4e0f63421a5c8651'),
+          _listingItem('Ligo Sardines',
+              'https://i.ebayimg.com/images/g/pz8AAOSwIt5enLLV/s-l300.jpg'),
+          _listingItem('1 sack rice',
+              'https://media.karousell.com/media/photos/products/2020/8/7/oishi_japanese_rice_1_sack_25k_1596774674_9992bf29_progressive.jpg'),
+          _listingItem('Butter Sticks',
+              'https://ph-test-11.slatic.net/p/abada0fd5d956a99f99d0f2ebebdd974.jpg'),
+          _listingItem('Vegetables',
+              'https://cdn.shopify.com/s/files/1/1533/6775/products/stjune11_grande.jpg?v=1613709550'),
+          _listingItem('1 tray of eggs',
+              'https://www.bultuhan.com/images/detailed/10/ZAY---F0001.jpg'),
+          _listingItem('Pancit Canton Noodles',
+              'https://c1.staticflickr.com/5/4158/33593402264_bedafb79d1_c.jpg'),
+          _listingItem('Assorted Canned Goods',
+              'https://cf.shopee.com.my/file/090a18a75c04ad1d4e0f63421a5c8651'),
+          _listingItem('Ligo Sardines',
+              'https://i.ebayimg.com/images/g/pz8AAOSwIt5enLLV/s-l300.jpg'),
+          _listingItem('1 sack rice',
+              'https://media.karousell.com/media/photos/products/2020/8/7/oishi_japanese_rice_1_sack_25k_1596774674_9992bf29_progressive.jpg'),
+          _listingItem('Butter Sticks',
+              'https://ph-test-11.slatic.net/p/abada0fd5d956a99f99d0f2ebebdd974.jpg'),
+          _listingItem('Vegetables',
+              'https://cdn.shopify.com/s/files/1/1533/6775/products/stjune11_grande.jpg?v=1613709550'),
+          _listingItem('1 tray of eggs',
+              'https://www.bultuhan.com/images/detailed/10/ZAY---F0001.jpg'),
         ],
       )),
     );
@@ -105,10 +124,10 @@ class ListingsContainer extends StatelessWidget {
 //   );
 // }
 
-Widget _listingItem() {
+Widget _listingItem(name, image) {
   // name, image, distance, time
-  // var donationImage = image;
-  // var donationName = name;
+  var donationImage = image;
+  var donationName = name;
   // var donationDistance = distance;
   // var donationTime = time;
 
@@ -122,8 +141,7 @@ Widget _listingItem() {
             fit: BoxFit.fitWidth,
             height: 130,
             width: double.infinity,
-            image: NetworkImage(
-                'https://c1.staticflickr.com/5/4158/33593402264_bedafb79d1_c.jpg'),
+            image: NetworkImage(donationImage),
           ),
         ),
         SizedBox(
@@ -135,7 +153,7 @@ Widget _listingItem() {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Pancit Canton Noodles',
+                donationName,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 14.0,
