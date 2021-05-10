@@ -3,20 +3,39 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
 import 'package:my_app/styles.dart';
 
-class Listings extends StatelessWidget {
+class Listings extends StatefulWidget {
+  @override
+  _ListingsState createState() => _ListingsState();
+}
+
+class _ListingsState extends State<Listings> {
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
-    //var width = MediaQuery.of(context).size.width;
-
     return Scaffold(
+      endDrawer: AccountDrawer(),
+      key: scaffoldKey,
       body: SafeArea(
         child: CustomScrollView(
           //physics: ClampingScrollPhysics(),
           slivers: [
             NavigationBar(
               title: 'Donations',
+              scaffold: scaffoldKey,
             ),
-            _container(),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _filter(context),
+                    _listingCount(),
+                  ],
+                ),
+              ),
+            ),
             ListingsContainer()
           ],
         ),
@@ -30,31 +49,68 @@ class Listings extends StatelessWidget {
   }
 }
 
-Widget _container() {
-  return (SliverToBoxAdapter(
-    child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _filter(),
-          _listingCount(),
-        ],
-      ),
-    ),
-  ));
-}
-
-Widget _filter() {
+Widget _filter(context) {
   return (Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Row(
-        children: [Text('Available Now'), Icon(Icons.arrow_drop_down)],
+      GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return _filterPicker();
+              });
+        },
+        child: Row(
+          children: [Text('Available Now'), Icon(Icons.arrow_drop_down)],
+        ),
       ),
-      TextButton(onPressed: () {}, child: Text('FILTER')),
+      TextButton(
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                builder: (BuildContext context) {
+                  return (_filterSheet());
+                });
+          },
+          child: Text('FILTER')),
     ],
   ));
+}
+
+Widget _filterPicker() {
+  return Container(
+    height: 250.0,
+    child: (CupertinoPicker(
+      useMagnifier: true,
+      onSelectedItemChanged: (index) {},
+      itemExtent: 50.0,
+      backgroundColor: Colors.white,
+      children: [
+        Center(child: Text('Available Now')),
+        Center(child: Text('Suggested')),
+        Center(child: Text('Nearest')),
+      ],
+    )),
+  );
+}
+
+Widget _filterSheet() {
+  return Container(
+    height: 500.0,
+    child: (Column(
+      children: [
+        // Text('My Location'),
+        // ListTile(
+        //   leading: Icon(
+        //     Icons.location_on_rounded,
+        //   ),
+        //   title: Text('Bali Oasis, Pasig'),
+        //   trailing: Icon(Icons.edit_rounded),
+        // )
+      ],
+    )),
+  );
 }
 
 Widget _listingCount() {
@@ -111,18 +167,6 @@ class ListingsContainer extends StatelessWidget {
     );
   }
 }
-
-// Widget _listingsContainer() {
-//   return SliverPadding(
-//     padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
-//     sliver: (SliverGrid.count(
-//       crossAxisSpacing: 5.0,
-//       mainAxisSpacing: 5.0,
-//       crossAxisCount: 2,
-//       children: [_listingItem(), _listingItem(), _listingItem()],
-//     )),
-//   );
-// }
 
 Widget _listingItem(name, image) {
   // name, image, distance, time

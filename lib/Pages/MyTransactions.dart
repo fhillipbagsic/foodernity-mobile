@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
 
-class Forum extends StatelessWidget {
+class MyTransactions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,9 +9,9 @@ class Forum extends StatelessWidget {
         child: CustomScrollView(
           physics: ClampingScrollPhysics(),
           slivers: [
-            NavigationBar(
-              title: 'Forum',
-            )
+            NavigationBar2(
+              title: 'My Transactions',
+            ),
           ],
         ),
       ),
