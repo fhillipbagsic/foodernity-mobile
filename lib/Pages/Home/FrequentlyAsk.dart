@@ -1,41 +1,89 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/Models/Item.dart';
+import 'package:my_app/Pages/RequestDonation.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
+import 'package:my_app/Pages/PostDonation/PostDonation.dart';
+import 'package:my_app/Pages/Home.dart';
 
-class AddListing extends StatefulWidget {
+class FrequentlyAsk extends StatefulWidget {
+  static String routeName = "/FrequentlyAsk";
   @override
-  _AddListingState createState() => _AddListingState();
+  _FrequentlyAskState createState() => _FrequentlyAskState();
 }
 
-class _AddListingState extends State<AddListing> {
+class _FrequentlyAskState extends State<FrequentlyAsk> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           physics: ClampingScrollPhysics(),
-          slivers: [_navigationBar(), _agreementDescription(), AgreementList()],
+          slivers: [
+            _navigationBar(context),
+            _agreementDescription(),
+            AgreementList()
+          ],
         ),
       ),
     );
   }
 }
 
-Widget _navigationBar() {
+Widget _navigationBar(context) {
   return CupertinoSliverNavigationBar(
-    largeTitle: Text('Post a Donation'),
-    trailing: Text(
-      'Next',
-      style: TextStyle(color: Colors.blue),
+    largeTitle:
+        Text('Frequently Ask Questions', style: TextStyle(fontSize: 30.0)),
+    trailing: GestureDetector(
+      onTap: () {
+        showAlertDialog(context);
+      },
+      child: Text(
+        'Done',
+        style: TextStyle(color: Colors.blue),
+      ),
     ),
   );
 }
 
+Widget showAlertDialog(BuildContext context) {
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("No"),
+    onPressed: () {
+      Navigator.pop(context, false);
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: Text("Yes"),
+    onPressed: () {
+      Navigator.pushNamed(context, Home.routeName);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Confirmation"),
+    content: Text("Are you done reading? "),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 Widget _agreementDescription() {
-  const title = "Donating Guidelines";
+  const title = "The Accepted Foods";
   const description =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Diam quis non euismod faucibus a eu cum pharetra elementum. Congue placerat vitae ultrices quis elit aliquam. Gravida a etiam sed aliquam mauris.";
+      "This guidelines are for food DONORS and REQUESTORS. By Following these guidelines, food DONORS and REQUESTORS will be able to safely request, prepare, handle, and provide food that can be accepted by INDIVIDUALS and FOOD DISTRIBUTING ORGANIZATIONS";
   return SliverToBoxAdapter(
     child: Container(
       margin: EdgeInsets.all(20.0),
@@ -55,20 +103,17 @@ Widget _agreementDescription() {
 
 List<Item> agreementItems = [
   Item(
-      headerValue: 'I acknowledge that I',
+      headerValue: 'How to post a donation',
       expandedValue: 'Guideline 1 description'),
   Item(
-      headerValue: 'I acknowledge that I',
+      headerValue: 'How to recevied a donation',
       expandedValue: 'Guideline 2 description'),
   Item(
-      headerValue: 'I acknowledge that I',
+      headerValue: 'How to request a donation',
       expandedValue: 'Guideline 3 description'),
   Item(
-      headerValue: 'I acknowledge that I',
+      headerValue: 'What foods can i donate',
       expandedValue: 'Guideline 4 description'),
-  Item(
-      headerValue: 'I acknowledge that I',
-      expandedValue: 'Guideline 5 description'),
 ];
 
 class AgreementList extends StatefulWidget {

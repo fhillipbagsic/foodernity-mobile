@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/AddListing.dart';
-import 'package:my_app/Pages/FAQs.dart';
-import 'package:my_app/Pages/Guidelines.dart';
+import 'package:my_app/Guidelines/FAQs.dart';
+import 'package:my_app/Pages/Home/FrequentlyAsk.dart';
 import 'package:my_app/styles.dart';
+import 'package:my_app/NavigationPages/Listed.dart';
+import 'package:my_app/NavigationPages/ReceivedDonations.dart';
+import 'package:my_app/NavigationPages/RequestedDonation.dart';
 
 class NavigationBar extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffold;
@@ -20,69 +22,86 @@ class _NavigationBarState extends State<NavigationBar> {
     return CupertinoSliverNavigationBar(
       automaticallyImplyLeading: false,
       largeTitle: Text(widget.title),
-      trailing: _avatar(widget.scaffold),
+      // trailing: _hamburger(widget.scaffold),
     );
   }
 }
 
-Widget _avatar(scaffold) {
-  return GestureDetector(
-    onTap: () {
-      scaffold.currentState.openEndDrawer();
-    },
-    child: CircleAvatar(
-      backgroundColor: ColorPrimary,
-      child: Text('FB'),
-    ),
-  );
-}
+// Widget _hamburger(scaffold) {
+//   return GestureDetector(
+//     onTap: () {
+//       scaffold.currentState.openEndDrawer();
+//     },
+//     child: Container(
+//       padding: EdgeInsets.only(top: 8),
+//       // ignore: missing_required_param
+//       child: IconButton(
+//         icon: Icon(Icons.menu, color: Colors.blue, size: 30.0),
+//       ),
+//     ),
+//   );
+// }
 
-class AccountDrawer extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(color: Colors.blue),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // CircleAvatar(
-                //   backgroundColor: Colors.white,
-                //   child: Text('FB'),
-                // ),
-                // Text(
-                //   'Fhillip Bagsic',
-                //   style: TextStyle(fontSize: 18.0, color: Colors.white),
-                // ),
-                // RichText(
-                //     text: TextSpan(children: [
-                //   WidgetSpan(
-                //       child: Icon(
-                //     Icons.star_rate_rounded,
-                //     size: 18.0,
-                //     color: Colors.orange[300],
-                //   )),
-                //   TextSpan(text: '5.0')
-                // ]))
-              ],
-            ),
-          ),
-          ListTile(
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddListing()));
-            },
-            leading: Icon(Icons.message),
-            title: Text('Frequently Asked Questions'),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class AccountDrawer extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Drawer(
+//       child: ListView(
+//         children: <Widget>[
+//           Container(
+//             child: UserAccountsDrawerHeader(
+//               currentAccountPicture: CircleAvatar(
+//                 backgroundImage: AssetImage("assets/images/profile.jpg"),
+//               ),
+//               accountName: Text(
+//                 "Mark Kenneth Dela Cruz",
+//                 style: TextStyle(color: Colors.white, fontSize: 20),
+//               ),
+//               accountEmail: Text(
+//                 "markennethdelacruz04@gmail.com",
+//                 style: TextStyle(color: Colors.white, fontSize: 13),
+//               ),
+//             ),
+//           ),
+//           SizedBox(
+//             height: 30,
+//           ),
+//           ListTile(
+//             title: Text('Frequently Asked Questions'),
+//             leading: Icon(Icons.contact_support_sharp),
+//             onTap: () {
+//               Navigator.pop(context);
+//               Navigator.push(context,
+//                   MaterialPageRoute(builder: (context) => FrequentlyAsk()));
+//             },
+//           ),
+//           SizedBox(
+//             height: 10,
+//           ),
+//           ListTile(
+//             title: Text('My Donations'),
+//             leading: Icon(Icons.add_shopping_cart),
+//             onTap: () {
+//               Navigator.pop(context);
+//               Navigator.push(
+//                   context, MaterialPageRoute(builder: (context) => Listed()));
+//             },
+//           ),
+//           SizedBox(
+//             height: 350,
+//           ),
+//           ListTile(
+//             title: Text('Logout'),
+//             leading: Icon(Icons.arrow_back),
+//             onTap: () {
+//               print("Clicked");
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class NavigationBar2 extends StatelessWidget {
   final String title;

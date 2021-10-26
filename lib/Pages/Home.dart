@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Home/Account.dart';
-import 'package:my_app/Pages/Home/Forum.dart';
+import 'package:http/http.dart';
 import 'package:my_app/Pages/Home/Listings.dart';
-import 'package:my_app/Pages/Home/Messages.dart';
 import 'package:my_app/Pages/Home/Notifications.dart';
+import 'package:my_app/Pages/Home/CallForDonations.dart';
+import 'package:my_app/Pages/AccountPage/profilepage.dart';
 
 class Home extends StatefulWidget {
+  static String routeName = "/Home";
   @override
   _HomeState createState() => _HomeState();
 }
@@ -15,11 +16,9 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
-    PlaceholderWidget(Notifications()),
     PlaceholderWidget(Listings()),
-    PlaceholderWidget(Messages()),
-    PlaceholderWidget(Forum()),
-    PlaceholderWidget(Account())
+    PlaceholderWidget(RequestListing()),
+    PlaceholderWidget(ProfilePage()),
   ];
 
   @override
@@ -31,24 +30,17 @@ class _HomeState extends State<Home> {
           onTap: onTabTapped,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.notifications_rounded),
-                label: 'Notifications'),
+                icon: Icon(Icons.shopping_basket_rounded), label: 'Inventory'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket_rounded), label: 'Donations'),
+                icon: Icon(Icons.food_bank), label: 'Call For Donations'),
             BottomNavigationBarItem(
-                icon: Icon(Icons.message_rounded), label: 'Messages'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.question_answer_rounded), label: 'Forum'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle), label: 'Account'),
+                icon: Icon(Icons.account_circle), label: 'My Profile'),
           ],
         ));
   }
 
   void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    setState(() => _currentIndex = index);
   }
 }
 

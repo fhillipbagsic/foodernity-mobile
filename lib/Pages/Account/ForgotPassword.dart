@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatelessWidget {
+  static String routeName = "/ForgotPass";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,14 +11,22 @@ class ForgotPassword extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 120.0,),
+              SizedBox(
+                height: 120.0,
+              ),
               _title(),
-              SizedBox(height: 10.0,),
-            _description(),
-            SizedBox(height: 30.0,),
-            _phoneNumberField(),
-            SizedBox(height: 30.0,),
-            _sendButton(),
+              SizedBox(
+                height: 10.0,
+              ),
+              _description(),
+              SizedBox(
+                height: 30.0,
+              ),
+              _phoneNumberField(),
+              SizedBox(
+                height: 30.0,
+              ),
+              _sendButton(),
             ],
           ),
         ),
@@ -36,8 +45,9 @@ Widget _title() {
 
 Widget _description() {
   return (Text(
-      'Enter the phone number associated with your account and we\'ll send a code with instructions to reset your password.',
-      style: TextStyle(color: Colors.grey),));
+    'Enter the phone number associated with your account and we\'ll send a code with instructions to reset your password.',
+    style: TextStyle(color: Colors.grey),
+  ));
 }
 
 Widget _phoneNumberField() {
