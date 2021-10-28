@@ -27,11 +27,14 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'Pages/PostDonation/step_three.dart';
 import 'Pages/PostDonation/verification.dart';
 import 'Pages/AccountPage/EditProfile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
 }
 
+
+var isLoggedInVar=false;
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
@@ -51,20 +54,30 @@ class _MyAppState extends State<MyApp> {
       print(hasInternet);
 
       if (hasInternet) {
-        print('Connected To Wifi');
+        print('Connected to internet');
       } else {
-        print('No Wifi');
+        print('No internet');
       }
     });
+    isLoggedIn();
   }
+  void isLoggedIn()async{
+    final prefs = await SharedPreferences.getInstance();
+    var userID = prefs.getInt("userID");
+    if(userID!=null){
+      isLoggedInVar=true;
+    }else{
+      isLoggedInVar=false;
+    }
 
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
       title: 'Foodernity',
-      home: PostDonation(),
+      home:  isLoggedInVar? Home():Signin(),
       routes: routes,
     );
   }

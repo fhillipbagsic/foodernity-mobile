@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,31 +10,32 @@ import 'package:my_app/Pages/Home.dart';
 import 'package:my_app/Pages/DonationDetails.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'package:cloudinary_public/cloudinary_public.dart';
 
 var donationName = "";
-var expiryDate = "";
-var quantity = "";
 File _image;
 var _donationNameController = TextEditingController();
-var _quantityController = TextEditingController();
-var _dateController = TextEditingController();
+// var _quantityController = TextEditingController();
+// var _dateController = TextEditingController();
 // String _dropDownValue;
 
 // final _form = GlobalKey<FormState>();
 List<TextEditingController> controllers = [];
 
-List<bool> isAllowed = [
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-  true,
-];
+// List<bool> isAllowed = [
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+//   true,
+// ];
 
 // var quantity = '';
 
@@ -407,8 +410,10 @@ class _formsState extends State<forms> {
                 } else {
                   if (validCharacters.hasMatch(value)) {
                     //goods
+
+                    donationName=value;
                   } else {
-                    return "Only letters are allowed in the Donationa Name field.";
+                    return "Only letters are allowed in the Donation Name field.";
                   }
                   return null;
                 }
@@ -425,7 +430,47 @@ class _formsState extends State<forms> {
     );
   }
 
-  Widget _submitButton() {
+  void postDonation(dynamic donationCateg,dynamic donationQty,dynamic img,dynamic donationName)async{
+    final prefs = await SharedPreferences.getInstance();
+    var userID = prefs.getInt("userID");
+
+     final DateTime now = DateTime.now();
+    final DateFormat formatter = DateFormat('MM/dd/yyyy');
+    final String formattedDate = formatter.format(now);
+
+
+    final cloudinary = CloudinaryPublic('dftq12ab0', 'b4jy8nar', cache: false);
+    CloudinaryResponse responseImg = await cloudinary.uploadFile(
+      CloudinaryFile.fromFile(img.path,
+          resourceType: CloudinaryResourceType.Image),
+    );
+
+    print(responseImg.secureUrl);
+
+    http.Response response = await http.post(
+        "https://foodernity.herokuapp.com/post/postDonation",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'userID': userID,
+          'date':formattedDate,
+          'donationName':donationName,
+          'donationCategories':donationCateg.toString(),
+          'donationQuantities':donationQty.toString(),
+          'imgPath':responseImg.secureUrl,
+          'status':"pending",
+
+        }));
+    print(response.body);
+
+  }
+  Widget _submitButton()  {
+
+    var categArr=[];
+    var dateArr=[];
+    var qtyArr=[];
+
     var width = MediaQuery.of(context).size.width - 30;
     return Container(
       margin: EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
@@ -434,29 +479,64 @@ class _formsState extends State<forms> {
           if (!_homeKey.currentState.validate()) {
             return;
           }
-          print('VALUES');
-          // print(controllers.toString());
 
-          for (var i = 0; i < controllers.length; i++) {
-            print(controllers[i].text);
+          if(_image!=null) {
+            print('VALUES');
+            // print(controllers.toString());
+            print(_image);
+            print(donationName);
+            for (var i = 0; i < (controllers.length - 2); i++) {
+              // print(controllers[i].text);
+              if (_categories.contains(controllers[i].text)) {
+                categArr.add(controllers[i].text);
+                dateArr.add(controllers[i + 1].text);
+                qtyArr.add(controllers[i + 2].text);
+              }
+            }
+
+            print(categArr);
+            print(dateArr);
+            print(qtyArr);
+
+            postDonation(categArr, qtyArr, _image, donationName);
+
+           //  dateArr.sort((a, b) {
+           //    DateTime c = DateTime.parse(a);
+           //    DateTime d = DateTime.parse(b);
+           //    return c.compareTo(d);
+           //  });
+           //  print("sorted");
+           //  print(dateArr[0]);
+           // var sixMonths =DateTime.now().add(Duration(days: 180));
+           // print(sixMonths);
+
+           // if(dateArr[0].){
+           //
+           // }
+            // print(_donationNameController.text);
+            // print(_image);
+            // print(_quantityController.text);
+            //print(_dropDownValue);
+            // print(_dateController.text);
+            // if (controller.text.isEmpty
+            //     ? _validate = true
+            //     : _validate = false) {
+            //   return;
+            // }
+            // setState(() {
+            //   controller.text.isEmpty
+            //       ? _validate = true
+            //       : _validate = false;
+            // });
+            // Navigator.pushNamed(context, PostDonationSummary.routeName);
+            // _homeKey.currentState.save();
+          }else{
+
+            //lagyan ng popup na image is required
+            print("image is required");
           }
-          // print(_donationNameController.text);
-          // print(_image);
-          // print(_quantityController.text);
-          //print(_dropDownValue);
-          // print(_dateController.text);
-          // if (controller.text.isEmpty
-          //     ? _validate = true
-          //     : _validate = false) {
-          //   return;
-          // }
-          // setState(() {
-          //   controller.text.isEmpty
-          //       ? _validate = true
-          //       : _validate = false;
-          // });
-          // Navigator.pushNamed(context, PostDonationSummary.routeName);
-          // _homeKey.currentState.save();
+
+
         },
         color: Colors.blue,
         minWidth: width,
@@ -574,7 +654,23 @@ class _CategoryFormState extends State<CategoryForm> {
   var categQty = 0;
 
   var index = 0;
-
+  
+  DateTime getMinExpiryDate(String category) {
+    switch(category) {
+      case 'Eggs':
+        return DateTime.now().add(Duration(days: 14));
+      default:
+        return DateTime.now().add(Duration(days: 180));
+    }
+  }
+  DateTime getMaxExpiryDate(String category) {
+    switch(category) {
+      case 'Eggs':
+        return DateTime.now().add(Duration(days: 42));
+      default:
+        return DateTime(2100);
+    }
+  }
   void initState() {
     //_dropDownMenuItems2 = getDropDownMenuItems2();
     //_dropDownValue = _dropDownMenuItems2[0].value;
@@ -617,7 +713,7 @@ class _CategoryFormState extends State<CategoryForm> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       SizedBox(
-                        height: 10.0,
+                        height: 5.0,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -690,7 +786,7 @@ class _CategoryFormState extends State<CategoryForm> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.0,
+                        height: 5.0,
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -704,7 +800,7 @@ class _CategoryFormState extends State<CategoryForm> {
                             ),
                           ),
                           SizedBox(
-                            height: 10.0,
+                            height: 5.0,
                           ),
                           Row(
                             children: [
@@ -715,6 +811,7 @@ class _CategoryFormState extends State<CategoryForm> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 5.0),
                                   child: DateTimeField(
+                                    enabled: widget.categoryController.text == '' ? false : true,
                                     controller: widget.expiryController,
                                     format: date,
                                     // validator: (value) {
@@ -726,10 +823,10 @@ class _CategoryFormState extends State<CategoryForm> {
                                     onShowPicker: (context, currentValue) {
                                       return showDatePicker(
                                           context: context,
-                                          firstDate: DateTime.now(),
+                                          firstDate: getMinExpiryDate(widget.categoryController.text),
                                           initialDate:
-                                              currentValue ?? DateTime.now(),
-                                          lastDate: DateTime(2100));
+                                              currentValue ?? getMinExpiryDate(widget.categoryController.text),
+                                          lastDate: getMaxExpiryDate(widget.categoryController.text),);
                                     },
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
@@ -743,7 +840,7 @@ class _CategoryFormState extends State<CategoryForm> {
                         ],
                       ),
                       SizedBox(
-                        height: 10.0,
+                        height: 5.0,
                       ),
                       Container(
                         child: Column(
@@ -760,7 +857,7 @@ class _CategoryFormState extends State<CategoryForm> {
                               ),
                             ),
                             SizedBox(
-                              height: 10.0,
+                              height: 5.0,
                             ),
                             Row(
                               children: [
@@ -772,6 +869,7 @@ class _CategoryFormState extends State<CategoryForm> {
                                     padding: const EdgeInsets.only(left: 5.0),
                                     child: TextFormField(
                                       controller: widget.quantityController,
+                                      enabled: widget.categoryController.text == '' ? false : true,
                                       onSaved: (value) {
                                         qty[index] = value;
 
@@ -807,9 +905,17 @@ class _CategoryFormState extends State<CategoryForm> {
       ),
     );
   }
+
 }
 
-
+// DateTime _getMaxExpiry(String category) {
+//   switch(category) {
+//     case 'eggs':
+//       return DateTime.now().add(Duration(days: 42));
+//     default:
+//       return DateTime(2100);
+//   }
+// }
 
  // Container(
                 //   margin: EdgeInsets.only(top: 20.0),

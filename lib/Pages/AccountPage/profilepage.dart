@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:my_app/Pages/Account/Signin.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,8 +118,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       refreshKey.currentState?.show(atTop: false);
       await Future.delayed(Duration(seconds: 2));
       setState(() {
-        // limit = random.nextInt(10);
+        preLoad();
       });
+    }
+
+    void logout() async {
+
+      final prefs = await SharedPreferences.getInstance();
+      prefs.clear();
     }
 
     return Sizer(builder: (context, orientation, deviceType) {
@@ -157,10 +164,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     icon: LineAwesomeIcons.question_circle,
                     text: 'Frequently Asked Questions',
                   ),
-                  ProfileListItem(
-                    icon: LineAwesomeIcons.alternate_sign_out,
-                    text: 'Logout',
-                    hasNavigation: false,
+                  InkWell(
+                    onTap: (){
+
+                      logout();
+                      Navigator.pop(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Signin()));
+                    },
+                    child: ProfileListItem(
+                      icon: LineAwesomeIcons.alternate_sign_out,
+                      text: 'Logout',
+                      hasNavigation: false,
+                    ),
                   ),
                 ],
               ),
