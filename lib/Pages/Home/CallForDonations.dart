@@ -104,6 +104,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
   var size = MediaQuery.of(context).size;
   final double itemWidth = size.width - 40;
   final double itemHeight = size.height / 1.7;
+  final double descHeight = size.height / 9;
 
   return Sizer(builder: (context, orientation, deviceType) {
     return Column(
@@ -208,7 +209,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                   height: 6,
                 ),
                 Container(
-                  height: 90.0,
+                  height: descHeight,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Padding(

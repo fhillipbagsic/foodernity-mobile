@@ -115,414 +115,97 @@ class _ListingsState extends State<Listings> {
   }
 }
 
+class InventoryContainer extends StatelessWidget {
+  const InventoryContainer({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
 Widget _Inventory(context) {
   int _index;
   var width = MediaQuery.of(context).size.width - 100;
   var height = MediaQuery.of(context).size.height / 7;
+  final categories = [
+    "Eggs",
+    "Canned goods",
+    "Instant Noodles",
+    "Rice",
+    "Cereals",
+    "Tea, Coffee, Milk, Sugar, etc.",
+    "Biscuits",
+    "Condiments and sauces",
+    "Beverages",
+    "Snacks",
+  ];
+  final image = [
+    'assets/images/eggs.png',
+    'assets/images/canned-food.png',
+    'assets/images/instant-noodles.png',
+    'assets/images/canned-food.png',
+    'assets/images/bakery.png',
+    'assets/images/canned-food.png',
+    'assets/images/snack.png',
+    'assets/images/canned-food.png',
+    'assets/images/snack.png',
+    'assets/images/snack.png',
+  ];
 
+  final stocks = ['40', '50', '60', '70', '80', '20', '10', '5', '23', '16'];
   return Container(
     child: Center(
       child: SizedBox(
           // height: 120, // card height
           height: height,
           // width: width,
-          child: ListView(scrollDirection: Axis.horizontal, children: <Widget>[
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(
-                            image: AssetImage('assets/images/canned-food.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Canned Goods",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "40",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return Container(
+                width: width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Image(image: AssetImage(image[index])),
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 20.0, top: 5.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  categories[index],
+                                  style: TextStyle(fontSize: 18),
                                 ),
-                              )
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Text(
+                                    stocks[index],
+                                    style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(
-                            image: AssetImage(
-                                'assets/images/instant-noodles.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Instant Noodles",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "38",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(image: AssetImage('assets/images/harvest.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 35.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Vegetables",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "31",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(image: AssetImage('assets/images/eggs.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 60.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Eggs",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "51",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(
-                            image: AssetImage('assets/images/grain-sack.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Uncooked Rice",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "20",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(image: AssetImage('assets/images/bakery.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Bread & Pastry",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "21",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(image: AssetImage('assets/images/fruits.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 60.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Fruits",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "10",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(image: AssetImage('assets/images/snack.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Biscuits & Snacks",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "51",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(
-                            image: AssetImage('assets/images/soft-drink.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 40.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Beverages",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "20",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              width: width,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Image(image: AssetImage('assets/images/ellipsis.png')),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 55.0, top: 5.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "Others",
-                                style: TextStyle(fontSize: 29),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Text(
-                                  "15",
-                                  style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ])),
+              );
+            },
+          )),
     ),
   );
 }
@@ -681,13 +364,13 @@ Widget _listingItem(title, date, image, context) {
                     title: Text(
                       donationDate,
                       style:
-                          TextStyle(fontWeight: FontWeight.w300, fontSize: 13),
+                          TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
                     ),
                     subtitle: Text(
                       donationTitle,
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           color: Colors.grey[600]),
                     ),
                     trailing: Wrap(

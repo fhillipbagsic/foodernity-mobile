@@ -16,9 +16,10 @@ File _image;
 var _donationNameController = TextEditingController();
 var _quantityController = TextEditingController();
 var _dateController = TextEditingController();
-String _dropDownValue;
+// String _dropDownValue;
 
 // final _form = GlobalKey<FormState>();
+List<TextEditingController> controllers = [];
 
 List<bool> isAllowed = [
   true,
@@ -150,15 +151,26 @@ class _formsState extends State<forms> {
   final form = GlobalKey<FormState>();
   List<CategoryForm> listDynamic = [];
   List<String> data = [];
-
   final date = DateFormat("yyyy-MM-dd");
 
   addDynamic() {
     setState(() {});
+
     if (listDynamic.length >= _categories.length) {
       return;
     }
-    listDynamic.add(new CategoryForm());
+    TextEditingController categoryController = TextEditingController();
+    TextEditingController expiryController = TextEditingController();
+    TextEditingController quantityController = TextEditingController();
+
+    controllers.add(categoryController);
+    controllers.add(expiryController);
+    controllers.add(quantityController);
+    listDynamic.add(new CategoryForm(
+      categoryController: categoryController,
+      expiryController: expiryController,
+      quantityController: quantityController,
+    ));
   }
 
   // if (data.length != 0) {
@@ -341,7 +353,7 @@ class _formsState extends State<forms> {
                                       color: Colors.blue, fontSize: 16.0),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      print('clicked');
+                                      //print('clicked');
                                       addDynamic();
                                     }),
                             ],
@@ -422,11 +434,17 @@ class _formsState extends State<forms> {
           if (!_homeKey.currentState.validate()) {
             return;
           }
-          print(_donationNameController.text);
-          print(_image);
+          print('VALUES');
+          // print(controllers.toString());
+
+          for (var i = 0; i < controllers.length; i++) {
+            print(controllers[i].text);
+          }
+          // print(_donationNameController.text);
+          // print(_image);
           // print(_quantityController.text);
-          print(_dropDownValue);
-          print(_dateController.text);
+          //print(_dropDownValue);
+          // print(_dateController.text);
           // if (controller.text.isEmpty
           //     ? _validate = true
           //     : _validate = false) {
@@ -519,6 +537,17 @@ void _showErrorMessage(context, String error) {
 }
 
 class CategoryForm extends StatefulWidget {
+  const CategoryForm(
+      {Key key,
+      this.categoryController,
+      this.expiryController,
+      this.quantityController})
+      : super(key: key);
+
+  final TextEditingController categoryController;
+  final TextEditingController expiryController;
+  final TextEditingController quantityController;
+
   @override
   State<CategoryForm> createState() => _CategoryFormState();
 }
@@ -530,7 +559,7 @@ class _CategoryFormState extends State<CategoryForm> {
 
   final GlobalKey<FormState> _homeKey = GlobalKey<FormState>();
 
-  List<DropdownMenuItem<String>> _dropDownMenuItems2;
+  //List<DropdownMenuItem<String>> _dropDownMenuItems2;
 
   // List _categories = [
   //   "Canned Goods",
@@ -547,8 +576,8 @@ class _CategoryFormState extends State<CategoryForm> {
   var index = 0;
 
   void initState() {
-    _dropDownMenuItems2 = getDropDownMenuItems2();
-    _dropDownValue = _dropDownMenuItems2[0].value;
+    //_dropDownMenuItems2 = getDropDownMenuItems2();
+    //_dropDownValue = _dropDownMenuItems2[0].value;
     PostDonation._homeKey = _homeKey;
     super.initState();
   }
@@ -565,11 +594,13 @@ class _CategoryFormState extends State<CategoryForm> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width - 30;
     var height = MediaQuery.of(context).size.height / 3.5;
+    var itemWidth = MediaQuery.of(context).size.height / 4;
     // final form = GlobalKey<FormState>();
     String error = '';
     return Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
             width: width,
@@ -580,173 +611,194 @@ class _CategoryFormState extends State<CategoryForm> {
               borderRadius: BorderRadius.circular(8),
               child: Form(
                 key: _homeKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Container(
-                        color: Colors.grey[200],
-                        width: 350,
-                        child: DropdownButton(
-                          hint: _dropDownValue == null
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: Text(
-                                    'Choose a category',
-                                    style: TextStyle(fontSize: 15.0),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Container(
+                          color: Colors.grey[200],
+                          width: 350,
+                          child: DropdownButton(
+                            hint: widget.categoryController.text == null
+                                ? Padding(
+                                    padding: const EdgeInsets.only(left: 5.0),
+                                    child: Text(
+                                      'Choose a category',
+                                      style: TextStyle(fontSize: 15.0),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.only(left: 5.0),
+                                    child: Text(
+                                      widget.categoryController.text,
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
                                   ),
-                                )
-                              : Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: Text(
-                                    _dropDownValue,
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ),
-                          isExpanded: true,
-                          iconSize: 30.0,
-                          underline: SizedBox(),
-                          style: TextStyle(color: Colors.grey),
-                          items: _categories.map(
-                            (val) {
-                              return DropdownMenuItem<String>(
-                                value: val,
-                                child: Text(val),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (val) {
-                            setState(
-                              () {
-                                _dropDownValue = val;
-
-                                for (var x = 0; x < _categories.length; x++) {
-                                  if (_categories[x] == val) {
-                                    print(_categories[x] + " categ");
-
-                                    print(val + " val");
-
-                                    if (isAllowed[x] == true) {
-                                      isAllowed[x] = false;
-                                      print(isAllowed[x]);
-                                      print(isAllowed);
-                                      // qty[x] == categQty;
-                                      index = x;
-                                    } else {
-                                      print("napili na po putangina mo");
-                                      _showErrorMessage(context, error);
-                                      _dropDownValue = _categories[0];
+                            isExpanded: true,
+                            iconSize: 30.0,
+                            underline: SizedBox(),
+                            style: TextStyle(color: Colors.grey),
+                            items: _categories.map(
+                              (val) {
+                                return DropdownMenuItem<String>(
+                                  value: val,
+                                  child: Text(val),
+                                );
+                              },
+                            ).toList(),
+                            onChanged: (val) {
+                              setState(
+                                () {
+                                  //_dropDownValue = val;
+                                  // print('abc');
+                                  for (var i = 0; i < controllers.length; i++) {
+                                    if (val == controllers[i].text) {
+                                      return _showErrorMessage(context, error);
                                     }
                                   }
-                                }
-                              },
-                            );
-                          },
+                                  widget.categoryController.text = val;
+                                  // for (var x = 0; x < _categories.length; x++) {
+                                  //   if (_categories[x] == val) {
+                                  //     // print(_categories[x] + " categ");
+
+                                  //     // print(val + " val");
+
+                                  //     if (isAllowed[x] == true) {
+                                  //       isAllowed[x] = false;
+                                  //       // print(isAllowed[x]);
+                                  //       // print(isAllowed);
+                                  //       // qty[x] == categQty;
+                                  //       index = x;
+                                  //       widget.categoryController.text = val;
+                                  //     } else {
+                                  //       // print("napili na po putangina mo");
+                                  //       _showErrorMessage(context, error);
+                                  //       //_dropDownValue = _categories[0];
+                                  //     }
+                                  //   }
+                                  // }
+                                },
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Row(
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            'Expiration Date: ',
-                            style: TextStyle(
-                                fontSize: 17.0, fontWeight: FontWeight.bold),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              'Expiration Date: ',
+                              style: TextStyle(
+                                  fontSize: 14.0, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 40.0),
-                            child: Container(
-                              color: Colors.grey[200],
-                              width: 200,
-                              // margin: EdgeInsets.only(top: 20.0),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: DateTimeField(
-                                  // controller: _dateController,
-                                  format: date,
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return ('Pickup Date Can\'t Be Empty');
-                                    }
-                                    if (!value.isAfter(DateTime.now())) {
-                                      return ('Pickup Date Can\'t Be In The Past');
-                                    }
-                                    return null;
-                                  },
-                                  onShowPicker: (context, currentValue) {
-                                    return showDatePicker(
-                                        context: context,
-                                        firstDate: DateTime(1900),
-                                        initialDate:
-                                            currentValue ?? DateTime.now(),
-                                        lastDate: DateTime(2100));
-                                  },
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Select Pick up Date*'),
-                                  style: TextStyle(fontSize: 15.0),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                color: Colors.grey[200],
+                                width: itemWidth,
+                                // margin: EdgeInsets.only(top: 20.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: DateTimeField(
+                                    controller: widget.expiryController,
+                                    format: date,
+                                    // validator: (value) {
+                                    //   if (!value.isAfter(DateTime.now())) {
+                                    //     return ('Pickup Date Can\'t Be In The Past');
+                                    //   }
+                                    //   return null;
+                                    // },
+                                    onShowPicker: (context, currentValue) {
+                                      return showDatePicker(
+                                          context: context,
+                                          firstDate: DateTime.now(),
+                                          initialDate:
+                                              currentValue ?? DateTime.now(),
+                                          lastDate: DateTime(2100));
+                                    },
+                                    decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Select Pick up Date*'),
+                                    style: TextStyle(fontSize: 14.0),
+                                  ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Quantity:  ',
-                            style: TextStyle(
-                                fontSize: 17.0, fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 130.0),
-                            child: Container(
-                              color: Colors.grey[200],
-                              width: 150,
-                              // margin: EdgeInsets.only(top: 20.0),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 5.0),
-                                child: TextFormField(
-                                  // controller: _quantityController,
-                                  onSaved: (value) {
-                                    qty[index] = value;
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Quantity:  ',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  color: Colors.grey[200],
+                                  width: itemWidth,
+                                  // margin: EdgeInsets.only(top: 20.0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 5.0),
+                                    child: TextFormField(
+                                      controller: widget.quantityController,
+                                      onSaved: (value) {
+                                        qty[index] = value;
 
-                                    print(qty);
-                                    print("quantities");
-                                    print(isAllowed);
-                                    print("is allowed");
-                                  },
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
-                                  // keyboardType: TextInputType.number,
-                                  textAlign: TextAlign.start,
-                                  decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'piece/s'),
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                              ),
+                                        //print(qty);
+                                        // print("quantities");
+                                        // print(isAllowed);
+                                        //print("is allowed");
+                                      },
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      // keyboardType: TextInputType.number,
+                                      textAlign: TextAlign.start,
+                                      decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'piece/s'),
+                                      style: TextStyle(fontSize: 14.0),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
