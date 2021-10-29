@@ -30,23 +30,17 @@ class _ListingDetailsState extends State<ListingDetails> {
               leading: GestureDetector(
                 onTap: () {
                   debugPrint('Back button tapped');
+                  Navigator.pop(context,
+                      MaterialPageRoute(builder: (context) => Listings()));
                 },
                 child: Row(
                   children: <Widget>[
                     Icon(CupertinoIcons.left_chevron,
                         color: CupertinoColors.activeBlue),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pop(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Listings()));
-                      },
-                      child: Text(
-                        'Back',
-                        style: TextStyle(
-                          color: CupertinoColors.activeBlue,
-                        ),
+                    Text(
+                      'Back',
+                      style: TextStyle(
+                        color: CupertinoColors.activeBlue,
                       ),
                     ),
                   ],

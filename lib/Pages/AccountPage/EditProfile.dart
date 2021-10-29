@@ -274,23 +274,17 @@ class _EditProfileState extends State<EditProfile> {
                 leading: GestureDetector(
                   onTap: () {
                     debugPrint('Back button tapped');
+                    Navigator.pop(context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()));
                   },
                   child: Row(
                     children: <Widget>[
                       Icon(CupertinoIcons.left_chevron,
                           color: CupertinoColors.activeBlue),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ProfilePage()));
-                        },
-                        child: Text(
-                          'Back',
-                          style: TextStyle(
-                            color: CupertinoColors.activeBlue,
-                          ),
+                      Text(
+                        'Back',
+                        style: TextStyle(
+                          color: CupertinoColors.activeBlue,
                         ),
                       ),
                     ],

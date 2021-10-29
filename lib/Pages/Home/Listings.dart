@@ -126,7 +126,7 @@ class InventoryContainer extends StatelessWidget {
 
 Widget _Inventory(context) {
   int _index;
-  var width = MediaQuery.of(context).size.width - 100;
+  var width = MediaQuery.of(context).size.width - 200;
   var height = MediaQuery.of(context).size.height / 7;
   final categories = [
     "Eggs",
@@ -181,12 +181,15 @@ Widget _Inventory(context) {
                               children: [
                                 Image(image: AssetImage(image[index])),
                                 Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      Text(
-                                        categories[index],
-                                        style: TextStyle(fontSize: 18),
+                                      SizedBox(
+                                        width: 120,
+                                        child: Text(
+                                          categories[index],
+                                          style: TextStyle(fontSize: 14),
+                                        ),
                                       ),
                                       Padding(
                                         padding:
@@ -194,7 +197,7 @@ Widget _Inventory(context) {
                                         child: Text(
                                           stocks[index],
                                           style: TextStyle(
-                                              fontSize: 32,
+                                              fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       )

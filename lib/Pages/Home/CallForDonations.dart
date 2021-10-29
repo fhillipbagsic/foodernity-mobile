@@ -52,7 +52,7 @@ class _ListingCountState extends State<ListingCount> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height) / 1.6;
+    final double itemHeight = (size.height) / 1.65;
     final double itemWidth = size.width - 40;
 
     return SliverPadding(
@@ -103,8 +103,8 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
   var postDate = date;
   var size = MediaQuery.of(context).size;
   final double itemWidth = size.width - 40;
-  final double itemHeight = size.height / 1.6;
-  final double descHeight = size.height / 7;
+  final double itemHeight = size.height / 1.65;
+  final double descHeight = size.height / 9;
 
   return Sizer(builder: (context, orientation, deviceType) {
     return Column(
@@ -242,7 +242,7 @@ Widget _donateButton(context) {
         FlatButton(
           onPressed: () {},
           minWidth: 55,
-          height: 40,
+          height: 35,
           color: Colors.blue,
           child: Text('Donate Now',
               style: TextStyle(

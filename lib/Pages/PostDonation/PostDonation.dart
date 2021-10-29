@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:my_app/Pages/Home.dart';
 import 'package:my_app/Pages/DonationDetails.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_app/Pages/Home/Listings.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -110,13 +111,13 @@ Widget showAlertDialog(BuildContext context) {
   Widget cancelButton = FlatButton(
     child: Text("Cancel"),
     onPressed: () {
-      Navigator.pop(context, false);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     },
   );
   Widget continueButton = FlatButton(
     child: Text("Continue"),
     onPressed: () {
-      Navigator.pushNamed(context, Home.routeName);
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
 
@@ -411,7 +412,7 @@ class _formsState extends State<forms> {
                   if (validCharacters.hasMatch(value)) {
                     //goods
 
-                    donationName=value;
+                    donationName = value;
                   } else {
                     return "Only letters are allowed in the Donation Name field.";
                   }
@@ -430,14 +431,14 @@ class _formsState extends State<forms> {
     );
   }
 
-  void postDonation(dynamic donationCateg,dynamic donationQty,dynamic img,dynamic donationName)async{
+  void postDonation(dynamic donationCateg, dynamic donationQty, dynamic img,
+      dynamic donationName) async {
     final prefs = await SharedPreferences.getInstance();
     var userID = prefs.getInt("userID");
 
-     final DateTime now = DateTime.now();
+    final DateTime now = DateTime.now();
     final DateFormat formatter = DateFormat('MM/dd/yyyy');
     final String formattedDate = formatter.format(now);
-
 
     final cloudinary = CloudinaryPublic('dftq12ab0', 'b4jy8nar', cache: false);
     CloudinaryResponse responseImg = await cloudinary.uploadFile(
@@ -447,41 +448,38 @@ class _formsState extends State<forms> {
 
     print(responseImg.secureUrl);
 
-    http.Response response = await http.post(
-        "https://foodernity.herokuapp.com/post/postDonation",
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'userID': userID,
-          'date':formattedDate,
-          'donationName':donationName,
-          'donationCategories':donationCateg.toString(),
-          'donationQuantities':donationQty.toString(),
-          'imgPath':responseImg.secureUrl,
-          'status':"pending",
-
-        }));
+    http.Response response =
+        await http.post("https://foodernity.herokuapp.com/post/postDonation",
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'userID': userID,
+              'date': formattedDate,
+              'donationName': donationName,
+              'donationCategories': donationCateg.toString(),
+              'donationQuantities': donationQty.toString(),
+              'imgPath': responseImg.secureUrl,
+              'status': "pending",
+            }));
     print(response.body);
 
-
-    http.Response response1 = await http.post(
-        "https://foodernity.herokuapp.com/stocks/addStocks",
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{
-        'categArr':donationCateg,
-          'qtyArr':donationQty,
-        }));
+    http.Response response1 =
+        await http.post("https://foodernity.herokuapp.com/stocks/addStocks",
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
+              'categArr': donationCateg,
+              'qtyArr': donationQty,
+            }));
     print(response1.body);
-
   }
-  Widget _submitButton()  {
 
-    var categArr=[];
-    var dateArr=[];
-    var qtyArr=[];
+  Widget _submitButton() {
+    var categArr = [];
+    var dateArr = [];
+    var qtyArr = [];
 
     var width = MediaQuery.of(context).size.width - 30;
     return Container(
@@ -492,7 +490,7 @@ class _formsState extends State<forms> {
             return;
           }
 
-          if(_image!=null) {
+          if (_image != null) {
             print('VALUES');
             // print(controllers.toString());
             print(_image);
@@ -512,19 +510,19 @@ class _formsState extends State<forms> {
 
             postDonation(categArr, qtyArr, _image, donationName);
 
-           //  dateArr.sort((a, b) {
-           //    DateTime c = DateTime.parse(a);
-           //    DateTime d = DateTime.parse(b);
-           //    return c.compareTo(d);
-           //  });
-           //  print("sorted");
-           //  print(dateArr[0]);
-           // var sixMonths =DateTime.now().add(Duration(days: 180));
-           // print(sixMonths);
+            //  dateArr.sort((a, b) {
+            //    DateTime c = DateTime.parse(a);
+            //    DateTime d = DateTime.parse(b);
+            //    return c.compareTo(d);
+            //  });
+            //  print("sorted");
+            //  print(dateArr[0]);
+            // var sixMonths =DateTime.now().add(Duration(days: 180));
+            // print(sixMonths);
 
-           // if(dateArr[0].){
-           //
-           // }
+            // if(dateArr[0].){
+            //
+            // }
             // print(_donationNameController.text);
             // print(_image);
             // print(_quantityController.text);
@@ -542,13 +540,11 @@ class _formsState extends State<forms> {
             // });
             // Navigator.pushNamed(context, PostDonationSummary.routeName);
             // _homeKey.currentState.save();
-          }else{
-
+          } else {
             //lagyan ng popup na image is required
+            _imageRequired(context);
             print("image is required");
           }
-
-
         },
         color: Colors.blue,
         minWidth: width,
@@ -590,6 +586,24 @@ class _formsState extends State<forms> {
   }
 }
 
+void _imageRequired(context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Image required', style: TextStyle(color: Colors.redAccent)),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            //   Navigator.of(context, rootNavigator: true).pop();
+          },
+          child: Text("Close"),
+        ),
+      ],
+    ),
+  );
+}
+
 void _showErrorMessage(context, String error) {
   var errorMessage = error;
   Widget continueButton = FlatButton(
@@ -598,7 +612,7 @@ void _showErrorMessage(context, String error) {
       style: TextStyle(color: Colors.red),
     ),
     onPressed: () {
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
 
@@ -666,23 +680,25 @@ class _CategoryFormState extends State<CategoryForm> {
   var categQty = 0;
 
   var index = 0;
-  
+
   DateTime getMinExpiryDate(String category) {
-    switch(category) {
+    switch (category) {
       case 'Eggs':
         return DateTime.now().add(Duration(days: 14));
       default:
         return DateTime.now().add(Duration(days: 180));
     }
   }
+
   DateTime getMaxExpiryDate(String category) {
-    switch(category) {
+    switch (category) {
       case 'Eggs':
         return DateTime.now().add(Duration(days: 42));
       default:
         return DateTime(2100);
     }
   }
+
   void initState() {
     //_dropDownMenuItems2 = getDropDownMenuItems2();
     //_dropDownValue = _dropDownMenuItems2[0].value;
@@ -823,7 +839,10 @@ class _CategoryFormState extends State<CategoryForm> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 5.0),
                                   child: DateTimeField(
-                                    enabled: widget.categoryController.text == '' ? false : true,
+                                    enabled:
+                                        widget.categoryController.text == ''
+                                            ? false
+                                            : true,
                                     controller: widget.expiryController,
                                     format: date,
                                     // validator: (value) {
@@ -834,11 +853,15 @@ class _CategoryFormState extends State<CategoryForm> {
                                     // },
                                     onShowPicker: (context, currentValue) {
                                       return showDatePicker(
-                                          context: context,
-                                          firstDate: getMinExpiryDate(widget.categoryController.text),
-                                          initialDate:
-                                              currentValue ?? getMinExpiryDate(widget.categoryController.text),
-                                          lastDate: getMaxExpiryDate(widget.categoryController.text),);
+                                        context: context,
+                                        firstDate: getMinExpiryDate(
+                                            widget.categoryController.text),
+                                        initialDate: currentValue ??
+                                            getMinExpiryDate(
+                                                widget.categoryController.text),
+                                        lastDate: getMaxExpiryDate(
+                                            widget.categoryController.text),
+                                      );
                                     },
                                     decoration: const InputDecoration(
                                         border: InputBorder.none,
@@ -881,7 +904,10 @@ class _CategoryFormState extends State<CategoryForm> {
                                     padding: const EdgeInsets.only(left: 5.0),
                                     child: TextFormField(
                                       controller: widget.quantityController,
-                                      enabled: widget.categoryController.text == '' ? false : true,
+                                      enabled:
+                                          widget.categoryController.text == ''
+                                              ? false
+                                              : true,
                                       onSaved: (value) {
                                         qty[index] = value;
 
@@ -917,7 +943,6 @@ class _CategoryFormState extends State<CategoryForm> {
       ),
     );
   }
-
 }
 
 // DateTime _getMaxExpiry(String category) {
