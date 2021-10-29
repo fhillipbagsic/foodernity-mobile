@@ -14,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_app/Pages/AccountPage/profile_list_item.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:my_app/Pages/Home/Listings.dart';
+import '../../main.dart';
+import '../Home.dart';
 import 'EditProfile.dart';
 
 var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -124,8 +126,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     void logout() async {
       final prefs = await SharedPreferences.getInstance();
-      ConfirmLogoutDialog(context);
-      prefs.clear();
+      prefs.clear().then((value) => {
+        ConfirmLogoutDialog(context)
+      });
+
+
+
+
     }
 
     return Sizer(builder: (context, orientation, deviceType) {
@@ -192,8 +199,9 @@ void ConfirmLogoutDialog(context) {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Signin()));
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => MyApp()));
+         //   Navigator.of(context, rootNavigator: true).pop();
           },
           child: Text("Confirm"),
         ),
