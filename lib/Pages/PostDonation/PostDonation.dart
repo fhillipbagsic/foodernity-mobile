@@ -464,6 +464,18 @@ class _formsState extends State<forms> {
         }));
     print(response.body);
 
+
+    http.Response response1 = await http.post(
+        "https://foodernity.herokuapp.com/stocks/addStocks",
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+        'categArr':donationCateg,
+          'qtyArr':donationQty,
+        }));
+    print(response1.body);
+
   }
   Widget _submitButton()  {
 

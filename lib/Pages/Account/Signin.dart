@@ -233,7 +233,7 @@ void _showErrorMessage(context, String subtitle) {
       style: TextStyle(color: Colors.red),
     ),
     onPressed: () {
-      Navigator.pop(context);
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
 
