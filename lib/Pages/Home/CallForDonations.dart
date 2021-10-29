@@ -52,7 +52,7 @@ class _ListingCountState extends State<ListingCount> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height) / 1.7;
+    final double itemHeight = (size.height) / 1.6;
     final double itemWidth = size.width - 40;
 
     return SliverPadding(
@@ -103,8 +103,8 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
   var postDate = date;
   var size = MediaQuery.of(context).size;
   final double itemWidth = size.width - 40;
-  final double itemHeight = size.height / 1.7;
-  final double descHeight = size.height / 9;
+  final double itemHeight = size.height / 1.6;
+  final double descHeight = size.height / 7;
 
   return Sizer(builder: (context, orientation, deviceType) {
     return Column(
@@ -202,7 +202,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                   padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
                   child: Text(
                     callForDonationTitle,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
@@ -216,36 +216,15 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                       padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
                       child: Text(
                         callForDonationDesc,
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 13),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 6,
+                  height: 10,
                 ),
-                ButtonBar(
-                  alignment: MainAxisAlignment.start,
-                  children: [
-                    FlatButton(
-                      onPressed: () {},
-                      minWidth: 55,
-                      height: 40,
-                      color: Colors.blue,
-                      child: Text('Donate Now',
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white)),
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                              color: Colors.blue,
-                              width: 1,
-                              style: BorderStyle.solid),
-                          borderRadius: BorderRadius.circular(2)),
-                    ),
-                  ],
-                ),
+                _donateButton(context)
               ],
             ),
           ),
@@ -257,110 +236,25 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
 
 Widget _donateButton(context) {
   return Container(
-    margin: EdgeInsets.only(right: 15.0, bottom: 6.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+    child: ButtonBar(
+      alignment: MainAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () => Navigator.pushNamed(context, RequestDetails.routeName),
-          child: Text(
-            "Details",
-            style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: 13.0),
-          ),
+        FlatButton(
+          onPressed: () {},
+          minWidth: 55,
+          height: 40,
+          color: Colors.blue,
+          child: Text('Donate Now',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white)),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(
+                  color: Colors.blue, width: 1, style: BorderStyle.solid),
+              borderRadius: BorderRadius.circular(2)),
         ),
       ],
     ),
   );
-}
-
-Widget _detailsButton(context) {
-  return Container(
-    margin: EdgeInsets.only(right: 15.0, bottom: 6.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        GestureDetector(
-          // onTap: () =>
-          //     Navigator.pushNamed(context, RequestGuidelines.routeName),
-          child: Text(
-            "Details",
-            style: TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: 13.0),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _filter(context) {
-  return (Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      GestureDetector(
-        onTap: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return _filterPicker();
-              });
-        },
-        child: Row(
-          children: [Text('Available Now'), Icon(Icons.arrow_drop_down)],
-        ),
-      ),
-      TextButton(
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return (_filterSheet());
-                });
-          },
-          child: Text('FILTER')),
-    ],
-  ));
-}
-
-Widget _filterPicker() {
-  return Container(
-    height: 250.0,
-    child: (CupertinoPicker(
-      useMagnifier: true,
-      onSelectedItemChanged: (index) {},
-      itemExtent: 50.0,
-      backgroundColor: Colors.white,
-      children: [
-        Center(child: Text('Available Now')),
-        Center(child: Text('Suggested')),
-        Center(child: Text('Nearest')),
-      ],
-    )),
-  );
-}
-
-Widget _filterSheet() {
-  return Container(
-    height: 500.0,
-    child: (Column(
-      children: [],
-    )),
-  );
-}
-
-class ListingContainer extends StatefulWidget {
-  @override
-  _ListingContainerState createState() => _ListingContainerState();
-}
-
-class _ListingContainerState extends State<ListingContainer> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }

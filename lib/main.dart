@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:my_app/Pages/Account/Signup.dart';
 import 'package:my_app/Pages/Home/Listings.dart';
@@ -20,7 +21,6 @@ import 'package:my_app/NavigationPages/Listed.dart';
 import 'package:my_app/Pages/Home/CallForDonations.dart';
 import 'package:my_app/NavigationPages/ReceivedDonations.dart';
 import 'package:my_app/NavigationPages/RequestedDonation.dart';
-import 'package:my_app/Pages/AccountPage/Account.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:my_app/Pages/AccountPage/profilepage.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -30,11 +30,13 @@ import 'Pages/AccountPage/EditProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: MyApp(),
+  ));
 }
 
+var isLoggedInVar = false;
 
-var isLoggedInVar=false;
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
@@ -54,31 +56,62 @@ class _MyAppState extends State<MyApp> {
       print(hasInternet);
 
       if (hasInternet) {
+        // Navigator.pop(context, false);
         print('Connected to internet');
       } else {
         print('No internet');
+        _showdialog(context);
       }
     });
     isLoggedIn();
   }
-  void isLoggedIn()async{
+
+  void isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     var userID = prefs.getInt("userID");
-    if(userID!=null){
-      isLoggedInVar=true;
-    }else{
-      isLoggedInVar=false;
+    if (userID != null) {
+      isLoggedInVar = true;
+    } else {
+      isLoggedInVar = false;
     }
-
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
       title: 'Foodernity',
-      home:  isLoggedInVar? Home():Signin(),
+      home: isLoggedInVar ? Home() : Home(),
       routes: routes,
+    );
+  }
+
+  void _showdialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.wifi_off,
+              size: 20.0,
+              color: Colors.redAccent,
+            ),
+            Text('ERROR'),
+          ],
+        ),
+        content: Text(
+          "No Internet Detected.",
+          style: TextStyle(color: Colors.redAccent),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => SystemNavigator.pop(),
+            child: Text("Exit"),
+          ),
+        ],
+      ),
     );
   }
 }

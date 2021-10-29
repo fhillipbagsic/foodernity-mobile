@@ -123,8 +123,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
 
     void logout() async {
-
       final prefs = await SharedPreferences.getInstance();
+      ConfirmLogoutDialog(context);
       prefs.clear();
     }
 
@@ -165,13 +165,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     text: 'Frequently Asked Questions',
                   ),
                   InkWell(
-                    onTap: (){
-
+                    onTap: () {
                       logout();
-                      Navigator.pop(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Signin()));
                     },
                     child: ProfileListItem(
                       icon: LineAwesomeIcons.alternate_sign_out,
@@ -187,4 +182,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     });
   }
+}
+
+void ConfirmLogoutDialog(context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Confirm Logout', style: TextStyle(color: Colors.redAccent)),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Signin()));
+          },
+          child: Text("Confirm"),
+        ),
+      ],
+    ),
+  );
 }

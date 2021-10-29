@@ -28,7 +28,7 @@ var _NameController = TextEditingController();
 var _CurrentPassController = TextEditingController();
 var _NewPassController = TextEditingController();
 
-void saveChangesBtnFnc() async {
+void saveChangesBtnFnc(context) async {
   final cloudinary = CloudinaryPublic('dftq12ab0', 'b4jy8nar', cache: false);
   final prefs = await SharedPreferences.getInstance();
 
@@ -122,7 +122,21 @@ void saveChangesBtnFnc() async {
         }
       } else {
         //Mali password mo
-        print("Mali password");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Mali Password',
+                style: TextStyle(color: Colors.redAccent)),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text("Close"),
+              ),
+            ],
+          ),
+        );
       }
     } else {
       // kapag di binago yung image
@@ -131,7 +145,21 @@ void saveChangesBtnFnc() async {
 
         if (_CurrentPassController.text == _NewPassController.text) {
           //Bawal gamitin ang same pass
-          print("Bawal gamitin same pass");
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Same password are not allowed',
+                  style: TextStyle(color: Colors.redAccent)),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text("Close"),
+                ),
+              ],
+            ),
+          );
         } else {
           // CloudinaryResponse responseImg = await cloudinary.uploadFile(
           //   CloudinaryFile.fromFile(_image.path,
@@ -159,6 +187,22 @@ void saveChangesBtnFnc() async {
         }
       } else {
         //Mali password mo
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Mali Password',
+                style: TextStyle(color: Colors.redAccent)),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                child: Text("Close"),
+              ),
+            ],
+          ),
+        );
+
         print("Mali password");
       }
     }
@@ -590,7 +634,7 @@ Widget _saveChanges(context) {
           if (!_homeKey.currentState.validate()) {
             return;
           }
-          saveChangesBtnFnc();
+          saveChangesBtnFnc(context);
           // print(EditFullName);
           // print(_CurrentPassController.text);
           // print(_NewPassController.text);

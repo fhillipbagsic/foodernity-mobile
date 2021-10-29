@@ -19,7 +19,7 @@ class Listings extends StatefulWidget {
 class _ListingsState extends State<Listings> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
 
-  var imageStocks = ['assets/images/instant-noodles.png'];
+  // var imageStocks = ['assets/images/instant-noodles.png'];
   var email = "";
   @override
   void initState() {
@@ -173,34 +173,38 @@ Widget _Inventory(context) {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Image(image: AssetImage(image[index])),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, top: 5.0),
-                            child: Column(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          children: [
+                            Row(
                               children: [
-                                Text(
-                                  categories[index],
-                                  style: TextStyle(fontSize: 18),
-                                ),
+                                Image(image: AssetImage(image[index])),
                                 Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Text(
-                                    stocks[index],
-                                    style: TextStyle(
-                                        fontSize: 32,
-                                        fontWeight: FontWeight.bold),
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        categories[index],
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Text(
+                                          stocks[index],
+                                          style: TextStyle(
+                                              fontSize: 32,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                )
+                                ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                          ],
+                        )),
                   ),
                 ),
               );
