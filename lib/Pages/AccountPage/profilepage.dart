@@ -26,7 +26,9 @@ class ProfilePage extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: ProfileScreen());
+    return Sizer(builder: (context, orientation, deviceType) {
+      return Scaffold(body: ProfileScreen());
+    });
   }
 }
 
@@ -126,20 +128,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     void logout() async {
       final prefs = await SharedPreferences.getInstance();
-      prefs.clear().then((value) => {
-        ConfirmLogoutDialog(context)
-      });
-
-
-
-
+      prefs.clear().then((value) => {ConfirmLogoutDialog(context)});
     }
 
-    return Sizer(builder: (context, orientation, deviceType) {
-      return Builder(
-        builder: (context) {
-          return Scaffold(
-            body: RefreshIndicator(
+    return Builder(
+      builder: (context) {
+        return Scaffold(
+          body: Container(
+            child: RefreshIndicator(
               key: refreshKey,
               onRefresh: refreshMyProfile,
               child: ListView(
@@ -184,10 +180,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-          );
-        },
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -201,7 +197,7 @@ void ConfirmLogoutDialog(context) {
           onPressed: () {
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => MyApp()));
-         //   Navigator.of(context, rootNavigator: true).pop();
+            //   Navigator.of(context, rootNavigator: true).pop();
           },
           child: Text("Confirm"),
         ),

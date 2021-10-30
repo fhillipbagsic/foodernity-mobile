@@ -24,33 +24,38 @@ class _ListingDetailsState extends State<ListingDetails> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: CupertinoNavigationBar(
-              leading: GestureDetector(
-                onTap: () {
-                  debugPrint('Back button tapped');
-                  Navigator.pop(context,
-                      MaterialPageRoute(builder: (context) => Listings()));
-                },
-                child: Row(
-                  children: <Widget>[
-                    Icon(CupertinoIcons.left_chevron,
-                        color: CupertinoColors.activeBlue),
-                    Text(
-                      'Back',
-                      style: TextStyle(
-                        color: CupertinoColors.activeBlue,
+          body: Container(
+            height: 100.h,
+            width: 100.w,
+            child: CupertinoPageScaffold(
+              resizeToAvoidBottomInset: false,
+              navigationBar: CupertinoNavigationBar(
+                leading: GestureDetector(
+                  onTap: () {
+                    debugPrint('Back button tapped');
+                    Navigator.pop(context,
+                        MaterialPageRoute(builder: (context) => Listings()));
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Icon(CupertinoIcons.left_chevron,
+                          color: CupertinoColors.activeBlue),
+                      Text(
+                        'Back',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: CupertinoColors.activeBlue,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                ),
+                middle: Text(
+                  'Title',
                 ),
               ),
-              middle: Text(
-                'Title',
-              ),
+              child: Container(child: _cardView(context)),
             ),
-            child: Container(child: _cardView(context)),
           ),
         ),
       );
@@ -135,16 +140,16 @@ Widget _cardView(context) {
                           children: [
                             Padding(
                               padding:
-                                  const EdgeInsets.only(top: 20, bottom: 20.0),
+                                  const EdgeInsets.only(top: 10, bottom: 10.0),
                               child: ListTile(
                                 title: Text(
                                   'Organizations Remarks',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 18),
+                                      fontSize: 16),
                                 ),
                                 subtitle: Container(
-                                  margin: const EdgeInsets.only(top: 10),
+                                  margin: const EdgeInsets.only(top: 5),
                                   height: 120.0,
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
@@ -154,7 +159,7 @@ Widget _cardView(context) {
                                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. ',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w300,
-                                            fontSize: 14.0,
+                                            fontSize: 13.0,
                                             color: Colors.grey[600]),
                                       ),
                                     ),

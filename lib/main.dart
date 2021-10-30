@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:my_app/Pages/Account/Signup.dart';
+import 'package:my_app/Pages/Account/enterCode.dart';
 import 'package:my_app/Pages/Home/Listings.dart';
 import 'package:my_app/Pages/Home/Notifications.dart';
 import 'package:my_app/Pages/PostDonation/PostDonation.dart';
@@ -82,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
       title: 'Foodernity',
-      home: isLoggedInVar ? Home() : Signin(),
+      home: isLoggedInVar ? Home() : ChangePasswordCode(),
       routes: routes,
     );
   }

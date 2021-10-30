@@ -265,120 +265,127 @@ class _EditProfileState extends State<EditProfile> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          body: RefreshIndicator(
-            key: refreshKey,
-            onRefresh: refreshEditProfile,
-            child: CupertinoPageScaffold(
-              resizeToAvoidBottomInset: false,
-              navigationBar: CupertinoNavigationBar(
-                leading: GestureDetector(
-                  onTap: () {
-                    debugPrint('Back button tapped');
-                    Navigator.pop(context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()));
-                  },
-                  child: Row(
-                    children: <Widget>[
-                      Icon(CupertinoIcons.left_chevron,
-                          color: CupertinoColors.activeBlue),
-                      Text(
-                        'Back',
-                        style: TextStyle(
-                          color: CupertinoColors.activeBlue,
+          body: Container(
+            height: 100.h,
+            width: 100.w,
+            child: RefreshIndicator(
+              key: refreshKey,
+              onRefresh: refreshEditProfile,
+              child: CupertinoPageScaffold(
+                resizeToAvoidBottomInset: false,
+                navigationBar: CupertinoNavigationBar(
+                  leading: GestureDetector(
+                    onTap: () {
+                      debugPrint('Back button tapped');
+                      Navigator.pop(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()));
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Icon(CupertinoIcons.left_chevron,
+                            color: CupertinoColors.activeBlue),
+                        Text(
+                          'Back',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: CupertinoColors.activeBlue,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  middle: Text('Edit Profile'),
                 ),
-                middle: Text('Edit Profile'),
-              ),
-              child: ListView(
-                children: [
-                  Center(
-                    child: Container(
-                      width: width,
-                      child: Form(
-                        key: _homeKey,
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 70,
-                            ),
-                            Container(
-                              child: SizedBox(
-                                height: 115,
-                                width: 115,
-                                child: Stack(
-                                  fit: StackFit.expand,
-                                  overflow: Overflow.visible,
-                                  children: [
-                                    (_image == null)
-                                        ? CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(imageLocal),
-                                          )
-                                        : ClipOval(
-                                            child: Image.file(
-                                              _image,
-                                              fit: BoxFit.cover,
+                child: ListView(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: width,
+                        child: Form(
+                          key: _homeKey,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 50,
+                              ),
+                              Container(
+                                child: SizedBox(
+                                  height: 115,
+                                  width: 115,
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    overflow: Overflow.visible,
+                                    children: [
+                                      (_image == null)
+                                          ? CircleAvatar(
+                                              backgroundImage:
+                                                  NetworkImage(imageLocal),
+                                            )
+                                          : ClipOval(
+                                              child: Image.file(
+                                                _image,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
+                                      Positioned(
+                                        right: -16,
+                                        bottom: 0,
+                                        child: SizedBox(
+                                          height: 46,
+                                          width: 46,
+                                          child: FlatButton(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              side: BorderSide(
+                                                  color: Colors.white),
+                                            ),
+                                            color: Color(0xFFF5F6F9),
+                                            onPressed: () {
+                                              getImage();
+                                            },
+                                            child: SvgPicture.asset(
+                                                "assets/icons/Camera Icon.svg"),
                                           ),
-                                    Positioned(
-                                      right: -16,
-                                      bottom: 0,
-                                      child: SizedBox(
-                                        height: 46,
-                                        width: 46,
-                                        child: FlatButton(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            side:
-                                                BorderSide(color: Colors.white),
-                                          ),
-                                          color: Color(0xFFF5F6F9),
-                                          onPressed: () {
-                                            getImage();
-                                          },
-                                          child: SvgPicture.asset(
-                                              "assets/icons/Camera Icon.svg"),
                                         ),
-                                      ),
-                                    )
-                                  ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 35.0,
-                            ),
-                            _fullNameTextField(context),
-                            SizedBox(
-                              height: 6.0,
-                            ),
-                            (loginMethodLocal == "default")
-                                ? _currentPass(context)
-                                : _currentPassDisabled(context),
-                            SizedBox(
-                              height: 6.0,
-                            ),
-                            (loginMethodLocal == "default")
-                                ? _newPass(context)
-                                : _newPassDisabled(context),
-                            SizedBox(
-                              height: 30.0,
-                            ),
-                            _saveChanges(context),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            _cancelChanges(context)
-                          ],
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              _fullNameTextField(context),
+                              SizedBox(
+                                height: 6.0,
+                              ),
+                              (loginMethodLocal == "default")
+                                  ? _currentPass(context)
+                                  : _currentPassDisabled(context),
+                              SizedBox(
+                                height: 6.0,
+                              ),
+                              (loginMethodLocal == "default")
+                                  ? _newPass(context)
+                                  : _newPassDisabled(context),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              _saveChanges(context),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              _cancelChanges(context)
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

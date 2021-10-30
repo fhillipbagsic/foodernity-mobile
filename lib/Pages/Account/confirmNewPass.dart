@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:my_app/Pages/Account/Signin.dart';
 
 var _newpassController = TextEditingController();
 var _confirmNewPass = TextEditingController();
@@ -77,6 +77,7 @@ Widget _description() {
 
 Widget _newPassTextField() {
   return (TextFormField(
+    obscureText: true,
     validator: passwordValidator,
     controller: _newpassController,
     decoration: InputDecoration(
@@ -93,6 +94,7 @@ final passwordValidator = MultiValidator([
 
 Widget _confirmPassTextfield() {
   return (TextFormField(
+    obscureText: true,
     validator: (String value) {
       if (value.isEmpty) {
         return 'Need to re-type password for confirmation';
@@ -107,24 +109,25 @@ Widget _confirmPassTextfield() {
   ));
 }
 
-void updatePassword()async{
+void updatePassword(context) async {
   final prefs = await SharedPreferences.getInstance();
 
-  var email=prefs.getString('fpemail');
+  var email = prefs.getString('fpemail');
   if (_confirmNewPass.text != _newpassController.text) {
-        print("Password and confirm password does not match");
-  }else {
+    print("Password and confirm password does not match");
+  } else {
     http.Response response = await http.post(
         "https://foodernity.herokuapp.com/forgotPassword/updatePassword",
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(<String, String>{
-          'email':email,
+          'email': email,
           'password': _newpassController.text,
         }));
 
     print(response.body);
+    successfulPassUpdate(context);
     //password update popup here
   }
 }
@@ -135,15 +138,33 @@ Widget _sendButton(context) {
       if (!_homeKey.currentState.validate()) {
         return;
       }
-      updatePassword();
+      updatePassword(context);
       // Navigator.push(context,
       //     MaterialPageRoute(builder: (context) => ChangePasswordCode()));
-
-
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [Text('SUBMIT')],
     ),
   ));
+}
+
+void successfulPassUpdate(context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Password updated successfully! ',
+          style: TextStyle(color: Colors.greenAccent)),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => Signin()));
+            //   Navigator.of(context, rootNavigator: true).pop();
+          },
+          child: Text("Proceed to Sing In"),
+        ),
+      ],
+    ),
+  );
 }

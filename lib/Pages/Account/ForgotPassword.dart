@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/Pages/Account/Signin.dart';
 import 'package:my_app/Pages/Account/enterCode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 var _emailController = TextEditingController();
 
@@ -12,29 +15,32 @@ class ForgotPassword extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 120.0,
-              ),
-              _title(),
-              SizedBox(
-                height: 10.0,
-              ),
-              _description(),
-              SizedBox(
-                height: 30.0,
-              ),
-              _phoneNumberField(),
-              SizedBox(
-                height: 30.0,
-              ),
-              _sendButton(context),
-            ],
+      body: Form(
+        key: _formKey,
+        child: SafeArea(
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 120.0,
+                ),
+                _title(),
+                SizedBox(
+                  height: 10.0,
+                ),
+                _description(),
+                SizedBox(
+                  height: 30.0,
+                ),
+                _phoneNumberField(),
+                SizedBox(
+                  height: 30.0,
+                ),
+                _sendButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -58,22 +64,28 @@ Widget _description() {
 }
 
 Widget _phoneNumberField() {
-  return (TextField(
+  return (TextFormField(
+    validator: (String value) {
+      if (value.isEmpty) {
+        return 'Please input email address';
+      }
+      return null;
+    },
     controller: _emailController,
-    decoration: InputDecoration(
-        border: OutlineInputBorder(), labelText: 'Email'),
+    decoration:
+        InputDecoration(border: OutlineInputBorder(), labelText: 'Email'),
   ));
 }
 
-bool isValid(){
-  if(_emailController.text.length!=0){
+bool isValid() {
+  if (_emailController.text.length != 0) {
     return true;
-  }else{
+  } else {
     return false;
   }
 }
 
-void getCode()async{
+void getCode(context) async {
   final prefs = await SharedPreferences.getInstance();
   http.Response response = await http.post(
       "https://foodernity.herokuapp.com/forgotPassword/getChangePasswordCode",
@@ -84,6 +96,7 @@ void getCode()async{
         'email': _emailController.text,
       }));
 
+  // alertNoAcc(context);
   print(response.body);
   prefs.setString('fpemail', _emailController.text);
   prefs.setString('fpcode', response.body);
@@ -92,25 +105,43 @@ void getCode()async{
 Widget _sendButton(context) {
   return (ElevatedButton(
     onPressed: () {
-
+      //validation trigger
+      if (!_formKey.currentState.validate()) {
+        return;
+      }
       //func
-        if(isValid()){
-          //goods
-          getCode();
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => ChangePasswordCode()),);
-        }else{
-          print("Email field cannot be empty");
-        }
-
-
-
-
-
+      if (isValid()) {
+        //goods
+        getCode(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChangePasswordCode()),
+        );
+      } else {
+        print("Email field cannot be empty");
+      }
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [Text('SEND CODE')],
     ),
   ));
+}
+
+void alertNoAcc(context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('Email not exist', style: TextStyle(color: Colors.redAccent)),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            //   Navigator.of(context, rootNavigator: true).pop();
+          },
+          child: Text("Close"),
+        ),
+      ],
+    ),
+  );
 }

@@ -13,33 +13,39 @@ class _RequestListingState extends State<RequestListing> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
-      body: SafeArea(
-        child: CustomScrollView(
-          physics: ClampingScrollPhysics(),
-          slivers: [
-            NavigationBar(
-              title: 'Call For Donations',
-              scaffold: scaffoldKey,
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // _filter(context),
-                    // _listingCount(),
-                  ],
+    return Sizer(builder: (context, orientation, deviceType) {
+      return Scaffold(
+        key: scaffoldKey,
+        body: Container(
+          height: 100.h,
+          width: 100.w,
+          child: SafeArea(
+            child: CustomScrollView(
+              physics: ClampingScrollPhysics(),
+              slivers: [
+                NavigationBar(
+                  title: 'Call For Donations',
+                  scaffold: scaffoldKey,
                 ),
-              ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // _filter(context),
+                        // _listingCount(),
+                      ],
+                    ),
+                  ),
+                ),
+                ListingCount(),
+              ],
             ),
-            ListingCount(),
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -209,7 +215,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                   height: 6,
                 ),
                 Container(
-                  height: descHeight,
+                  height: 25.h,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Padding(

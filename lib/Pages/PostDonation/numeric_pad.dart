@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class NumericPad extends StatelessWidget {
   final Function(int) onNumberSelected;
@@ -7,63 +8,66 @@ class NumericPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFFF5F4F9),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            height: MediaQuery.of(context).size.height * 0.11,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                buildNumber(1),
-                buildNumber(2),
-                buildNumber(3),
-              ],
+    return Sizer(builder: (context, orientation, deviceType) {
+      return Container(
+        height: 80.h,
+        color: Color(0xFFF5F4F9),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height * 0.11,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  buildNumber(1),
+                  buildNumber(2),
+                  buildNumber(3),
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.11,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                buildNumber(4),
-                buildNumber(5),
-                buildNumber(6),
-              ],
+            Container(
+              height: MediaQuery.of(context).size.height * 0.11,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  buildNumber(4),
+                  buildNumber(5),
+                  buildNumber(6),
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.11,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                buildNumber(7),
-                buildNumber(8),
-                buildNumber(9),
-              ],
+            Container(
+              height: MediaQuery.of(context).size.height * 0.11,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  buildNumber(7),
+                  buildNumber(8),
+                  buildNumber(9),
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.11,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                buildEmptySpace(),
-                buildNumber(0),
-                buildBackspace(),
-              ],
+            Container(
+              height: MediaQuery.of(context).size.height * 0.11,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  buildEmptySpace(),
+                  buildNumber(0),
+                  buildBackspace(),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget buildNumber(int number) {

@@ -14,6 +14,7 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloudinary_public/cloudinary_public.dart';
+import 'package:sizer/sizer.dart';
 
 var donationName = "";
 File _image;
@@ -46,7 +47,7 @@ List _categories = [
   "Instant Noodles",
   "Rice",
   "Cereals",
-  "Tea, Coffee, Milk, Sugar, etc.",
+  "Tea/Coffee/Milk/Sugar",
   "Biscuits",
   "Condiments and sauces",
   "Beverages",
@@ -72,22 +73,28 @@ class _PostDonationState extends State<PostDonation> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Scaffold(
-        body: Form(
-          key: _homeKey,
-          child: SafeArea(
-            child: CustomScrollView(
-              physics: ClampingScrollPhysics(),
-              slivers: [_navigationBar(context), forms()],
+    return Sizer(builder: (context, orientation, deviceType) {
+      return GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Scaffold(
+          body: Container(
+            height: 100.h,
+            width: 100.w,
+            child: Form(
+              key: _homeKey,
+              child: SafeArea(
+                child: CustomScrollView(
+                  physics: ClampingScrollPhysics(),
+                  slivers: [_navigationBar(context), forms()],
+                ),
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -822,7 +829,7 @@ class _CategoryFormState extends State<CategoryForm> {
                           Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              'Expiration Date: ',
+                              'Earliest Expiry ',
                               style: TextStyle(
                                   fontSize: 14.0, fontWeight: FontWeight.bold),
                             ),

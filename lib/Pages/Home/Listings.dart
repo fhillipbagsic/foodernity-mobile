@@ -2,10 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/Models/Item.dart';
+import 'package:my_app/Pages/PostDonation/PostDonation.dart';
 import 'package:my_app/Pages/RecentDonationDetails.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
 import 'package:my_app/styles.dart';
-import 'package:my_app/Guidelines/AddListingGuidelines.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -72,40 +73,44 @@ class _ListingsState extends State<Listings> {
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return Scaffold(
-        // endDrawer: AccountDrawer(),
         key: scaffoldKey,
-        body: SafeArea(
-          child: CustomScrollView(
-            //physics: ClampingScrollPhysics(),
-            slivers: [
-              NavigationBar(
-                title: 'Donations',
-                scaffold: scaffoldKey,
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // _filter(context),
-                      _currentStocks(),
-                      _Inventory(context),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      _recentDonations(),
-                    ],
+        body: Container(
+          height: 100.h,
+          width: 100.w,
+          child: SafeArea(
+            child: CustomScrollView(
+              //physics: ClampingScrollPhysics(),
+              slivers: [
+                NavigationBar(
+                  title: 'Donations',
+                  scaffold: scaffoldKey,
+                ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // _filter(context),
+                        _currentStocks(),
+                        _Inventory(context),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        _recentDonations(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              ListingsContainer()
-            ],
+                ListingsContainer(),
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, AddListing.routeName);
+            // Navigator.pushNamed(context, AddListing.routeName);
+            showInformationDialog(context);
           },
           child: Icon(Icons.add),
           backgroundColor: ColorPrimary,
@@ -113,6 +118,197 @@ class _ListingsState extends State<Listings> {
       );
     });
   }
+}
+
+List<Item> agreementItems = [
+  Item(
+    headerValue:
+        'I acknowledge that I am donating foods that are in the following:',
+    expandedValue:
+        'Canned Goods - Canned fruits and vegetables, milks and sauces, meat and fish.',
+    expandedValue2:
+        'Instant Noodles - Instant Noodles sush as soups noodles, fried noodles, non-fried noodles.',
+    expandedValue3:
+        'Snacks & Biscuits - Any kinds of snacks and biscuits and the.',
+    expandedValue4:
+        'Beverages - Water, tea, coffee, soft drinks, juice drinks (alcoholic are prohibited).',
+    expandedValue5:
+        "Others - Other non-perishable foods that don't require refrigeration (e.g., condiments).",
+    expandedValue6: '',
+  ),
+  Item(
+    headerValue:
+        'I acknowledge that I am not donating foods that are in the following:',
+    expandedValue:
+        'Home-cooked-foods - Foods prepared, cooked, cooled, or reheated at home.',
+    expandedValue2:
+        'Expired Foods - Foods that are past a "use by / consume by" date.',
+    expandedValue3:
+        'Foods in containers - Foods taken out of their original packaging and placed into containers.',
+    expandedValue4:
+        'Opened Foods - Foods in opened or torn containers exposing the food to potential contamination.',
+    expandedValue5:
+        "Raw foods - Meat, beef, pork, poultry, and other considered raw foods.",
+    expandedValue6:
+        "Others - Other perishables such as fruits, vegetables, dairy products, eggs, meat, poultry, and seafood.",
+  ),
+  Item(
+    headerValue:
+        'I acknowledge that I am donating foods that are in the following:',
+    expandedValue:
+        'Canned Goods - Canned fruits and vegetables, milks and sauces, meat and fish.',
+    expandedValue2:
+        'Instant Noodles - Instant Noodles sush as soups noodles, fried noodles, non-fried noodles.',
+    expandedValue3:
+        'Snacks & Biscuits - Any kinds of snacks and biscuits and the.',
+    expandedValue4:
+        'Beverages - Water, tea, coffee, soft drinks, juice drinks (alcoholic are prohibited).',
+    expandedValue5:
+        "Others - Other non-perishable foods that don't require refrigeration (e.g., condiments).",
+    expandedValue6: '',
+  ),
+  Item(
+    headerValue:
+        'I acknowledge that I am not donating foods that are in the following:',
+    expandedValue:
+        'Home-cooked-foods - Foods prepared, cooked, cooled, or reheated at home.',
+    expandedValue2:
+        'Expired Foods - Foods that are past a "use by / consume by" date.',
+    expandedValue3:
+        'Foods in containers - Foods taken out of their original packaging and placed into containers.',
+    expandedValue4:
+        'Opened Foods - Foods in opened or torn containers exposing the food to potential contamination.',
+    expandedValue5:
+        "Raw foods - Meat, beef, pork, poultry, and other considered raw foods.",
+    expandedValue6:
+        "Others - Other perishables such as fruits, vegetables, dairy products, eggs, meat, poultry, and seafood.",
+  ),
+  Item(
+    headerValue:
+        'I acknowledge that I am donating foods that are in the following:',
+    expandedValue:
+        'Canned Goods - Canned fruits and vegetables, milks and sauces, meat and fish.',
+    expandedValue2:
+        'Instant Noodles - Instant Noodles sush as soups noodles, fried noodles, non-fried noodles.',
+    expandedValue3:
+        'Snacks & Biscuits - Any kinds of snacks and biscuits and the.',
+    expandedValue4:
+        'Beverages - Water, tea, coffee, soft drinks, juice drinks (alcoholic are prohibited).',
+    expandedValue5:
+        "Others - Other non-perishable foods that don't require refrigeration (e.g., condiments).",
+    expandedValue6: '',
+  ),
+];
+
+Future<void> showInformationDialog(BuildContext context) async {
+  var size = MediaQuery.of(context).size;
+  final double height = (size.height) / 2.0;
+  final double width = size.width / 1;
+  final List<Item> _data = agreementItems;
+  const description =
+      "Before proceeding to post a donation, you must adhere to the guidelines first to protect you and the safety of the others as we. The guidelines to acknowledge are as follows.";
+
+  return await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: Container(
+                height: height,
+                width: width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text('Guidelines For Posting Donations',
+                            style: TextStyle(color: Colors.blue)),
+                      ),
+                      SizedBox(
+                        height: 3.0,
+                      ),
+                      Text(description,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300)),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      ExpansionPanelList(
+                        expansionCallback: (int index, bool isExpanded) {
+                          setState(() {
+                            _data[index].isExpanded = !isExpanded;
+                          });
+                        },
+                        children: _data.map<ExpansionPanel>((Item item) {
+                          return ExpansionPanel(
+                            headerBuilder:
+                                (BuildContext context, bool isExpanded) {
+                              return ListTile(
+                                title: Text(
+                                  item.headerValue,
+                                  style: TextStyle(fontSize: 12.0),
+                                ),
+                              );
+                            },
+                            body: ListTile(
+                              title: Column(
+                                children: [
+                                  Text(item.expandedValue,
+                                      style: TextStyle(fontSize: 10.0)),
+                                  SizedBox(height: 10.0),
+                                  Text(item.expandedValue2,
+                                      style: TextStyle(fontSize: 10.0)),
+                                  SizedBox(height: 10.0),
+                                  Text(item.expandedValue3,
+                                      style: TextStyle(fontSize: 10.0)),
+                                  SizedBox(height: 10.0),
+                                  Text(item.expandedValue4,
+                                      style: TextStyle(fontSize: 10.0)),
+                                  SizedBox(height: 10.0),
+                                  Text(item.expandedValue5,
+                                      style: TextStyle(fontSize: 10.0)),
+                                  SizedBox(height: 10.0),
+                                  Text(item.expandedValue6,
+                                      style: TextStyle(fontSize: 10.0)),
+                                ],
+                              ),
+                            ),
+                            isExpanded: item.isExpanded,
+                          );
+                        }).toList(),
+                      )
+                    ],
+                  ),
+                )),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                      },
+                      child: Text(
+                        "Close",
+                      )),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PostDonation()));
+                    },
+                    child:
+                        Text("Proceed", style: TextStyle(color: Colors.blue)),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+      });
 }
 
 class InventoryContainer extends StatelessWidget {
@@ -286,7 +482,8 @@ Widget _currentStocks() {
     padding: const EdgeInsets.only(top: 10.0),
     child: (Text(
       'MHTP Current Stocks',
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+      style: TextStyle(
+          fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
     )),
   );
 }
@@ -294,7 +491,8 @@ Widget _currentStocks() {
 Widget _recentDonations() {
   return (Text(
     'Recent Donations from Donors',
-    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+    style: TextStyle(
+        fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
   ));
 }
 
@@ -306,7 +504,8 @@ class ListingsContainer extends StatelessWidget {
     final double itemWidth = size.width / 2;
     return SliverPadding(
       // padding: EdgeInsets.symmetric(horizontal: 20.0),
-      padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
+      padding:
+          EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0, bottom: 15.0),
       sliver: (SliverGrid.count(
         childAspectRatio: (itemWidth / itemHeight),
         crossAxisSpacing: 5.0,

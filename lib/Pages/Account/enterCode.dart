@@ -27,17 +27,14 @@ class _ChangePasswordCodeState extends State<ChangePasswordCode> {
   }
 }
 
-
-void checkCode(context)async{
+void checkCode(context) async {
   final prefs = await SharedPreferences.getInstance();
-  var fpcode=prefs.getString('fpcode');
-  if(code==fpcode){
+  var fpcode = prefs.getString('fpcode');
+  if (code == fpcode) {
     //goods
     print("the fpcode and user input code matched");
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NewPass()));
-
-  }else{
+    Navigator.push(context, MaterialPageRoute(builder: (context) => NewPass()));
+  } else {
     print("the fpcode and user input code did not matched");
   }
 }
@@ -50,7 +47,6 @@ class Design extends StatefulWidget {
 }
 
 class _DesignState extends State<Design> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,7 +62,7 @@ class _DesignState extends State<Design> {
               Text(
                 'Enter Code to Change Password',
                 style: TextStyle(
-                    fontSize: 22.sp,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.blue),
               ),
@@ -134,27 +130,26 @@ class _DesignState extends State<Design> {
                 child: Container(
                   child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: ElevatedButton(
-                      child: Container(
-                        width: double.infinity,
-                        child: Text(
-                          'Verify and ChangePassword',
-                          style: TextStyle(fontSize: 13.sp),
-                          textAlign: TextAlign.center,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: ElevatedButton(
+                        child: Container(
+                          width: double.infinity,
+                          child: Text(
+                            'Verify and ChangePassword',
+                            style: TextStyle(fontSize: 13.sp),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        print(code);
-                        if(code.length==6){
+                        onPressed: () {
+                          print(code);
+                          if (code.length == 6) {
                             checkCode(context);
-                        }else{
-                          print("Please complete the code.");
-                        }
-
-
-
-
-                      },
+                          } else {
+                            print("Please complete the code.");
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ),
