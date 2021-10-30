@@ -280,11 +280,14 @@ void loginUser(context) async {
   var message = response.body;
   // print(message);
 
+
   if (message == "No existing account.") {
     _showErrorMessage(context, "No existing account.");
   } else if (message == "Wrong email/password.") {
     _showErrorMessage(context, "Wrong email/password.");
-  } else if (message == "logged in") {
+  } else if (message == "Suspended") {
+    _showErrorMessage(context, "This account has been suspended");
+  }else if (message == "Logged in") {
     await prefs.setString('email', _emailController.text);
     var string = await prefs.getString('email');
     print(string);
