@@ -140,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onRefresh: refreshMyProfile,
               child: ListView(
                 children: <Widget>[
-                  SizedBox(height: 50),
+                  SizedBox(height: 30),
                   header,
                   SizedBox(height: 30),
                   InkWell(

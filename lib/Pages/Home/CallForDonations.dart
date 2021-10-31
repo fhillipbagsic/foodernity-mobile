@@ -58,7 +58,7 @@ class _ListingCountState extends State<ListingCount> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height) / 1.65;
+    final double itemHeight = (size.height) - 45.h;
     final double itemWidth = size.width - 40;
 
     return SliverPadding(
@@ -76,7 +76,7 @@ class _ListingCountState extends State<ListingCount> {
               'June 27 2021',
               'http://gsb.ateneo.edu/wp-content/uploads/2020/11/Rolly-1.jpg',
               'Call for donations for the victims of Typhoon Rolly',
-              ' TIte In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz 2 ',
+              ' In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz 2 ',
               context),
           _donationCall(
               'https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg',
@@ -84,7 +84,7 @@ class _ListingCountState extends State<ListingCount> {
               'June 27 2021',
               'http://gsb.ateneo.edu/wp-content/uploads/2020/11/Rolly-1.jpg',
               'Call for donations for the victims of Typhoon Rolly',
-              ' TIte In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz 2 ',
+              ' In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz 2 ',
               context),
           _donationCall(
               'https://preview.keenthemes.com/metronic-v4/theme/assets/pages/media/profile/profile_user.jpg',
@@ -92,7 +92,7 @@ class _ListingCountState extends State<ListingCount> {
               'June 27 2021',
               'http://gsb.ateneo.edu/wp-content/uploads/2020/11/Rolly-1.jpg',
               'Call for donations for the victims of Typhoon Rolly',
-              ' TIte In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz 2 ',
+              ' In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business In support of the disaster relief efforts to the Ateneo Graduate School of Business Mark kenneth Dela Cruz 2 ',
               context),
         ],
       )),
@@ -109,7 +109,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
   var postDate = date;
   var size = MediaQuery.of(context).size;
   final double itemWidth = size.width - 40;
-  final double itemHeight = size.height / 1.65;
+  final double itemHeight = size.height - 45.h;
   final double descHeight = size.height / 9;
 
   return Sizer(builder: (context, orientation, deviceType) {
@@ -158,7 +158,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                                       maxLines: 1,
                                       style: TextStyle(
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 20.0),
+                                          fontSize: 16.0.sp),
                                     ),
                                   ),
                                   SizedBox(height: 3.0),
@@ -168,7 +168,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                                         maxLines: 1,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w300,
-                                            fontSize: 15)),
+                                            fontSize: 13.sp)),
                                   )
                                 ],
                               )))
@@ -208,27 +208,30 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                   padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
                   child: Text(
                     callForDonationTitle,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(
                   height: 6,
                 ),
                 Container(
-                  height: 25.h,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
-                      child: Text(
-                        callForDonationDesc,
-                        style: TextStyle(fontSize: 13),
+                  height: 100,
+                  child: IntrinsicHeight(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
+                        child: Text(
+                          callForDonationDesc,
+                          style: TextStyle(fontSize: 10.sp),
+                        ),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 5,
                 ),
                 _donateButton(context)
               ],
@@ -252,7 +255,7 @@ Widget _donateButton(context) {
           color: Colors.blue,
           child: Text('Donate Now',
               style: TextStyle(
-                  fontSize: 15.0,
+                  fontSize: 13.0.sp,
                   fontWeight: FontWeight.normal,
                   color: Colors.white)),
           shape: RoundedRectangleBorder(

@@ -92,10 +92,10 @@ class _ListingsState extends State<Listings> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // _filter(context),
-                        _currentStocks(),
-                        _Inventory(context),
+                        // _currentStocks(),
+                        // _Inventory(context),
                         SizedBox(
-                          height: 10.0,
+                          height: 20.0,
                         ),
                         _recentDonations(),
                       ],

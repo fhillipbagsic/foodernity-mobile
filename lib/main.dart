@@ -83,7 +83,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFFEFEFEF)),
       title: 'Foodernity',
-      home: isLoggedInVar ? Home() : ChangePasswordCode(),
+      home: isLoggedInVar ? Home() : Signin(),
       routes: routes,
     );
   }
