@@ -18,10 +18,7 @@ import 'package:my_app/Pages/splash/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:my_app/Pages/DonationDetails.dart';
 import 'package:my_app/Pages/RecentDonationDetails.dart';
-import 'package:my_app/NavigationPages/Listed.dart';
 import 'package:my_app/Pages/Home/CallForDonations.dart';
-import 'package:my_app/NavigationPages/ReceivedDonations.dart';
-import 'package:my_app/NavigationPages/RequestedDonation.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:my_app/Pages/AccountPage/profilepage.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -29,6 +26,7 @@ import 'Pages/PostDonation/step_three.dart';
 import 'Pages/PostDonation/verification.dart';
 import 'Pages/AccountPage/EditProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Pages/MyDonations/MyDonations.dart';
 
 void main() {
   runApp(MaterialApp(

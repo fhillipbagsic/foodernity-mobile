@@ -12,10 +12,7 @@ import 'package:my_app/Pages/RequestGuidelines.dart';
 import 'package:my_app/Pages/splash/splash_screen.dart';
 import 'package:my_app/Pages/DonationDetails.dart';
 import 'package:my_app/Pages/Home/Listings.dart';
-import 'package:my_app/NavigationPages/Listed.dart';
 import 'package:my_app/Pages/RequestListingDetails.dart';
-import 'package:my_app/NavigationPages/ReceivedDonations.dart';
-import 'package:my_app/NavigationPages/RequestedDonation.dart';
 import 'package:my_app/Pages/RequestDonationSummary.dart';
 import 'package:my_app/Pages/PostDonation/verification.dart';
 
@@ -33,10 +30,7 @@ final Map<String, WidgetBuilder> routes = {
   RequestDonation.routeName: (context) => RequestDonation(),
   RequestGuidelines.routeName: (context) => RequestGuidelines(),
   FrequentlyAsk.routeName: (context) => FrequentlyAsk(),
-  Listed.routeName: (context) => Listed(),
   RequestDetails.routeName: (context) => RequestDetails(),
-  ReceivedDonations.routeName: (context) => ReceivedDonations(),
-  RequestedDonation.routeName: (context) => RequestedDonation(),
   RequestSummary.routeName: (context) => RequestSummary(),
   Verification.routeName: (context) => Verification()
 };

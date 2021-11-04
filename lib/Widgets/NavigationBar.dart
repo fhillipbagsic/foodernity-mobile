@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/Guidelines/FAQs.dart';
 import 'package:my_app/Pages/Home/FrequentlyAsk.dart';
 import 'package:my_app/styles.dart';
-import 'package:my_app/NavigationPages/Listed.dart';
-import 'package:my_app/NavigationPages/ReceivedDonations.dart';
-import 'package:my_app/NavigationPages/RequestedDonation.dart';
+import 'package:my_app/Pages/Home/Notifications.dart';
 
 class NavigationBar extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffold;
@@ -21,6 +19,19 @@ class _NavigationBarState extends State<NavigationBar> {
   Widget build(BuildContext context) {
     return CupertinoSliverNavigationBar(
       automaticallyImplyLeading: false,
+      trailing: GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => Notifications()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Icon(
+              Icons.notifications,
+              color: Colors.blue,
+              size: 25.0,
+            ),
+          )),
       largeTitle: Text(widget.title),
       // trailing: _hamburger(widget.scaffold),
     );

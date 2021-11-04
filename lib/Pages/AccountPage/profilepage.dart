@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:my_app/Pages/Account/Signin.dart';
+import 'package:my_app/Pages/MyDonations/MyDonations.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -144,7 +145,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   header,
                   SizedBox(height: 30),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MyDonations()));
+                    },
                     splashColor: Colors.blue.withAlpha(30),
                     child: ProfileListItem(
                       icon: LineAwesomeIcons.user_shield,

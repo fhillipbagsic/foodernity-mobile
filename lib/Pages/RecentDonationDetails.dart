@@ -68,6 +68,14 @@ Widget _cardView(context) {
   var height = MediaQuery.of(context).size.height / 4;
   var imgHeight = MediaQuery.of(context).size.height / 3;
   var donationGoodsHeight = MediaQuery.of(context).size.height / 6;
+  var img =
+      'https://psu.edu.ph/wp-content/uploads/2020/11/125760987_1831764043637981_8035397335388690116_n.jpg';
+  var beneficiaries = 'Barangay 403';
+  var donatedGoods = 'November 05, 2021';
+  var remarks =
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. ';
+  var donGoods = 'Instant Noodles';
+
   return Container(
     child: Column(
       children: [
@@ -76,7 +84,7 @@ Widget _cardView(context) {
           width: width,
           height: imgHeight,
           child: Image.network(
-            'https://psu.edu.ph/wp-content/uploads/2020/11/125760987_1831764043637981_8035397335388690116_n.jpg',
+            img,
             fit: BoxFit.fitWidth,
           ),
         ),
@@ -99,7 +107,7 @@ Widget _cardView(context) {
                       color: Colors.blue[400],
                     ),
                     title: Text(
-                      'Benefiaries: Residents of Barangay 403',
+                      'Benefiaries: Residents of ' + beneficiaries,
                       style: TextStyle(fontSize: 16, color: Colors.blue[400]),
                     ),
                   ),
@@ -120,7 +128,7 @@ Widget _cardView(context) {
                       color: Colors.green[400],
                     ),
                     title: Text(
-                      'Donations donated on November 05, 2021',
+                      'Donations donated on ' + donatedGoods,
                       style: TextStyle(fontSize: 16, color: Colors.green[400]),
                     ),
                   ),
@@ -156,7 +164,7 @@ Widget _cardView(context) {
                                     child: Padding(
                                       padding: const EdgeInsets.only(top: 5),
                                       child: Text(
-                                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. A mattis enim sagittis, eget ante justo massa. Duis amet eget id fames nisi, dolor et quis senectus. ',
+                                        remarks,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w300,
                                             fontSize: 13.0,
@@ -223,7 +231,7 @@ Widget _cardView(context) {
                                                     bottom: 6,
                                                   ),
                                                   child: Text(
-                                                    'Instant Noodles',
+                                                    donGoods,
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                         fontSize: 13,
