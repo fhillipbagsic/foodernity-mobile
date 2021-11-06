@@ -58,7 +58,7 @@ class _ListingCountState extends State<ListingCount> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height) - 45.h;
+    final double itemHeight = (size.height) - 35.h;
     final double itemWidth = size.width - 40;
 
     return SliverPadding(
@@ -109,7 +109,7 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
   var postDate = date;
   var size = MediaQuery.of(context).size;
   final double itemWidth = size.width - 40;
-  final double itemHeight = size.height - 45.h;
+  final double itemHeight = size.height - 40.h;
   final double descHeight = size.height / 9;
 
   return Sizer(builder: (context, orientation, deviceType) {

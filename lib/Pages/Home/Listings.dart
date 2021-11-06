@@ -102,7 +102,7 @@ class _ListingsState extends State<Listings> {
                     ),
                   ),
                 ),
-                ListingsContainer(),
+               Notification(),
               ],
             ),
           ),
@@ -495,43 +495,115 @@ Widget _recentDonations() {
         fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
   ));
 }
+class Notification extends StatefulWidget {
+  const Notification({Key key}) : super(key: key);
 
-class ListingsContainer extends StatelessWidget {
+  @override
+  _NotificationState createState() => _NotificationState();
+}
+
+class _NotificationState extends State<Notification> {
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height) / 6.5;
-    final double itemWidth = size.width / 2;
-    return SliverPadding(
-      // padding: EdgeInsets.symmetric(horizontal: 20.0),
-      padding:
-          EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0, bottom: 15.0),
-      sliver: (SliverGrid.count(
-        childAspectRatio: (itemWidth / itemHeight),
-        crossAxisSpacing: 5.0,
-        mainAxisSpacing: 5.0,
-        crossAxisCount: 1,
-        children: [
-          _listingItem(
-              'Donation Drive to the residents of Barangay 403 ',
-              'November 05, 2021',
-              'https://psu.edu.ph/wp-content/uploads/2020/11/125760987_1831764043637981_8035397335388690116_n.jpg',
-              context),
-          _listingItem(
-              'Donation Drive to the residents of Barangay 403',
-              'November 05, 2021',
-              'http://static1.squarespace.com/static/55f9afdfe4b0f520d4e4ff43/55f9b97fe4b0241b81b0cbe4/5eb092883c9e9c74eb3c23fa/1594661924914/OC+AOT+food+donation.jpg?format=1500w',
-              context),
-          _listingItem(
-              'Donation Drive to the residents of Barangay 403',
-              'November 05, 2021',
-              'https://psu.edu.ph/wp-content/uploads/2020/11/125760987_1831764043637981_8035397335388690116_n.jpg',
-              context),
-        ],
-      )),
+    return SliverToBoxAdapter(
+      child: Sizer(
+        builder: (context, orientation, deviceType) {
+          return Container(
+            height: 1000,
+            child: FutureBuilder(
+              future: getAnnouncements(),
+              builder: (context, snapshot) {
+                if (snapshot.data == null) {
+                  return Container(
+                    child: Center(
+                      child: Text("Loading Notifications..."),
+                    ),
+                  );
+                } else
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, i) {
+                        return ListTile(
+                          title: Text(snapshot.data[i].notif),
+                        );
+                      });
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
+
+Future getAnnouncements() async {
+  // final prefs = await SharedPreferences.getInstance();
+  // var email= prefs.getString('email');
+
+
+  http.Response response =
+  await http.post("https://foodernity.herokuapp.com/donations/getDistributedDonations",
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+
+      }));
+
+  print(response.body);
+  // var jsonData = jsonDecode(response.body);
+  // List<AppNotification> notifications = [];
+  //
+  // for (var u in jsonData) {
+  //
+  //   // print(u);
+  //   AppNotification notification =
+  //   AppNotification(u["notificationMessage"]);
+  //   notifications.add(notification);
+  // }
+  // print(notifications.length);
+  // return notifications;
+}
+
+
+
+
+// class ListingsContainer extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     var size = MediaQuery.of(context).size;
+//     final double itemHeight = (size.height) / 6.5;
+//     final double itemWidth = size.width / 2;
+//     return SliverPadding(
+//       // padding: EdgeInsets.symmetric(horizontal: 20.0),
+//       padding:
+//           EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0, bottom: 15.0),
+//       sliver: (SliverGrid.count(
+//         childAspectRatio: (itemWidth / itemHeight),
+//         crossAxisSpacing: 5.0,
+//         mainAxisSpacing: 5.0,
+//         crossAxisCount: 1,
+//         children: [
+//           _listingItem(
+//               'Donation Drive to the residents of Barangay 403 ',
+//               'November 05, 2021',
+//               'https://psu.edu.ph/wp-content/uploads/2020/11/125760987_1831764043637981_8035397335388690116_n.jpg',
+//               context),
+//           _listingItem(
+//               'Donation Drive to the residents of Barangay 403',
+//               'November 05, 2021',
+//               'http://static1.squarespace.com/static/55f9afdfe4b0f520d4e4ff43/55f9b97fe4b0241b81b0cbe4/5eb092883c9e9c74eb3c23fa/1594661924914/OC+AOT+food+donation.jpg?format=1500w',
+//               context),
+//           _listingItem(
+//               'Donation Drive to the residents of Barangay 403',
+//               'November 05, 2021',
+//               'https://psu.edu.ph/wp-content/uploads/2020/11/125760987_1831764043637981_8035397335388690116_n.jpg',
+//               context),
+//         ],
+//       )),
+//     );
+//   }
+// }
 
 Widget _listingItem(title, date, image, context) {
   var donationImage = image;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -127,10 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     }
 
-    void logout() async {
-      final prefs = await SharedPreferences.getInstance();
-      prefs.clear().then((value) => {ConfirmLogoutDialog(context)});
-    }
+
 
     return Builder(
       builder: (context) {
@@ -175,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      logout();
+                      ConfirmLogoutDialog(context);
                     },
                     child: ProfileListItem(
                       icon: LineAwesomeIcons.alternate_sign_out,
@@ -192,7 +190,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
-
+void logout() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.clear();
+}
 void ConfirmLogoutDialog(context) {
   showDialog(
     context: context,
@@ -201,9 +202,11 @@ void ConfirmLogoutDialog(context) {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
+            logout();
+
             Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => MyApp()));
-            //   Navigator.of(context, rootNavigator: true).pop();
+
           },
           child: Text("Confirm"),
         ),
