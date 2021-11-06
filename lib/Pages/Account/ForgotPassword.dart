@@ -98,8 +98,19 @@ void getCode(context) async {
 
   // alertNoAcc(context);
   print(response.body);
-  prefs.setString('fpemail', _emailController.text);
-  prefs.setString('fpcode', response.body);
+
+  if(response.body=="No existing account."){
+    alertNoAcc(context);
+  }else{
+    prefs.setString('fpemail', _emailController.text);
+    prefs.setString('fpcode', response.body);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChangePasswordCode()),
+    );
+  }
+
 }
 
 Widget _sendButton(context) {
@@ -113,10 +124,7 @@ Widget _sendButton(context) {
       if (isValid()) {
         //goods
         getCode(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ChangePasswordCode()),
-        );
+
       } else {
         print("Email field cannot be empty");
       }
