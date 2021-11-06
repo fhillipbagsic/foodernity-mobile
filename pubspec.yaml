@@ -46,6 +46,7 @@ dependencies:
   flutter_screenutil: ^1.0.2
   line_awesome_flutter: ^1.0.1
   cloudinary_public: ^0.7.0
+  get: ^4.1.4
 
 dev_dependencies:
   flutter_test:

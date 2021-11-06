@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
-import 'package:my_app/Pages/RequestListingDetails.dart';
 import 'package:sizer/sizer.dart';
+import 'package:my_app/Pages/Home/Listings.dart';
 
 class RequestListing extends StatefulWidget {
   @override
@@ -233,7 +233,19 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
                 SizedBox(
                   height: 5,
                 ),
-                _donateButton(context)
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        _donateButton(context),
+                        SizedBox(
+                          width: 15.0,
+                        ),
+                        _detailsButton(context),
+                      ],
+                    )
+                  ],
+                )
               ],
             ),
           ),
@@ -243,13 +255,27 @@ Widget _donationCall(profile, name, date, image, title, description, context) {
   });
 }
 
+Widget _detailsButton(context) {
+  return Container(
+    child: GestureDetector(
+      onTap: () {},
+      child: Text(
+        "Details",
+        style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+      ),
+    ),
+  );
+}
+
 Widget _donateButton(context) {
   return Container(
     child: ButtonBar(
       alignment: MainAxisAlignment.start,
       children: [
         FlatButton(
-          onPressed: () {},
+          onPressed: () {
+            showInformationDialog(context);
+          },
           minWidth: 55,
           height: 35,
           color: Colors.blue,

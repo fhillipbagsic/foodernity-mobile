@@ -221,7 +221,7 @@ Future<void> showInformationDialog(BuildContext context) async {
                     children: [
                       Align(
                         alignment: Alignment.topLeft,
-                        child: Text('Guidelines For Posting Donations',
+                        child: Text('Guidelines For Donating',
                             style: TextStyle(color: Colors.blue)),
                       ),
                       SizedBox(

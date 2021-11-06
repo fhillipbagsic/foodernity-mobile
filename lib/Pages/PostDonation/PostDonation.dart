@@ -116,15 +116,15 @@ Widget _navigationBar(context) {
 Widget showAlertDialog(BuildContext context) {
   // set up the buttons
   Widget cancelButton = FlatButton(
-    child: Text("Cancel"),
+    child: Text("No"),
     onPressed: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
   Widget continueButton = FlatButton(
-    child: Text("Continue"),
+    child: Text("Yes"),
     onPressed: () {
-      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     },
   );
 

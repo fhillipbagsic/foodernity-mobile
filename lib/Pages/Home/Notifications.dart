@@ -1,9 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Home.dart';
-import 'package:my_app/Widgets/NavigationBar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sizer/sizer.dart';
+import 'package:http/http.dart' as http;
 
 class Notifications extends StatefulWidget {
   @override
@@ -65,11 +65,11 @@ class _NotificationCountState extends State<NotificationCount> {
         children: [
           _buildNotification(
               // 'https://cf.shopee.com.my/file/090a18a75c04ad1d4e0f63421a5c8651',
-              'Pancit Canton',
+              'Biscuits',
               'The foodbank accepted your donation'),
           _buildNotification(
               // 'https://cf.shopee.com.my/file/090a18a75c04ad1d4e0f63421a5c8651',
-              'Pancit Canton',
+              'Bread',
               'The foodbank accepted your donation'),
           _buildNotification(
               // 'https://cf.shopee.com.my/file/090a18a75c04ad1d4e0f63421a5c8651',
@@ -79,6 +79,20 @@ class _NotificationCountState extends State<NotificationCount> {
       )),
     );
   }
+}
+
+Future getUserData() async {
+  var response = await http.get('https://jsonplaceholder.typicode.com/users');
+  var jsonData = jsonDecode(response.body);
+  List<AppNotification> notifications = [];
+
+  for (var u in jsonData) {
+    AppNotification notification =
+        AppNotification(u["name"], u["email"], u["userName"]);
+    notifications.add(notification);
+  }
+  print(notifications.length);
+  return notifications;
 }
 
 Widget _buildNotification(title, description) {
@@ -109,7 +123,8 @@ Widget _buildNotification(title, description) {
                     style: TextStyle(
                         // fontFamily: 'roboto',
                         fontWeight: FontWeight.bold,
-                        fontSize: 18.0)),
+                        fontSize: 18.0,
+                        color: Colors.blue)),
                 subtitle: Text(notifDesc,
                     style: TextStyle(
                         // fontFamily: 'RobotoMono-Regular',
@@ -123,4 +138,10 @@ Widget _buildNotification(title, description) {
       );
     },
   );
+}
+
+class AppNotification {
+  final String email, name, userName;
+
+  AppNotification(this.email, this.name, this.userName);
 }
