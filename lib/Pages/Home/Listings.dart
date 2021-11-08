@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_app/Models/Item.dart';
 import 'package:my_app/Pages/PostDonation/PostDonation.dart';
 import 'package:my_app/Pages/RecentDonationDetails.dart';
@@ -72,48 +73,70 @@ class _ListingsState extends State<Listings> {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return Scaffold(
-        key: scaffoldKey,
-        body: Container(
-          height: 100.h,
-          width: 100.w,
-          child: SafeArea(
-            child: CustomScrollView(
-              //physics: ClampingScrollPhysics(),
-              slivers: [
-                NavigationBar(
-                  title: 'Donations',
-                  scaffold: scaffoldKey,
-                ),
-                SliverToBoxAdapter(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // _filter(context),
-                        // _currentStocks(),
-                        // _Inventory(context),
-                        SizedBox(
-                          height: 20.0,
-                        ),
-                        _recentDonations(),
-                      ],
+      return WillPopScope(
+        onWillPop: () {
+          return showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                    title: Text('Warning',
+                        style: TextStyle(color: Colors.redAccent)),
+                    content: Text('Are you sure to Exit ?'),
+                    actions: <Widget>[
+                      FlatButton(
+                          onPressed: () => SystemNavigator.pop(),
+                          child: Text('Yes')),
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: Text('No'))
+                    ],
+                  ));
+        },
+        child: Scaffold(
+          key: scaffoldKey,
+          body: Container(
+            height: 100.h,
+            width: 100.w,
+            child: SafeArea(
+              child: CustomScrollView(
+                //physics: ClampingScrollPhysics(),
+                slivers: [
+                  NavigationBar(
+                    title: 'Announcements',
+                    scaffold: scaffoldKey,
+                  ),
+                  SliverToBoxAdapter(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // _filter(context),
+                          // _currentStocks(),
+                          // _Inventory(context),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          _recentDonations(),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-               Notification(),
-              ],
+                  RecentDonations(),
+                  // ListingsContainer()
+                ],
+              ),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // Navigator.pushNamed(context, AddListing.routeName);
-            showInformationDialog(context);
-          },
-          child: Icon(Icons.add),
-          backgroundColor: ColorPrimary,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              // Navigator.pushNamed(context, AddListing.routeName);
+              showInformationDialog(context);
+            },
+            child: Icon(Icons.add),
+            backgroundColor: ColorPrimary,
+          ),
         ),
       );
     });
@@ -495,36 +518,102 @@ Widget _recentDonations() {
         fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
   ));
 }
-class Notification extends StatefulWidget {
-  const Notification({Key key}) : super(key: key);
+
+class RecentDonations extends StatefulWidget {
+  const RecentDonations({Key key}) : super(key: key);
 
   @override
-  _NotificationState createState() => _NotificationState();
+  _RecentDonationsState createState() => _RecentDonationsState();
 }
 
-class _NotificationState extends State<Notification> {
+class _RecentDonationsState extends State<RecentDonations> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double height = (size.height) - 29.h;
+    final double cardHeight = size.height / 5.5;
     return SliverToBoxAdapter(
       child: Sizer(
         builder: (context, orientation, deviceType) {
           return Container(
-            height: 1000,
+            padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
+            height: height,
             child: FutureBuilder(
               future: getAnnouncements(),
               builder: (context, snapshot) {
                 if (snapshot.data == null) {
                   return Container(
                     child: Center(
-                      child: Text("Loading Notifications..."),
+                      child: CircularProgressIndicator(),
                     ),
                   );
                 } else
                   return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, i) {
-                        return ListTile(
-                          title: Text(snapshot.data[i].notif),
+                        return Container(
+                          margin: EdgeInsets.only(top: 10.0),
+                          child: (Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                  child: Image(
+                                    fit: BoxFit.fitWidth,
+                                    height: cardHeight,
+                                    width: double.infinity,
+                                    image: NetworkImage(
+                                      snapshot.data[i].donationImage,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      children: [
+                                        ListTile(
+                                          title: Text(
+                                            snapshot.data[i].date,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w300,
+                                                fontSize: 12),
+                                          ),
+                                          subtitle: Text(
+                                            snapshot.data[i].donationRecipient,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14.0,
+                                                color: Colors.grey[600]),
+                                          ),
+                                          trailing: Wrap(
+                                            spacing: 1,
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ListingDetails()));
+                                                },
+                                                child: Icon(
+                                                    Icons.navigate_next_sharp,
+                                                    color: Colors.blue),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )),
                         );
                       });
               },
@@ -537,36 +626,38 @@ class _NotificationState extends State<Notification> {
 }
 
 Future getAnnouncements() async {
-  // final prefs = await SharedPreferences.getInstance();
-  // var email= prefs.getString('email');
+  print('get announcements');
 
-
-  http.Response response =
-  await http.post("https://foodernity.herokuapp.com/donations/getDistributedDonations",
+  http.Response response = await http.post(
+      "https://foodernity.herokuapp.com/donations/getDistributedDonations",
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String>{
-
-      }));
+      body: jsonEncode(<String, String>{}));
 
   print(response.body);
-  // var jsonData = jsonDecode(response.body);
-  // List<AppNotification> notifications = [];
-  //
-  // for (var u in jsonData) {
-  //
-  //   // print(u);
-  //   AppNotification notification =
-  //   AppNotification(u["notificationMessage"]);
-  //   notifications.add(notification);
-  // }
-  // print(notifications.length);
-  // return notifications;
+  var jsonData = jsonDecode(response.body);
+  List<AppAnnouncements> announcements = [];
+
+  for (var u in jsonData) {
+    // print(u);
+    AppAnnouncements announcement = AppAnnouncements(u["distributedDonationID"],
+        u["donationImage"], u["date"], u["donationRecipient"]);
+    announcements.add(announcement);
+  }
+  print(announcements.length);
+  return announcements;
 }
 
+class AppAnnouncements {
+  final int distributedDonationID;
+  final String donationImage;
+  final String date;
+  final String donationRecipient;
 
-
+  AppAnnouncements(this.distributedDonationID, this.donationImage, this.date,
+      this.donationRecipient);
+}
 
 // class ListingsContainer extends StatelessWidget {
 //   @override
@@ -605,123 +696,66 @@ Future getAnnouncements() async {
 //   }
 // }
 
-Widget _listingItem(title, date, image, context) {
-  var donationImage = image;
-  var donationDate = date;
-  var donationTitle = title;
+// Widget _listingItem(title, date, image, context) {
+//   var donationImage = image;
+//   var donationDate = date;
+//   var donationTitle = title;
 
-  var width = MediaQuery.of(context).size.width;
-  var height = MediaQuery.of(context).size.height / 5;
+//   var width = MediaQuery.of(context).size.width;
+//   var height = MediaQuery.of(context).size.height / 5;
 
-  return InkWell(
-    splashColor: Colors.blue.withAlpha(30),
-    onTap: () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ListingDetails()));
-    },
-    child: (Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(4.0),
-            child: Image(
-              fit: BoxFit.fitWidth,
-              height: height,
-              width: double.infinity,
-              image: NetworkImage(donationImage),
-            ),
-          ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      donationDate,
-                      style:
-                          TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
-                    ),
-                    subtitle: Text(
-                      donationTitle,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.0,
-                          color: Colors.grey[600]),
-                    ),
-                    trailing: Wrap(
-                      spacing: 1,
-                      children: <Widget>[
-                        Icon(Icons.navigate_next_sharp, color: Colors.blue)
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    )),
-  );
-}
+//   return InkWell(
+//     splashColor: Colors.blue.withAlpha(30),
+//     onTap: () {
+//       Navigator.push(
+//           context, MaterialPageRoute(builder: (context) => ListingDetails()));
+//     },
+//     child: (Card(
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           ClipRRect(
+//             borderRadius: BorderRadius.circular(4.0),
+//             child: Image(
+//               fit: BoxFit.fitWidth,
+//               height: height,
+//               width: double.infinity,
+//               image: NetworkImage(donationImage),
+//             ),
+//           ),
+//           Container(
+//             child: Padding(
+//               padding: const EdgeInsets.only(left: 8.0),
+//               child: Column(
+//                 children: [
+//                   ListTile(
+//                     title: Text(
+//                       donationDate,
+//                       style:
+//                           TextStyle(fontWeight: FontWeight.w300, fontSize: 12),
+//                     ),
+//                     subtitle: Text(
+//                       donationTitle,
+//                       style: TextStyle(
+//                           fontWeight: FontWeight.w600,
+//                           fontSize: 14.0,
+//                           color: Colors.grey[600]),
+//                     ),
+//                     trailing: Wrap(
+//                       spacing: 1,
+//                       children: <Widget>[
+//                         Icon(Icons.navigate_next_sharp, color: Colors.blue)
+//                       ],
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     )),
+//   );
+// }
 
-
-          // Container(
-          //   padding: EdgeInsets.only(left: 10.0),
-          //   child: Row(
-          //     children: [
-          //       Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           SizedBox(
-          //             height: 12.0,
-          //           ),
-          //           // CircleAvatar(
-          //           //   radius: 20.0,
-          //           //   backgroundImage: NetworkImage(donatorImage),
-          //           //   backgroundColor: Colors.transparent,
-          //           // ),
-          //         ],
-          //       ),
-          //       Container(
-          //         child: Padding(
-          //           padding: const EdgeInsets.only(left: 8.0, top: 11),
-          //           child: Column(
-          //             children: [
-          //               SizedBox(
-          //                 width: 120,
-          //                 child: Text(
-          //                   donatorName,
-          //                   maxLines: 1,
-          //                   overflow: TextOverflow.clip,
-          //                   style: TextStyle(
-          //                     fontWeight: FontWeight.w600,
-          //                     fontSize: 12.0,
-          //                   ),
-          //                 ),
-          //               ),
-          //               SizedBox(
-          //                 height: 3.0,
-          //               ),
-          //               SizedBox(
-          //                   width: 120,
-          //                   child: Text(
-          //                     donationDesc,
-          //                     maxLines: 1,
-          //                     overflow: TextOverflow.ellipsis,
-          //                     style: TextStyle(
-          //                         fontWeight: FontWeight.w300, fontSize: 10),
-          //                   ))
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 10.0,
-          // ),

@@ -7,14 +7,13 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/Pages/Home.dart';
-import 'package:my_app/Pages/DonationDetails.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:sizer/sizer.dart';
+import 'package:my_app/Pages/PostDonation/step_three.dart';
 
 var donationName = "";
 File _image;
@@ -183,18 +182,6 @@ class _formsState extends State<forms> {
       quantityController: quantityController,
     ));
   }
-
-  // if (data.length != 0) {
-  //     floatingIcon = new Icon(Icons.add);
-
-  //     data = [];
-  //     listDynamic = [];
-  //     print('if');
-  //   }
-  //   setState(() {});
-  //   if (listDynamic.length >= 5) {
-  //     return;
-  //   }
 
   void initState() {
     _dropDownMenuItems2 = getDropDownMenuItems2();
@@ -514,39 +501,9 @@ class _formsState extends State<forms> {
             print(categArr);
             print(dateArr);
             print(qtyArr);
-
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => StepThree()));
             postDonation(categArr, qtyArr, _image, donationName);
-
-            //  dateArr.sort((a, b) {
-            //    DateTime c = DateTime.parse(a);
-            //    DateTime d = DateTime.parse(b);
-            //    return c.compareTo(d);
-            //  });
-            //  print("sorted");
-            //  print(dateArr[0]);
-            // var sixMonths =DateTime.now().add(Duration(days: 180));
-            // print(sixMonths);
-
-            // if(dateArr[0].){
-            //
-            // }
-            // print(_donationNameController.text);
-            // print(_image);
-            // print(_quantityController.text);
-            //print(_dropDownValue);
-            // print(_dateController.text);
-            // if (controller.text.isEmpty
-            //     ? _validate = true
-            //     : _validate = false) {
-            //   return;
-            // }
-            // setState(() {
-            //   controller.text.isEmpty
-            //       ? _validate = true
-            //       : _validate = false;
-            // });
-            // Navigator.pushNamed(context, PostDonationSummary.routeName);
-            // _homeKey.currentState.save();
           } else {
             //lagyan ng popup na image is required
             _imageRequired(context);

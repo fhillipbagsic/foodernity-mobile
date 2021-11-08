@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:my_app/Pages/MyDonations/Donation.dart';
 import 'package:my_app/Pages/MyDonations/donation_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
+import 'package:http/http.dart' as http;
+import 'package:my_app/Pages/PostDonation/PostDonation.dart';
 
 class MyDonations extends StatefulWidget {
   @override
@@ -26,99 +30,103 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  List<Donation> donations = [
-    Donation(
-        donationID: 1,
-        donationName: 'Pancit Canton',
-        dateTimePosted: '2021-10-17 19:53:57.175818',
-        donationCategories: ['Instant Noodles', 'Canned Goods'],
-        donationQuantities: [5, 10],
-        donationExpiries: ['2021-10-17', '2021-10-17'],
-        imgPath:
-            'https://upload.wikimedia.org/wikipedia/commons/b/b0/Lucky_Me%21_Pancit_Canton_instant_noodles_%28Philippines%29.jpg',
-        status: 'pending'),
-    Donation(
-        donationID: 2,
-        donationName: 'Assorted Canned Goods',
-        dateTimePosted: '2021-10-17 19:53:57.175818',
-        donationCategories: ['Canned Goods'],
-        donationQuantities: [5],
-        donationExpiries: ['2021-10-17'],
-        imgPath:
-            'https://ph-test-11.slatic.net/p/7375d11f5a5c0384da4acda3c7b66c8f.jpg',
-        status: 'accepted'),
-    Donation(
-        donationID: 3,
-        donationName: 'Assorted Canned Goods',
-        dateTimePosted: '2021-10-17 19:53:57.175818',
-        donationCategories: ['Instant Noodles'],
-        donationQuantities: [5],
-        donationExpiries: ['2021-10-17'],
-        imgPath:
-            'https://ph-test-11.slatic.net/p/7375d11f5a5c0384da4acda3c7b66c8f.jpg',
-        status: 'onhand'),
-    Donation(
-        donationID: 4,
-        donationName: 'Assorted Canned Goods',
-        dateTimePosted: '2021-10-17 19:53:57.175818',
-        donationCategories: ['Instant Noodles'],
-        donationQuantities: [5],
-        donationExpiries: ['2021-10-17'],
-        imgPath:
-            'https://ph-test-11.slatic.net/p/7375d11f5a5c0384da4acda3c7b66c8f.jpg',
-        status: 'distributed'),
-  ];
+  Future<List<Donation>> futureDonations;
+
+  @override
+  void initState() {
+    super.initState();
+    futureDonations = fetchDonations();
+  }
+
   List values = [
     'Pending Donations',
     'Accepted Donations',
     'Received Donations',
-    'Distributed Donations'
   ];
 
   int selectedValue = 0;
 
-  void sortDonations(String value) {
-    List<Donation> newDonations = [];
+  Future<List<Donation>> fetchDonations() async {
+    final prefs = await SharedPreferences.getInstance();
+    var userID = prefs.getInt("userID");
+    print(userID);
+    print('fetch');
+    final response = await http.post(
+        Uri.parse(
+          'https://foodernity.herokuapp.com/donations/getDonationsFor',
+        ),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(
+          <String, int>{
+            'donorID': userID,
+          },
+        ));
 
-    var sortWord = value.split(' ')[0].toLowerCase();
+    List<Donation> parsedDonations = [];
+    if (response.statusCode == 200) {
+      List donations = jsonDecode(response.body);
 
-    print(sortWord);
-    donations.forEach((element) {
-      if (element.status == sortWord) {
-        newDonations.add(element);
+      for (var donation in donations) {
+        donation['donationCategories'] = donation['donationCategories']
+            .toString()
+            .substring(1, donation['donationCategories'].toString().length - 1)
+            .split(', ');
+        donation['donationQuantities'] = donation['donationQuantities']
+            .toString()
+            .substring(1, donation['donationQuantities'].toString().length - 1)
+            .split(', ');
+
+        parsedDonations.add(Donation.fromJSON(donation));
       }
-    });
+    }
 
-    donations.forEach((element) {
-      if (element.status != sortWord) {
-        newDonations.add(element);
-      }
-    });
-
-    donations = newDonations;
+    return parsedDonations;
   }
 
-  showPicker() {
-    showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return CupertinoPicker(
-              itemExtent: 32.0,
-              onSelectedItemChanged: (value) {
-                setState(() {
-                  print(value);
-                  selectedValue = value;
-                  sortDonations(values[value]);
-                });
-              },
-              children: const [
-                Text('Pending Donations'),
-                Text('Accepted Donations'),
-                Text('Received Donations'),
-                Text('Distributed Donations'),
-              ]);
-        });
-  }
+  // sortDonations(String value) {
+  //   Future<List<Donation>> newDonations = [];
+
+  //   var sortWord = value.split(' ')[0].toLowerCase();
+
+  //   print(sortWord);
+  //   futureDonations.then((value) => value.forEach((element) {
+  //         if (element.status == sortWord) {
+  //           newDonations.add(element);
+  //         }
+  //       }));
+
+  //   futureDonations.then((value) => value.forEach((element) {
+  //         if (element.status != sortWord) {
+  //           newDonations.add(element);
+  //         }
+  //       }));
+
+  //   futureDonations = newDonations;
+  // }
+
+  // showPicker() {
+  //   showModalBottomSheet(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return CupertinoPicker(
+  //             itemExtent: 32.0,
+  //             onSelectedItemChanged: (value) {
+  //               setState(() {
+  //                 print(value);
+  //                 selectedValue = value;
+  //                 sortDonations(values[value]);
+  //               });
+  //             },
+  //             children: const [
+  //               Text('Pending Donations'),
+  //               Text('Accepted Donations'),
+  //               Text('Received Donations'),
+  //               Text('Distributed Donations'),
+  //             ]);
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,53 +134,38 @@ class _AppState extends State<App> {
       body: SafeArea(
         child: Container(
           color: Color.fromRGBO(238, 238, 238, 1),
-          child: CustomScrollView(
-            slivers: [
-              CupertinoSliverNavigationBar(
-                largeTitle: Text('My Donations'),
-              ),
-              SliverToBoxAdapter(
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  margin:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  child: GestureDetector(
-                    onTap: showPicker,
-                    child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Color.fromRGBO(33, 150, 243, 1),
-                          boxShadow: [
-                            BoxShadow(
-                                offset: Offset(0, 1),
-                                blurRadius: 1.0,
-                                color: Color.fromRGBO(0, 0, 0, .1))
-                          ]),
-                      child: Text(
-                        'Sort by: ' + values[selectedValue],
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
+          child: FutureBuilder<List<Donation>>(
+            future: futureDonations,
+            builder: (context, snapshot) {
+              Widget donationsSliverList;
+              if (snapshot.hasData) {
+                donationsSliverList = SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return DonationItem(
+                      donation: snapshot.data[index],
+                    );
+                  }, childCount: snapshot.data.length),
+                );
+              } else {
+                donationsSliverList = SliverToBoxAdapter(
+                  child: Container(
+                    child: CircularProgressIndicator(),
                   ),
-                ),
-              ),
-              _getSlivers(donations, context)
-            ],
+                );
+              }
+              return CustomScrollView(
+                slivers: [
+                  CupertinoSliverNavigationBar(
+                    largeTitle: Text('My Donations'),
+                  ),
+                  donationsSliverList
+                ],
+              );
+            },
           ),
         ),
       ),
     );
   }
-}
-
-SliverList _getSlivers(List<Donation> donations, BuildContext context) {
-  return SliverList(
-    delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
-      return DonationItem(
-        donation: donations[index],
-      );
-    }, childCount: donations.length),
-  );
 }

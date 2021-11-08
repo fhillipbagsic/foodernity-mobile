@@ -96,79 +96,100 @@ class _SigninState extends State<Signin> {
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.blue,
-          body: Form(
-            key: _formKey,
-            child: SafeArea(
-                bottom: false,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 30.h,
-                      width: 70.w,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Welcome to Foodernity',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 45.0),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 10.h,
-                        width: 100.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(20.0),
-                            topLeft: Radius.circular(20.0),
+        child: WillPopScope(
+          onWillPop: () {
+            return showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      title: Text('Warning',
+                          style: TextStyle(color: Colors.redAccent)),
+                      content: Text('Are you sure to Exit ?'),
+                      actions: <Widget>[
+                        FlatButton(
+                            onPressed: () => SystemNavigator.pop(),
+                            child: Text('Yes')),
+                        FlatButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: Text('No'))
+                      ],
+                    ));
+          },
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.blue,
+            body: Form(
+              key: _formKey,
+              child: SafeArea(
+                  bottom: false,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 30.h,
+                        width: 70.w,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Welcome to Foodernity',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 45.0),
+                            textAlign: TextAlign.center,
                           ),
                         ),
-                        padding:
-                            EdgeInsets.only(top: 40.0, right: 30.0, left: 30.0),
-                        child: Column(
-                          children: [
-                            _signInTextField(),
-                            SizedBox(
-                              height: 20.0,
-                            ),
-                            _passwordField(),
-                            SizedBox(
-                              height: 15.0,
-                            ),
-                            _forgotPassword(context),
-                            SizedBox(
-                              height: 30.0,
-                            ),
-                            _signinButton(context),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              'or',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            GoogleButton(),
-                            SizedBox(
-                              height: 40.0,
-                            ),
-                            _noAccount(context),
-                          ],
-                        ),
                       ),
-                    )
-                  ],
-                )),
+                      Expanded(
+                        child: Container(
+                          height: 10.h,
+                          width: 100.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(20.0),
+                              topLeft: Radius.circular(20.0),
+                            ),
+                          ),
+                          padding: EdgeInsets.only(
+                              top: 40.0, right: 30.0, left: 30.0),
+                          child: Column(
+                            children: [
+                              _signInTextField(),
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                              _passwordField(),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              _forgotPassword(context),
+                              SizedBox(
+                                height: 30.0,
+                              ),
+                              _signinButton(context),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              Text(
+                                'or',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              GoogleButton(),
+                              SizedBox(
+                                height: 40.0,
+                              ),
+                              _noAccount(context),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
+            ),
           ),
         ),
       );
@@ -280,14 +301,13 @@ void loginUser(context) async {
   var message = response.body;
   // print(message);
 
-
   if (message == "No existing account.") {
     _showErrorMessage(context, "No existing account.");
   } else if (message == "Wrong email/password.") {
     _showErrorMessage(context, "Wrong email/password.");
   } else if (message == "Suspended") {
     _showErrorMessage(context, "This account has been suspended");
-  }else if (message == "Logged in") {
+  } else if (message == "Logged in") {
     await prefs.setString('email', _emailController.text);
     var string = await prefs.getString('email');
     print(string);

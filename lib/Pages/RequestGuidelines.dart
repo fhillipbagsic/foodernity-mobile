@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/Models/Item.dart';
-import 'package:my_app/Pages/RequestDonation.dart';
-import 'package:my_app/Widgets/NavigationBar.dart';
-import 'package:my_app/Pages/PostDonation/PostDonation.dart';
 
 class RequestGuidelines extends StatefulWidget {
   static String routeName = "/RequestGuidelines";
@@ -33,7 +30,7 @@ Widget _navigationBar(context) {
   return CupertinoSliverNavigationBar(
     largeTitle: Text('Add a Request'),
     trailing: GestureDetector(
-      onTap: () => Navigator.pushNamed(context, RequestDonation.routeName),
+      // onTap: () => Navigator.pushNamed(context, RequestDonation.routeName),
       child: Text(
         'Next',
         style: TextStyle(color: Colors.blue),

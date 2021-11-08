@@ -22,10 +22,7 @@ import 'EditProfile.dart';
 
 var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-// void main() => runApp(ProfilePage());
-
 class ProfilePage extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
@@ -128,8 +125,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     }
 
-
-
     return Builder(
       builder: (context) {
         return Scaffold(
@@ -190,10 +185,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
 void logout() async {
   final prefs = await SharedPreferences.getInstance();
   prefs.clear();
 }
+
 void ConfirmLogoutDialog(context) {
   showDialog(
     context: context,
@@ -203,10 +200,8 @@ void ConfirmLogoutDialog(context) {
         FlatButton(
           onPressed: () {
             logout();
-
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => MyApp()));
-
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Signin()));
           },
           child: Text("Confirm"),
         ),

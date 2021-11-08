@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/Models/Item.dart';
-import 'package:my_app/Pages/RequestDonation.dart';
-import 'package:my_app/Widgets/NavigationBar.dart';
-import 'package:my_app/Pages/PostDonation/PostDonation.dart';
 import 'package:my_app/Pages/Home.dart';
 
 class FrequentlyAsk extends StatefulWidget {

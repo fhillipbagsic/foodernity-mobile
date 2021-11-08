@@ -5,7 +5,7 @@ import 'package:my_app/Pages/MyDonations/donation_detail.dart';
 class DonationItem extends StatefulWidget {
   final Donation donation;
 
-  const DonationItem({Key key, this.donation}) : super(key: key);
+  const DonationItem({this.donation});
 
   @override
   _DonationItemState createState() => _DonationItemState();
@@ -16,7 +16,7 @@ class _DonationItemState extends State<DonationItem> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(15.0),
-      margin: EdgeInsets.only(bottom: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 5.0),
       color: Colors.white,
       child: Row(
         children: [
@@ -101,12 +101,9 @@ Widget _getStatus(String status) {
     case 'accepted':
       return _status(Icons.check_circle_rounded, 'Donation Accepted',
           Color.fromRGBO(102, 187, 106, 1));
-    case 'onhand':
+    case 'received':
       return _status(Icons.inventory, 'Donation Received',
           Color.fromRGBO(255, 167, 38, 1));
-    case 'distributed':
-      return _status(Icons.volunteer_activism, 'Donation Distributed',
-          Color.fromRGBO(229, 115, 115, 1));
     default:
       return _status(Icons.warning, 'Error', Colors.black);
   }
@@ -138,11 +135,9 @@ Widget _getDescription(String status) {
       return _description('The food bank is still reviewing your donation.');
     case 'accepted':
       return _description('You can now proceed to deliver your donation.');
-    case 'onhand':
+    case 'received':
       return _description(
           'Your donation has been received by the organization.');
-    case 'distributed':
-      return _description('Your donation has been donated to Bantay Bata!');
     default:
       return _description('Error');
   }

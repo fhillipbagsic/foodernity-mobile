@@ -140,7 +140,7 @@ class _AppState extends State<App> {
                         } else {
                           print('result is false');
                         }
-                        // showAlertDialog(context);
+                        showAlertDialog(context);
                       },
                     ),
                   ),
@@ -217,10 +217,8 @@ Widget showAlertDialog(BuildContext context) {
       style: TextStyle(color: Colors.blue),
     ),
     onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Signin()),
-      );
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Signin()));
     },
   );
 

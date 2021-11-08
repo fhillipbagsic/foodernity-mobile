@@ -30,7 +30,8 @@ class _HomeState extends State<Home> {
           onTap: onTabTapped,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_basket_rounded), label: 'Inventory'),
+                icon: Icon(Icons.shopping_basket_rounded),
+                label: 'Announcements'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.food_bank), label: 'Call For Donations'),
             BottomNavigationBarItem(

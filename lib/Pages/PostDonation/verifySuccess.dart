@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/Pages/Account/Signin.dart';
 import 'package:sizer/sizer.dart';
-import 'package:my_app/Pages/MyDonations/MyDonations.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
 
-import '../Home.dart';
-
-class StepThree extends StatelessWidget {
+class verifySuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(
@@ -33,7 +30,7 @@ class App extends StatelessWidget {
                   height: 10.h,
                 ),
                 Image.asset(
-                  'assets/images/donations.png',
+                  'assets/images/verify.png',
                   width: 50.w,
                 ),
                 SizedBox(
@@ -48,7 +45,7 @@ class App extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  'Please wait for the organization to accept your donation. You will be notified once accepted so you can proceed to deliver your donation.',
+                  'Proceed to Sign in to login your account',
                   style: TextStyle(
                       fontSize: 12.sp, color: Color.fromRGBO(111, 111, 111, 1)),
                   textAlign: TextAlign.center,
@@ -59,32 +56,15 @@ class App extends StatelessWidget {
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => Home()));
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white)),
-                        child: Container(
-                          width: double.infinity,
-                          child: Text(
-                            'Go to Home',
-                            style: TextStyle(
-                                color: Color.fromRGBO(139, 139, 139, 1)),
-                            textAlign: TextAlign.center,
-                          ),
-                        )),
-                    ElevatedButton(
-                        onPressed: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyDonations()));
+                                  builder: (context) => Signin()));
                         },
                         child: Container(
                           width: double.infinity,
                           child: Text(
-                            'View My Donations',
+                            'Sign In',
                             textAlign: TextAlign.center,
                           ),
                         ))
