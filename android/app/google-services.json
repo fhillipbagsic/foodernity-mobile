@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "353375298980",
+    "project_id": "foodernity--sign-in",
+    "storage_bucket": "foodernity--sign-in.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353375298980:android:ef3f7786717221027a4d31",
+        "android_client_info": {
+          "package_name": "com.example.my_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "353375298980-gjg3bdooe16n53lanknq6mbl6ei72qpt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.my_app",
+            "certificate_hash": "1e3cb45a945279c9d8a09c56aa06a72923d3eda0"
+          }
+        },
+        {
+          "client_id": "353375298980-igd10ofkls7konrsknuc1vupl9pfd86a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8C1FABlnbX_1Be8SSOTOzEM32lBolfm4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "353375298980-igd10ofkls7konrsknuc1vupl9pfd86a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
