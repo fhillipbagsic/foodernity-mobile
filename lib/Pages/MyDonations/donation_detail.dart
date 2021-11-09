@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_app/Models/Donation.dart';
+import 'package:my_app/Pages/MyProfile/profile_page.dart';
 import 'package:sizer/sizer.dart';
 
 class DonationDetail extends StatelessWidget {
@@ -10,93 +11,92 @@ class DonationDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        home: Scaffold(
-          appBar: CupertinoNavigationBar(
-            leading: CupertinoNavigationBarBackButton(
-              color: Colors.black,
-              onPressed: () => Navigator.pop(context),
-            ),
-            transitionBetweenRoutes: true,
-            middle: Text('Donation Details'),
+      return Scaffold(
+        appBar: CupertinoNavigationBar(
+          leading: CupertinoNavigationBarBackButton(
+            color: Colors.black,
+            onPressed: () {
+              Navigator.pop(context,
+                  MaterialPageRoute(builder: (context) => ProfilePage()));
+            },
           ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Container(
-                color: Color.fromRGBO(245, 245, 245, 1),
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 5.0),
-                      width: 100.w,
-                      height: 25.h,
-                      child: Image.network(
-                        donation.imgPath,
-                        fit: BoxFit.cover,
-                      ),
+          middle: Text('Donation Details'),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              color: Color.fromRGBO(245, 245, 245, 1),
+              width: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(bottom: 5.0),
+                    width: 100.w,
+                    height: 25.h,
+                    child: Image.network(
+                      donation.imgPath,
+                      fit: BoxFit.cover,
                     ),
-                    _getAlert(donation.status),
-                    _getDetails(donation.status),
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        donation.donationName,
-                        style: TextStyle(
-                            fontSize: 17.sp, fontWeight: FontWeight.bold),
-                      ),
+                  ),
+                  _getAlert(donation.status),
+                  _getDetails(donation.status),
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      donation.donationName,
+                      style: TextStyle(
+                          fontSize: 17.sp, fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 20.0, vertical: 10.0),
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Food categories to be donated:',
-                        style: TextStyle(
-                            fontSize: 12.sp, fontWeight: FontWeight.w600),
-                      ),
+                  ),
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Food categories to be donated:',
+                      style: TextStyle(
+                          fontSize: 12.sp, fontWeight: FontWeight.w600),
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 3.0),
-                              child: Text('Category',
-                                  style: TextStyle(
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w500),
-                                  textAlign: TextAlign.center),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 3.0),
-                              child: Text(
-                                'Quantity',
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 3.0),
+                            child: Text('Category',
                                 style: TextStyle(
                                     fontSize: 11.sp,
                                     fontWeight: FontWeight.w500),
-                                textAlign: TextAlign.center,
-                              ),
+                                textAlign: TextAlign.center),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 3.0),
+                            child: Text(
+                              'Quantity',
+                              style: TextStyle(
+                                  fontSize: 11.sp, fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Column(
-                          children: _getDonations(donation.donationCategories,
-                              donation.donationQuantities)),
-                    ),
-                    _dateTimePosted(donation.date)
-                  ],
-                ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Column(
+                        children: _getDonations(donation.donationCategories,
+                            donation.donationQuantities)),
+                  ),
+                  _dateTimePosted(donation.date)
+                ],
               ),
             ),
           ),
@@ -125,7 +125,7 @@ Widget _getAlert(String status) {
           Color.fromRGBO(255, 167, 38, 1),
           Color.fromRGBO(255, 167, 38, .1),
           Icons.inventory,
-          'Your donation has already been received by the organization. You will be notified once your donation has been distributed.');
+          'Your donation has already been received by the organization. We would like to extend our gratitude to the donors who are helping us to fight hunger.');
     default:
       return _alert(Color.fromRGBO(229, 115, 115, 1),
           Color.fromRGBO(229, 115, 115, 1), Icons.warning, 'Error');

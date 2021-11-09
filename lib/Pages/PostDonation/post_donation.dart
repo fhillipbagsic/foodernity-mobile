@@ -18,28 +18,7 @@ import 'package:my_app/Pages/PostDonation/step_three.dart';
 var donationName = "";
 File _image;
 var _donationNameController = TextEditingController();
-// var _quantityController = TextEditingController();
-// var _dateController = TextEditingController();
-// String _dropDownValue;
-
-// final _form = GlobalKey<FormState>();
 List<TextEditingController> controllers = [];
-
-// List<bool> isAllowed = [
-//   true,
-//   true,
-//   true,
-//   true,
-//   true,
-//   true,
-//   true,
-//   true,
-//   true,
-//   true,
-// ];
-
-// var quantity = '';
-
 List _categories = [
   "Eggs",
   "Canned goods",
@@ -79,16 +58,15 @@ class _PostDonationState extends State<PostDonation> {
         },
         child: Scaffold(
           body: Container(
+            color: Colors.grey[200],
             height: 100.h,
             width: 100.w,
             child: Form(
               key: _homeKey,
               child: SafeArea(
                 child: CustomScrollView(
-                  physics: ClampingScrollPhysics(),
                   slivers: [
                     CupertinoSliverNavigationBar(
-                      automaticallyImplyLeading: false,
                       largeTitle: Text('Post a Donation'),
                       leading: GestureDetector(
                         onTap: () {
@@ -258,7 +236,7 @@ class _formsState extends State<Forms> {
         ));
 
     Widget dynamicForm = Container(
-      height: 260.0 * listDynamic.length,
+      height: 280.0 * listDynamic.length,
       child: new ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         itemCount: listDynamic.length,
@@ -279,8 +257,7 @@ class _formsState extends State<Forms> {
             child: Column(
               children: [
                 Container(
-                  width: width,
-                  margin: EdgeInsets.only(top: 20.0),
+                  padding: EdgeInsets.symmetric(horizontal: 15.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -296,6 +273,9 @@ class _formsState extends State<Forms> {
                 Container(
                   width: imageWidth,
                   child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                     clipBehavior: Clip.antiAlias,
                     elevation: 2,
                     child: Center(
@@ -326,7 +306,6 @@ class _formsState extends State<Forms> {
                             : Container(
                                 width: width,
                                 height: 200,
-                                margin: EdgeInsets.all(10.0),
                                 child: FlatButton(
                                   onPressed: getImage,
                                   child: Image.file(
@@ -418,29 +397,40 @@ class _formsState extends State<Forms> {
                     )),
               ],
             ),
-            TextFormField(
-              controller: _donationNameController,
-              validator: (String value) {
-                var validCharacters = RegExp(r'^[a-zA-Z ]+$');
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Container(
+                color: Colors.grey[100],
+                margin: EdgeInsets.all(20),
+                child: TextFormField(
+                  controller: _donationNameController,
+                  validator: (String value) {
+                    var validCharacters = RegExp(r'^[a-zA-Z ]+$');
 
-                if (value.isEmpty) {
-                  return 'Donation Name is required';
-                } else {
-                  if (validCharacters.hasMatch(value)) {
-                    //goods
+                    if (value.isEmpty) {
+                      return 'Donation Name is required';
+                    } else {
+                      if (validCharacters.hasMatch(value)) {
+                        //goods
 
-                    donationName = value;
-                  } else {
-                    return "Only letters are allowed in the Donation Name field.";
-                  }
-                  return null;
-                }
-              },
-              // onSaved: (value) {
-              //   donationName = value;
-              // },
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(), hintText: 'Enter Here'),
+                        donationName = value;
+                      } else {
+                        return "Only letters are allowed in the Donation Name field.";
+                      }
+                      return null;
+                    }
+                  },
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.white, width: 0)),
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter Here',
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -649,25 +639,9 @@ class CategoryForm extends StatefulWidget {
 
 class _CategoryFormState extends State<CategoryForm> {
   final date = DateFormat("yyyy-MM-dd");
-
   final form = GlobalKey<FormState>();
-
   final GlobalKey<FormState> _homeKey = GlobalKey<FormState>();
-
-  //List<DropdownMenuItem<String>> _dropDownMenuItems2;
-
-  // List _categories = [
-  //   "Canned Goods",
-  //   "Instant Noodles",
-  //   "Biscuits",
-  //   "Beverages",
-  //   "Others"
-  // ];
-
-  // List qty = [0, 0, 0, 0, 0];
-
   var categQty = 0;
-
   var index = 0;
 
   DateTime getMinExpiryDate(String category) {
@@ -689,14 +663,12 @@ class _CategoryFormState extends State<CategoryForm> {
   }
 
   void initState() {
-    //_dropDownMenuItems2 = getDropDownMenuItems2();
-    //_dropDownValue = _dropDownMenuItems2[0].value;
     PostDonation._homeKey = _homeKey;
     super.initState();
   }
 
   List<DropdownMenuItem<String>> getDropDownMenuItems2() {
-    List<DropdownMenuItem<String>> items = new List();
+    List<DropdownMenuItem<String>> items = [];
     for (String city in _categories) {
       items.add(new DropdownMenuItem(value: city, child: new Text(city)));
     }
@@ -705,231 +677,176 @@ class _CategoryFormState extends State<CategoryForm> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width - 30;
-    var height = MediaQuery.of(context).size.height / 3.5;
     var itemWidth = MediaQuery.of(context).size.height / 4;
-    // final form = GlobalKey<FormState>();
     String error = '';
-    return Padding(
-      padding: const EdgeInsets.only(top: 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            width: width,
-            height: height,
-            child: Material(
-              elevation: 1,
-              clipBehavior: Clip.antiAlias,
-              borderRadius: BorderRadius.circular(8),
-              child: Form(
-                key: _homeKey,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Container(
-                          color: Colors.grey[200],
-                          width: 350,
-                          child: DropdownButton(
-                            hint: widget.categoryController.text == null
-                                ? Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      'Choose a category',
-                                      style: TextStyle(fontSize: 15.0),
-                                    ),
-                                  )
-                                : Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: Text(
-                                      widget.categoryController.text,
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                            isExpanded: true,
-                            iconSize: 30.0,
-                            underline: SizedBox(),
-                            style: TextStyle(color: Colors.grey),
-                            items: _categories.map(
-                              (val) {
-                                return DropdownMenuItem<String>(
-                                  value: val,
-                                  child: Text(val),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (val) {
-                              setState(
-                                () {
-                                  //_dropDownValue = val;
-                                  // print('abc');
-                                  for (var i = 0; i < controllers.length; i++) {
-                                    if (val == controllers[i].text) {
-                                      return _showErrorMessage(context, error);
-                                    }
-                                  }
-                                  widget.categoryController.text = val;
-                                  // for (var x = 0; x < _categories.length; x++) {
-                                  //   if (_categories[x] == val) {
-                                  //     // print(_categories[x] + " categ");
-
-                                  //     // print(val + " val");
-
-                                  //     if (isAllowed[x] == true) {
-                                  //       isAllowed[x] = false;
-                                  //       // print(isAllowed[x]);
-                                  //       // print(isAllowed);
-                                  //       // qty[x] == categQty;
-                                  //       index = x;
-                                  //       widget.categoryController.text = val;
-                                  //     } else {
-                                  //       // print("napili na po putangina mo");
-                                  //       _showErrorMessage(context, error);
-                                  //       //_dropDownValue = _categories[0];
-                                  //     }
-                                  //   }
-                                  // }
-                                },
-                              );
-                            },
-                          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Card(
+          margin: EdgeInsets.symmetric(vertical: 7, horizontal: 15.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(25.0),
+            child: Form(
+              key: _homeKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.symmetric(horizontal: 15.0),
+                    child: DropdownButton(
+                      hint: widget.categoryController.text == ''
+                          ? Text(
+                              'Choose a category',
+                              style: TextStyle(fontSize: 15.0),
+                            )
+                          : Text(
+                              widget.categoryController.text,
+                            ),
+                      isExpanded: true,
+                      iconSize: 30.0,
+                      underline: SizedBox(),
+                      style: TextStyle(color: Colors.grey),
+                      items: _categories.map(
+                        (val) {
+                          return DropdownMenuItem<String>(
+                            value: val,
+                            child: Text(val,
+                                style: TextStyle(color: Colors.black)),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (val) {
+                        setState(
+                          () {
+                            for (var i = 0; i < controllers.length; i++) {
+                              if (val == controllers[i].text) {
+                                return _showErrorMessage(context, error);
+                              }
+                            }
+                            widget.categoryController.text = val;
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Earliest Expiry:',
+                          style: TextStyle(
+                              fontSize: 14.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(
                         height: 5.0,
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
                         children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Earliest Expiry ',
-                              style: TextStyle(
-                                  fontSize: 14.0, fontWeight: FontWeight.bold),
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(10)),
+                            padding: EdgeInsets.symmetric(horizontal: 15.0),
+                            width: itemWidth,
+                            child: DateTimeField(
+                              enabled: widget.categoryController.text == ''
+                                  ? false
+                                  : true,
+                              controller: widget.expiryController,
+                              format: date,
+                              onShowPicker: (context, currentValue) {
+                                return showDatePicker(
+                                  context: context,
+                                  firstDate: getMinExpiryDate(
+                                      widget.categoryController.text),
+                                  initialDate: currentValue ??
+                                      getMinExpiryDate(
+                                          widget.categoryController.text),
+                                  lastDate: getMaxExpiryDate(
+                                      widget.categoryController.text),
+                                );
+                              },
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Select expiry date'),
+                              style: TextStyle(fontSize: 14.0),
                             ),
-                          ),
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                color: Colors.grey[200],
-                                width: itemWidth,
-                                // margin: EdgeInsets.only(top: 20.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: DateTimeField(
-                                    enabled:
-                                        widget.categoryController.text == ''
-                                            ? false
-                                            : true,
-                                    controller: widget.expiryController,
-                                    format: date,
-                                    // validator: (value) {
-                                    //   if (!value.isAfter(DateTime.now())) {
-                                    //     return ('Pickup Date Can\'t Be In The Past');
-                                    //   }
-                                    //   return null;
-                                    // },
-                                    onShowPicker: (context, currentValue) {
-                                      return showDatePicker(
-                                        context: context,
-                                        firstDate: getMinExpiryDate(
-                                            widget.categoryController.text),
-                                        initialDate: currentValue ??
-                                            getMinExpiryDate(
-                                                widget.categoryController.text),
-                                        lastDate: getMaxExpiryDate(
-                                            widget.categoryController.text),
-                                      );
-                                    },
-                                    decoration: const InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Select Pick up Date*'),
-                                    style: TextStyle(fontSize: 14.0),
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Quantity:',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 14.0, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Row(
                           children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'Quantity:  ',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold),
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(10)),
+                              padding: EdgeInsets.symmetric(horizontal: 15.0),
+                              width: itemWidth,
+                              child: TextFormField(
+                                controller: widget.quantityController,
+                                enabled: widget.categoryController.text == ''
+                                    ? false
+                                    : true,
+                                onSaved: (value) {
+                                  qty[index] = value;
+                                },
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                textAlign: TextAlign.start,
+                                decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'piece/s'),
+                                style: TextStyle(fontSize: 14.0),
                               ),
-                            ),
-                            SizedBox(
-                              height: 5.0,
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  color: Colors.grey[200],
-                                  width: itemWidth,
-                                  // margin: EdgeInsets.only(top: 20.0),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 5.0),
-                                    child: TextFormField(
-                                      controller: widget.quantityController,
-                                      enabled:
-                                          widget.categoryController.text == ''
-                                              ? false
-                                              : true,
-                                      onSaved: (value) {
-                                        qty[index] = value;
-
-                                        //print(qty);
-                                        // print("quantities");
-                                        // print(isAllowed);
-                                        //print("is allowed");
-                                      },
-                                      inputFormatters: [
-                                        FilteringTextInputFormatter.digitsOnly
-                                      ],
-                                      // keyboardType: TextInputType.number,
-                                      textAlign: TextAlign.start,
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'piece/s'),
-                                      style: TextStyle(fontSize: 14.0),
-                                    ),
-                                  ),
-                                )
-                              ],
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -40,8 +40,10 @@ class _CallForDonationDetailsState extends State<CallForDonationDetails> {
                     },
                     child: Row(
                       children: <Widget>[
-                        Icon(CupertinoIcons.left_chevron,
-                            color: CupertinoColors.activeBlue),
+                        Icon(
+                          CupertinoIcons.left_chevron,
+                          color: CupertinoColors.activeBlue,
+                        ),
                         Text(
                           'Back',
                           style: TextStyle(
@@ -135,7 +137,7 @@ Widget _date(String date) {
   return Container(
     margin: EdgeInsets.only(top: 40),
     child: Text(
-      'Donation made on ' + date + '.',
+      'Posted on ' + date + '.',
       style: TextStyle(
           color: Color.fromRGBO(170, 170, 170, 1), fontStyle: FontStyle.italic),
     ),

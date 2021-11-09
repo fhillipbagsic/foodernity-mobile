@@ -20,11 +20,10 @@ class Listings extends StatefulWidget {
 class _ListingsState extends State<Listings> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   Future<List<Announcement>> futureAnnouncements;
-  // var imageStocks = ['assets/images/instant-noodles.png'];
   var email = "";
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     futureAnnouncements = getAnnouncements();
     preLoad();
@@ -95,6 +94,7 @@ class _ListingsState extends State<Listings> {
         child: Scaffold(
           key: scaffoldKey,
           body: Container(
+            color: Colors.grey[200],
             height: 100.h,
             width: 100.w,
             child: SafeArea(
@@ -113,9 +113,11 @@ class _ListingsState extends State<Listings> {
                       );
                     } else {
                       announcementsSliverList = SliverToBoxAdapter(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator(),
+                        child: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       );
                     }
@@ -257,9 +259,8 @@ Future<void> showInformationDialog(BuildContext context) async {
                       ),
                       Text(description,
                           style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w300)),
+                            fontSize: 11.sp,
+                          )),
                       SizedBox(
                         height: 30,
                       ),
@@ -284,7 +285,7 @@ Future<void> showInformationDialog(BuildContext context) async {
                               title: Column(
                                 children: [
                                   Text(item.expandedValue,
-                                      style: TextStyle(fontSize: 10.0)),
+                                      style: TextStyle(fontSize: 10.sp)),
                                   SizedBox(height: 10.0),
                                   Text(item.expandedValue2,
                                       style: TextStyle(fontSize: 10.0)),

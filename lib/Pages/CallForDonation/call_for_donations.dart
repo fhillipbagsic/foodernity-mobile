@@ -29,6 +29,7 @@ class _RequestListingState extends State<RequestListing> {
         key: scaffoldKey,
         body: SafeArea(
           child: Container(
+            color: Colors.grey[200],
             child: FutureBuilder(
               future: futureCallforDonations,
               builder: (context, snapshot) {
@@ -44,9 +45,11 @@ class _RequestListingState extends State<RequestListing> {
                   );
                 } else {
                   ctaSliverList = SliverToBoxAdapter(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(),
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     ),
                   );
                 }
@@ -54,6 +57,7 @@ class _RequestListingState extends State<RequestListing> {
                 return CustomScrollView(
                   slivers: [
                     CupertinoSliverNavigationBar(
+                      automaticallyImplyLeading: false,
                       largeTitle: Text('Call for Donations'),
                     ),
                     ctaSliverList

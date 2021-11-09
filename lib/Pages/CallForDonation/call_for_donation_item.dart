@@ -110,6 +110,7 @@ Widget _details(String title, String description) {
         Text(
           description,
           style: TextStyle(fontSize: 11.sp),
+          overflow: TextOverflow.ellipsis,
           maxLines: 3,
         )
       ],

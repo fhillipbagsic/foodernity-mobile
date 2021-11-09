@@ -62,33 +62,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: <Widget>[
                 CircleAvatar(
                   radius: 50,
-                  backgroundImage: NetworkImage(img),
+                  backgroundImage: NetworkImage(img ?? ''),
                 ),
               ],
             ),
           ),
           SizedBox(height: 30),
           Text(
-            fullName ?? "Your name",
+            (fullName ?? "Your name"),
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(18),
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
           SizedBox(height: 13),
           Text(
-            email,
+            (email ?? ''),
             style: TextStyle(
-              fontSize: ScreenUtil().setSp(13),
-              fontWeight: FontWeight.w100,
+              fontSize: 15,
+              fontWeight: FontWeight.w300,
             ),
           ),
           SizedBox(height: 5),
           Text(
-            'Joined on ' + dateOfReg,
+            ('Joined on ' + dateOfReg),
             style: TextStyle(
               fontSize: ScreenUtil().setSp(13),
-              fontWeight: FontWeight.w100,
+              fontWeight: FontWeight.w300,
             ),
           ),
         ],
@@ -134,8 +134,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     splashColor: Colors.blue.withAlpha(30),
                     child: ProfileListItem(
-                      icon: LineAwesomeIcons.user_shield,
-                      text: 'View my donation',
+                      icon: Icons.volunteer_activism_rounded,
+                      text: 'View My Donations',
                     ),
                   ),
                   InkWell(
@@ -146,12 +146,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               builder: (context) => EditProfile()));
                     },
                     child: ProfileListItem(
-                      icon: LineAwesomeIcons.history,
-                      text: 'Edit profile',
+                      icon: Icons.edit_rounded,
+                      text: 'Edit Profile',
                     ),
                   ),
                   ProfileListItem(
-                    icon: LineAwesomeIcons.question_circle,
+                    icon: Icons.help,
                     text: 'Frequently Asked Questions',
                   ),
                   InkWell(
@@ -159,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _confirmLogoutDialog(context);
                     },
                     child: ProfileListItem(
-                      icon: LineAwesomeIcons.alternate_sign_out,
+                      icon: Icons.logout_rounded,
                       text: 'Logout',
                       hasNavigation: false,
                     ),
@@ -185,7 +185,7 @@ void _confirmLogoutDialog(context) {
     builder: (context) => AlertDialog(
       title: Text('Confirm Logout', style: TextStyle(color: Colors.redAccent)),
       actions: <Widget>[
-        FlatButton(
+        ElevatedButton(
           onPressed: () {
             logout();
             Navigator.push(

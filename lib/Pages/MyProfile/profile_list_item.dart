@@ -34,11 +34,18 @@ class ProfileListItem extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Icon(
-            this.icon,
-            size: 25,
+          Container(
+            padding: EdgeInsets.all(15.0),
+            decoration: BoxDecoration(
+                color: _getColor(text),
+                borderRadius: BorderRadius.circular(30)),
+            child: Icon(
+              this.icon,
+              size: 25,
+              color: Colors.white,
+            ),
           ),
-          SizedBox(width: 15),
+          SizedBox(width: 20),
           Text(
             this.text,
             style: TextStyle(
@@ -56,4 +63,18 @@ class ProfileListItem extends StatelessWidget {
       ),
     );
   }
+}
+
+Color _getColor(String text) {
+  switch (text) {
+    case 'View My Donations':
+      return Colors.blue;
+    case 'Edit Profile':
+      return Colors.green;
+    case 'Frequently Asked Questions':
+      return Colors.orange;
+    case 'Logout':
+      return Colors.red;
+  }
+  return Colors.green;
 }

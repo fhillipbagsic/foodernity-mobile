@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/Models/Donation.dart';
 import 'package:my_app/Pages/MyDonations/donation_item.dart';
+import 'package:my_app/Pages/MyProfile/profile_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:http/http.dart' as http;
@@ -17,9 +18,7 @@ class _MyDonationsState extends State<MyDonations> {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return MaterialApp(
-        home: App(),
-      );
+      return App();
     });
   }
 }
@@ -85,6 +84,78 @@ class _AppState extends State<App> {
     return parsedDonations;
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          color: Color.fromRGBO(238, 238, 238, 1),
+          child: FutureBuilder<List<Donation>>(
+            future: futureDonations,
+            builder: (context, snapshot) {
+              Widget donationsSliverList;
+              if (snapshot.hasData) {
+                donationsSliverList = SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return DonationItem(
+                      donation: snapshot.data[index],
+                    );
+                  }, childCount: snapshot.data.length),
+                );
+              } else {
+                donationsSliverList = SliverToBoxAdapter(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10),
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                );
+              }
+              return CustomScrollView(
+                slivers: [
+                  CupertinoSliverNavigationBar(
+                    leading: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfilePage(),
+                          ),
+                        );
+                      },
+                      child: Text('Back', style: TextStyle(color: Colors.blue)),
+                    ),
+                    largeTitle: Text('My Donations'),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 5,
+                    ),
+                  ),
+                  donationsSliverList
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+// child: CupertinoPageScaffold(
+//         navigationBar: CupertinoNavigationBar(
+//           leading: GestureDetector(
+//             onTap: () {
+//               debugPrint('Back button tapped');
+//               Navigator.pop(context,
+//                   MaterialPageRoute(builder: (context) => ProfilePage()));
+//             },
+//             child: Text('Back', style: TextStyle(color: Colors.blue)),
+//           ),
+//         ),
+
   // sortDonations(String value) {
   //   Future<List<Donation>> newDonations = [];
 
@@ -127,49 +198,3 @@ class _AppState extends State<App> {
   //             ]);
   //       });
   // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Container(
-          color: Color.fromRGBO(238, 238, 238, 1),
-          child: FutureBuilder<List<Donation>>(
-            future: futureDonations,
-            builder: (context, snapshot) {
-              Widget donationsSliverList;
-              if (snapshot.hasData) {
-                donationsSliverList = SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                    return DonationItem(
-                      donation: snapshot.data[index],
-                    );
-                  }, childCount: snapshot.data.length),
-                );
-              } else {
-                donationsSliverList = SliverToBoxAdapter(
-                  child: Container(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-              return CustomScrollView(
-                slivers: [
-                  CupertinoSliverNavigationBar(
-                    leading: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text('Back'),
-                    ),
-                    largeTitle: Text('My Donations'),
-                  ),
-                  donationsSliverList
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
