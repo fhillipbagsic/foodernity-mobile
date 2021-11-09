@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_app/Models/Item.dart';
-import 'package:my_app/Pages/PostDonation/PostDonation.dart';
-import 'package:my_app/Pages/RecentDonationDetails.dart';
-import 'package:my_app/Widgets/NavigationBar.dart';
+import 'package:my_app/Models/Announcement.dart';
+import 'package:my_app/Pages/Announcement/announcement_item.dart';
+import 'package:my_app/Pages/PostDonation/post_donation.dart';
 import 'package:my_app/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -20,14 +19,14 @@ class Listings extends StatefulWidget {
 
 class _ListingsState extends State<Listings> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
-
+  Future<List<Announcement>> futureAnnouncements;
   // var imageStocks = ['assets/images/instant-noodles.png'];
   var email = "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    futureAnnouncements = getAnnouncements();
     preLoad();
   }
 
@@ -99,33 +98,39 @@ class _ListingsState extends State<Listings> {
             height: 100.h,
             width: 100.w,
             child: SafeArea(
-              child: CustomScrollView(
-                //physics: ClampingScrollPhysics(),
-                slivers: [
-                  NavigationBar(
-                    title: 'Announcements',
-                    scaffold: scaffoldKey,
-                  ),
-                  SliverToBoxAdapter(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // _filter(context),
-                          // _currentStocks(),
-                          // _Inventory(context),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          _recentDonations(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  RecentDonations(),
-                  // ListingsContainer()
-                ],
+              child: Container(
+                child: FutureBuilder(
+                  future: futureAnnouncements,
+                  builder: (context, snapshot) {
+                    Widget announcementsSliverList;
+                    if (snapshot.hasData) {
+                      announcementsSliverList = SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                          return AnnouncementItem(
+                              announcement: snapshot.data[index]);
+                        }, childCount: snapshot.data.length),
+                      );
+                    } else {
+                      announcementsSliverList = SliverToBoxAdapter(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return CustomScrollView(
+                      slivers: [
+                        CupertinoSliverNavigationBar(
+                          automaticallyImplyLeading: false,
+                          largeTitle: Text('Announcements'),
+                        ),
+                        _recentDonations(),
+                        announcementsSliverList
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
@@ -343,180 +348,185 @@ class InventoryContainer extends StatelessWidget {
   }
 }
 
-Widget _Inventory(context) {
-  int _index;
-  var width = MediaQuery.of(context).size.width - 200;
-  var height = MediaQuery.of(context).size.height / 7;
-  final categories = [
-    "Eggs",
-    "Canned goods",
-    "Instant Noodles",
-    "Rice",
-    "Cereals",
-    "Tea, Coffee, Milk, Sugar, etc.",
-    "Biscuits",
-    "Condiments and sauces",
-    "Beverages",
-    "Snacks",
-  ];
-  final image = [
-    'assets/images/eggs.png',
-    'assets/images/canned-food.png',
-    'assets/images/instant-noodles.png',
-    'assets/images/canned-food.png',
-    'assets/images/bakery.png',
-    'assets/images/canned-food.png',
-    'assets/images/snack.png',
-    'assets/images/canned-food.png',
-    'assets/images/snack.png',
-    'assets/images/snack.png',
-  ];
+// Widget _Inventory(context) {
+//   int _index;
+//   var width = MediaQuery.of(context).size.width - 200;
+//   var height = MediaQuery.of(context).size.height / 7;
+//   final categories = [
+//     "Eggs",
+//     "Canned goods",
+//     "Instant Noodles",
+//     "Rice",
+//     "Cereals",
+//     "Tea, Coffee, Milk, Sugar, etc.",
+//     "Biscuits",
+//     "Condiments and sauces",
+//     "Beverages",
+//     "Snacks",
+//   ];
+//   final image = [
+//     'assets/images/eggs.png',
+//     'assets/images/canned-food.png',
+//     'assets/images/instant-noodles.png',
+//     'assets/images/canned-food.png',
+//     'assets/images/bakery.png',
+//     'assets/images/canned-food.png',
+//     'assets/images/snack.png',
+//     'assets/images/canned-food.png',
+//     'assets/images/snack.png',
+//     'assets/images/snack.png',
+//   ];
 
-  final stocks = ['40', '50', '60', '70', '80', '20', '10', '5', '23', '16'];
-  return Container(
-    child: Center(
-      child: SizedBox(
-          // height: 120, // card height
-          height: height,
-          // width: width,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
-              return Container(
-                width: width,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
-                          direction: Axis.vertical,
-                          children: [
-                            Row(
-                              children: [
-                                Image(image: AssetImage(image[index])),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 120,
-                                        child: Text(
-                                          categories[index],
-                                          style: TextStyle(fontSize: 14),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Text(
-                                          stocks[index],
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
-                  ),
-                ),
-              );
-            },
-          )),
-    ),
-  );
-}
+//   final stocks = ['40', '50', '60', '70', '80', '20', '10', '5', '23', '16'];
+//   return Container(
+//     child: Center(
+//       child: SizedBox(
+//           // height: 120, // card height
+//           height: height,
+//           // width: width,
+//           child: ListView.builder(
+//             scrollDirection: Axis.horizontal,
+//             itemCount: categories.length,
+//             itemBuilder: (context, index) {
+//               return Container(
+//                 width: width,
+//                 child: Padding(
+//                   padding: const EdgeInsets.all(8.0),
+//                   child: Card(
+//                     elevation: 2,
+//                     shape: RoundedRectangleBorder(
+//                         borderRadius: BorderRadius.circular(5)),
+//                     child: Padding(
+//                         padding: const EdgeInsets.all(8.0),
+//                         child: Wrap(
+//                           direction: Axis.vertical,
+//                           children: [
+//                             Row(
+//                               children: [
+//                                 Image(image: AssetImage(image[index])),
+//                                 Padding(
+//                                   padding: const EdgeInsets.all(8.0),
+//                                   child: Column(
+//                                     children: [
+//                                       SizedBox(
+//                                         width: 120,
+//                                         child: Text(
+//                                           categories[index],
+//                                           style: TextStyle(fontSize: 14),
+//                                         ),
+//                                       ),
+//                                       Padding(
+//                                         padding:
+//                                             const EdgeInsets.only(top: 10.0),
+//                                         child: Text(
+//                                           stocks[index],
+//                                           style: TextStyle(
+//                                               fontSize: 20,
+//                                               fontWeight: FontWeight.bold),
+//                                         ),
+//                                       )
+//                                     ],
+//                                   ),
+//                                 ),
+//                               ],
+//                             ),
+//                           ],
+//                         )),
+//                   ),
+//                 ),
+//               );
+//             },
+//           )),
+//     ),
+//   );
+// }
 
-Widget _filter(context) {
-  return (Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      GestureDetector(
-        onTap: () {
-          showModalBottomSheet(
-              context: context,
-              builder: (BuildContext context) {
-                return _filterPicker();
-              });
-        },
-        child: Row(
-          children: [Text('Available Now'), Icon(Icons.arrow_drop_down)],
-        ),
-      ),
-      TextButton(
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return (_filterSheet());
-                });
-          },
-          child: Text('FILTER')),
-    ],
-  ));
-}
+// Widget _filter(context) {
+//   return (Row(
+//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//     children: [
+//       GestureDetector(
+//         onTap: () {
+//           showModalBottomSheet(
+//               context: context,
+//               builder: (BuildContext context) {
+//                 return _filterPicker();
+//               });
+//         },
+//         child: Row(
+//           children: [Text('Available Now'), Icon(Icons.arrow_drop_down)],
+//         ),
+//       ),
+//       TextButton(
+//           onPressed: () {
+//             showModalBottomSheet(
+//                 context: context,
+//                 builder: (BuildContext context) {
+//                   return (_filterSheet());
+//                 });
+//           },
+//           child: Text('FILTER')),
+//     ],
+//   ));
+// }
 
-Widget _filterPicker() {
-  return Container(
-    height: 250.0,
-    child: (CupertinoPicker(
-      useMagnifier: true,
-      onSelectedItemChanged: (index) {},
-      itemExtent: 50.0,
-      backgroundColor: Colors.white,
-      children: [
-        Center(child: Text('Available Now')),
-        Center(child: Text('Suggested')),
-        Center(child: Text('Nearest')),
-      ],
-    )),
-  );
-}
+// Widget _filterPicker() {
+//   return Container(
+//     height: 250.0,
+//     child: (CupertinoPicker(
+//       useMagnifier: true,
+//       onSelectedItemChanged: (index) {},
+//       itemExtent: 50.0,
+//       backgroundColor: Colors.white,
+//       children: [
+//         Center(child: Text('Available Now')),
+//         Center(child: Text('Suggested')),
+//         Center(child: Text('Nearest')),
+//       ],
+//     )),
+//   );
+// }
 
-Widget _filterSheet() {
-  return Container(
-    height: 500.0,
-    child: (Column(
-      children: [
-        Text('My Location'),
-        ListTile(
-          leading: Icon(
-            Icons.location_on_rounded,
-          ),
-          title: Text('Bali Oasis, Pasig'),
-          trailing: Icon(Icons.edit_rounded),
-        )
-      ],
-    )),
-  );
-}
+// Widget _filterSheet() {
+//   return Container(
+//     height: 500.0,
+//     child: (Column(
+//       children: [
+//         Text('My Location'),
+//         ListTile(
+//           leading: Icon(
+//             Icons.location_on_rounded,
+//           ),
+//           title: Text('Bali Oasis, Pasig'),
+//           trailing: Icon(Icons.edit_rounded),
+//         )
+//       ],
+//     )),
+//   );
+// }
 
-Widget _currentStocks() {
-  return Padding(
-    padding: const EdgeInsets.only(top: 10.0),
-    child: (Text(
-      'MHTP Current Stocks',
-      style: TextStyle(
-          fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
-    )),
-  );
-}
+// Widget _currentStocks() {
+//   return Padding(
+//     padding: const EdgeInsets.only(top: 10.0),
+//     child: (Text(
+//       'MHTP Current Stocks',
+//       style: TextStyle(
+//           fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
+//     )),
+//   );
+// }
 
 Widget _recentDonations() {
-  return (Text(
-    'Recent Donations from Donors',
-    style: TextStyle(
-        fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
-  ));
+  return SliverToBoxAdapter(
+    child: Container(
+      margin: EdgeInsets.only(left: 15, top: 10, bottom: 5),
+      child: (Text(
+        'Recent Donations from Donors',
+        style: TextStyle(
+            fontWeight: FontWeight.bold, fontSize: 18.0, color: Colors.blue),
+      )),
+    ),
+  );
 }
 
 class RecentDonations extends StatefulWidget {
@@ -531,7 +541,6 @@ class _RecentDonationsState extends State<RecentDonations> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     final double height = (size.height) - 29.h;
-    final double cardHeight = size.height / 5.5;
     return SliverToBoxAdapter(
       child: Sizer(
         builder: (context, orientation, deviceType) {
@@ -541,81 +550,24 @@ class _RecentDonationsState extends State<RecentDonations> {
             child: FutureBuilder(
               future: getAnnouncements(),
               builder: (context, snapshot) {
-                if (snapshot.data == null) {
-                  return Container(
-                    child: Center(
+                Widget announcementsSliverList;
+                if (snapshot.hasData) {
+                  announcementsSliverList = SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      return AnnouncementItem();
+                    }),
+                  );
+                } else {
+                  announcementsSliverList = SliverToBoxAdapter(
+                    child: Container(
                       child: CircularProgressIndicator(),
                     ),
                   );
-                } else
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, i) {
-                        return Container(
-                          margin: EdgeInsets.only(top: 10.0),
-                          child: (Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4.0),
-                                  child: Image(
-                                    fit: BoxFit.fitWidth,
-                                    height: cardHeight,
-                                    width: double.infinity,
-                                    image: NetworkImage(
-                                      snapshot.data[i].donationImage,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Column(
-                                      children: [
-                                        ListTile(
-                                          title: Text(
-                                            snapshot.data[i].date,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 12),
-                                          ),
-                                          subtitle: Text(
-                                            snapshot.data[i].donationRecipient,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14.0,
-                                                color: Colors.grey[600]),
-                                          ),
-                                          trailing: Wrap(
-                                            spacing: 1,
-                                            children: <Widget>[
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ListingDetails()));
-                                                },
-                                                child: Icon(
-                                                    Icons.navigate_next_sharp,
-                                                    color: Colors.blue),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                        );
-                      });
+                }
+                return CustomScrollView(
+                  slivers: [announcementsSliverList],
+                );
               },
             ),
           );
@@ -625,39 +577,36 @@ class _RecentDonationsState extends State<RecentDonations> {
   }
 }
 
-Future getAnnouncements() async {
+Future<List<Announcement>> getAnnouncements() async {
   print('get announcements');
 
-  http.Response response = await http.post(
-      "https://foodernity.herokuapp.com/donations/getDistributedDonations",
+  final response = await http.post(
+      Uri.parse(
+          "https://foodernity.herokuapp.com/donations/getDistributedDonations"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{}));
 
-  print(response.body);
-  var jsonData = jsonDecode(response.body);
-  List<AppAnnouncements> announcements = [];
+  List<Announcement> parsedAnnouncements = [];
 
-  for (var u in jsonData) {
-    // print(u);
-    AppAnnouncements announcement = AppAnnouncements(u["distributedDonationID"],
-        u["donationImage"], u["date"], u["donationRecipient"]);
-    announcements.add(announcement);
+  if (response.statusCode == 200) {
+    List announcements = jsonDecode(response.body);
+
+    for (var announcement in announcements) {
+      announcement['donationCategory'] =
+          announcement['donationCategory'].toString().split(',');
+      announcement['donationQuantity'] =
+          announcement['donationQuantity'].toString().split(',');
+
+      parsedAnnouncements.add(Announcement.fromJSON(announcement));
+    }
   }
-  print(announcements.length);
-  return announcements;
+
+  return parsedAnnouncements;
 }
 
-class AppAnnouncements {
-  final int distributedDonationID;
-  final String donationImage;
-  final String date;
-  final String donationRecipient;
 
-  AppAnnouncements(this.distributedDonationID, this.donationImage, this.date,
-      this.donationRecipient);
-}
 
 // class ListingsContainer extends StatelessWidget {
 //   @override

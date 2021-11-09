@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_app/Pages/AccountPage/profilepage.dart';
+import 'package:my_app/Pages/MyProfile/profile_page.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';

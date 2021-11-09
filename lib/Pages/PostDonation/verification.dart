@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
+import 'package:my_app/Pages/Account/signin.dart';
 import 'package:my_app/Pages/PostDonation/numeric_pad.dart';
 import 'package:sizer/sizer.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
-import 'package:my_app/Pages/Account/Signup.dart';
+import 'package:my_app/Pages/Account/signup.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';

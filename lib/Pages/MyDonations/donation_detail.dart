@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:my_app/Pages/MyDonations/Donation.dart';
+import 'package:my_app/Models/Donation.dart';
 import 'package:sizer/sizer.dart';
 
 class DonationDetail extends StatelessWidget {

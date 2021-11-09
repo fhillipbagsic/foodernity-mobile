@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
+import 'package:my_app/Models/Announcement.dart';
+import 'package:my_app/Pages/Announcement/announcement.dart';
 import 'package:sizer/sizer.dart';
 
 class ListingDetails extends StatefulWidget {
-  const ListingDetails({Key key}) : super(key: key);
+  final Announcement announcement;
+  const ListingDetails({this.announcement});
   static String routeName = "/RecentDonationDetails";
 
   @override
@@ -14,8 +16,6 @@ class ListingDetails extends StatefulWidget {
 class _ListingDetailsState extends State<ListingDetails> {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height / 3;
     return Sizer(builder: (context, orientation, deviceType) {
       return GestureDetector(
         onTap: () {
@@ -53,7 +53,16 @@ class _ListingDetailsState extends State<ListingDetails> {
                   'Title',
                 ),
               ),
-              child: Container(child: _cardView(context)),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _donationImage(widget.announcement.donationImage),
+                    _recipients(widget.announcement.donationRecipient),
+                    _date(widget.announcement.date),
+                    _remarks(widget.announcement.donationRemarks),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -62,6 +71,84 @@ class _ListingDetailsState extends State<ListingDetails> {
   }
 }
 
+Widget _donationImage(String donationImage) {
+  return Container(
+    margin: EdgeInsets.only(top: 20.0),
+    width: 100.w,
+    child: Image.network(
+      donationImage,
+      fit: BoxFit.fitWidth,
+    ),
+  );
+}
+
+Widget _recipients(String beneficiaries) {
+  return Card(
+    color: Colors.blue[50],
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.blue, width: 1.5),
+      borderRadius: BorderRadius.circular(7.0),
+    ),
+    margin: EdgeInsets.all(10.0),
+    child: Container(
+      child: ListTile(
+        leading: Icon(
+          Icons.people_sharp,
+          size: 30.0,
+          color: Colors.blue[400],
+        ),
+        title: Text(
+          'Benefiaries: Residents of ' + beneficiaries,
+          style: TextStyle(fontSize: 16, color: Colors.blue[400]),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _date(String date) {
+  return Card(
+    color: Colors.green[50],
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.green, width: 1.5),
+      borderRadius: BorderRadius.circular(7.0),
+    ),
+    margin: EdgeInsets.all(10.0),
+    child: Container(
+      child: ListTile(
+        leading: Icon(
+          Icons.timer_sharp,
+          size: 30.0,
+          color: Colors.green[400],
+        ),
+        title: Text(
+          'Donations donated on ' + date,
+          style: TextStyle(fontSize: 16, color: Colors.green[400]),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _remarks(String remarks) {
+  return Card(
+    child: Container(
+      margin: EdgeInsets.all(15),
+      width: 90.w,
+      child: Column(
+        children: [
+          Text(
+            'Organizations Remarks',
+            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+          ),
+          Text(remarks)
+        ],
+      ),
+    ),
+  );
+}
+
+// _cardView(context)
 Widget _cardView(context) {
   var width = MediaQuery.of(context).size.width;
   var height = MediaQuery.of(context).size.height / 4;

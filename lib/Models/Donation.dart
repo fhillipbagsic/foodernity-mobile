@@ -1,16 +1,10 @@
 class Donation {
   int donationID;
-
   String donationName;
-
   String date;
-
   List donationCategories;
-
   List donationQuantities;
-
   String imgPath;
-
   String status;
 
   Donation(

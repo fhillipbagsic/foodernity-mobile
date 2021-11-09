@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
+import 'package:my_app/Pages/Account/signin.dart';
 import 'package:sizer/sizer.dart';
 
-class verifySuccess extends StatelessWidget {
+class VerifySuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(

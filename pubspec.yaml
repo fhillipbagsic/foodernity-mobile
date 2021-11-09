@@ -46,6 +46,7 @@ dependencies:
   line_awesome_flutter: ^1.0.1
   cloudinary_public: ^0.7.0
   get: ^4.1.4
+  flutter_local_notifications: ^4.0.1+2
 
 dev_dependencies:
   flutter_test:

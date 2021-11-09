@@ -1,10 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:my_app/main.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -23,7 +23,13 @@ class _NotificationsState extends State<Notifications> {
       body: SafeArea(
         child: CustomScrollView(
           physics: ClampingScrollPhysics(),
-          slivers: [appBar(context), Notification()],
+          slivers: [
+            CupertinoSliverNavigationBar(
+              automaticallyImplyLeading: false,
+              largeTitle: Text('Notifications'),
+            ),
+            Notification()
+          ],
         ),
       ),
     );
@@ -33,11 +39,6 @@ class _NotificationsState extends State<Notifications> {
 Widget appBar(context) {
   return SliverToBoxAdapter(
       child: CupertinoNavigationBar(
-    leading: CupertinoNavigationBarBackButton(
-      color: Colors.black,
-      onPressed: () => Navigator.pop(context),
-    ),
-    transitionBetweenRoutes: true,
     middle: Text('Notifications'),
   ));
 }
@@ -78,22 +79,29 @@ class _NotificationState extends State<Notification> {
                             margin: EdgeInsets.only(
                               top: 10,
                             ),
-                            child: ListTile(
-                              leading: ClipOval(
-                                child: Container(
-                                  child: Image.asset(
-                                    'assets/images/email_open.png',
-                                    color: Colors.grey[400],
-                                    height: 50,
-                                    width: 50,
-                                    fit: BoxFit.fill,
+                            child: GestureDetector(
+                              onTap: () {
+                                print('notif');
+                                showNotification();
+                              },
+                              child: ListTile(
+                                leading: ClipOval(
+                                  child: Container(
+                                    child: Image.asset(
+                                      'assets/images/email_open.png',
+                                      color: Colors.grey[400],
+                                      height: 50,
+                                      width: 50,
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              title: Text(
-                                snapshot.data[i].notif,
-                                style: TextStyle(
-                                    fontSize: 13, fontWeight: FontWeight.w300),
+                                title: Text(
+                                  snapshot.data[i].notif,
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w300),
+                                ),
                               ),
                             ),
                           );

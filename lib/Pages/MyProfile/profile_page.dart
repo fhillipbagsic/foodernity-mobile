@@ -1,24 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
-import 'package:my_app/Pages/MyDonations/MyDonations.dart';
-import 'package:my_app/Widgets/NavigationBar.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:my_app/Pages/Account/signin.dart';
+import 'package:my_app/Pages/MyDonations/my_donations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-import 'package:my_app/SizeConfig/SizeConfig.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_app/Pages/AccountPage/profile_list_item.dart';
+import 'package:my_app/Pages/MyProfile/profile_list_item.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
-import '../../main.dart';
-import '../Home.dart';
-import 'EditProfile.dart';
+import 'edit_profile.dart';
 
 var refreshKey = GlobalKey<RefreshIndicatorState>();
 
@@ -43,7 +32,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var img = "";
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     preLoad();
@@ -168,7 +156,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      ConfirmLogoutDialog(context);
+                      _confirmLogoutDialog(context);
                     },
                     child: ProfileListItem(
                       icon: LineAwesomeIcons.alternate_sign_out,
@@ -191,7 +179,7 @@ void logout() async {
   prefs.clear();
 }
 
-void ConfirmLogoutDialog(context) {
+void _confirmLogoutDialog(context) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(

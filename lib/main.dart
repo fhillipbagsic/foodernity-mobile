@@ -1,36 +1,68 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
-import 'package:my_app/Pages/Account/Signup.dart';
-import 'package:my_app/Pages/Account/enterCode.dart';
-import 'package:my_app/Pages/CallForDonationDetails.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
-import 'package:my_app/Pages/Home/Notifications.dart';
-import 'package:my_app/Pages/PostDonation/PostDonation.dart';
-import 'package:my_app/Pages/splash/components/body.dart';
 import 'package:my_app/routes.dart';
 import 'package:my_app/Pages/Home.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
-import 'package:my_app/Pages/Account/ForgotPassword.dart';
-import 'package:my_app/Pages/splash/splash_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:my_app/Pages/DonationDetails.dart';
-import 'package:my_app/Pages/RecentDonationDetails.dart';
-import 'package:my_app/Pages/Home/CallForDonations.dart';
-import 'package:pie_chart/pie_chart.dart';
-import 'package:my_app/Pages/AccountPage/profilepage.dart';
+import 'package:my_app/Pages/Account/signin.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'Pages/PostDonation/step_three.dart';
-import 'Pages/PostDonation/verification.dart';
-import 'Pages/AccountPage/EditProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Pages/MyDonations/MyDonations.dart';
-import 'package:my_app/Pages/PostDonation/verifySuccess.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/cupertino.dart';
 
-void main() {
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+InitializationSettings initializationSettings;
+const MethodChannel platform =
+    MethodChannel('dexterous.com/flutter/local_notifications');
+
+class ReceivedNotification {
+  ReceivedNotification({
+    this.id,
+    this.title,
+    this.body,
+    this.payload,
+  });
+
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+}
+
+Future onDidReceiveLocalNotification(
+    int id, String title, String body, String payload) async {
+  return CupertinoAlertDialog(
+    title: Text(title),
+    content: Text(body),
+    actions: <Widget>[
+      CupertinoDialogAction(
+          isDefaultAction: true,
+          onPressed: () {
+            print("");
+          },
+          child: Text("Okay")),
+    ],
+  );
+}
+
+Future<void> showNotification() async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+          'your channel id', 'channel name', 'channeldescription',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker');
+
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+      0, 'plain title', 'plain body', platformChannelSpecifics,
+      payload: 'item x');
+}
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(MaterialApp(
     home: MyApp(),
   ));
@@ -64,7 +96,28 @@ class _MyAppState extends State<MyApp> {
         _showdialog(context);
       }
     });
+    initializing();
     isLoggedIn();
+  }
+
+  void initializing() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('app_icon');
+
+    final IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+            onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+
+    initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+  }
+
+  Future onSelectNotification(String payLoad) {
+    if (payLoad != null) {
+      print(payLoad);
+    }
+
+    // we can set navigator to navigate another screen
   }
 
   void isLoggedIn() async {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
-import 'package:my_app/Pages/Account/enterCode.dart';
+import 'package:my_app/Pages/Account/signin.dart';
+import 'package:my_app/Pages/Account/enter_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -99,9 +99,9 @@ void getCode(context) async {
   // alertNoAcc(context);
   print(response.body);
 
-  if(response.body=="No existing account."){
+  if (response.body == "No existing account.") {
     alertNoAcc(context);
-  }else{
+  } else {
     prefs.setString('fpemail', _emailController.text);
     prefs.setString('fpcode', response.body);
 
@@ -110,7 +110,6 @@ void getCode(context) async {
       MaterialPageRoute(builder: (context) => ChangePasswordCode()),
     );
   }
-
 }
 
 Widget _sendButton(context) {
@@ -124,7 +123,6 @@ Widget _sendButton(context) {
       if (isValid()) {
         //goods
         getCode(context);
-
       } else {
         print("Email field cannot be empty");
       }

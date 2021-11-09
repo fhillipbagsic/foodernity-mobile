@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:my_app/Pages/Account/numeric_pad_forgotPass.dart';
-import 'package:numeric_keyboard/numeric_keyboard.dart';
+import 'package:my_app/Pages/Account/numeric_pad_forgot_password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_app/Pages/Account/confirmNewPass.dart';
+import 'package:my_app/Pages/Account/confirm_new_password.dart';
 
 String code = "";
 

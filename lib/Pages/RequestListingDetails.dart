@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
+import 'package:my_app/Pages/Announcement/announcement.dart';
 import 'package:my_app/Pages/Home.dart';
 
 class RequestDetails extends StatefulWidget {

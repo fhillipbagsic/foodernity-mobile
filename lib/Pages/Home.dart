@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
-import 'package:my_app/Pages/Home/Notifications.dart';
-import 'package:my_app/Pages/Home/CallForDonations.dart';
-import 'package:my_app/Pages/AccountPage/profilepage.dart';
+import 'package:my_app/Pages/Announcement/announcement.dart';
+import 'package:my_app/Pages/CallForDonation/call_for_donations.dart';
+import 'package:my_app/Pages/MyProfile/profile_page.dart';
+import 'package:my_app/Pages/Notifications/notifications.dart';
 
 class Home extends StatefulWidget {
   static String routeName = "/Home";
@@ -16,6 +15,7 @@ class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
   final List<Widget> _children = [
+    PlaceholderWidget(Notifications()),
     PlaceholderWidget(Listings()),
     PlaceholderWidget(RequestListing()),
     PlaceholderWidget(ProfilePage()),
@@ -29,6 +29,8 @@ class _HomeState extends State<Home> {
           currentIndex: _currentIndex,
           onTap: onTabTapped,
           items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.notifications), label: 'Notifications'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_basket_rounded),
                 label: 'Announcements'),

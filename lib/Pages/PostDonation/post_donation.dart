@@ -86,7 +86,28 @@ class _PostDonationState extends State<PostDonation> {
               child: SafeArea(
                 child: CustomScrollView(
                   physics: ClampingScrollPhysics(),
-                  slivers: [_navigationBar(context), forms()],
+                  slivers: [
+                    CupertinoSliverNavigationBar(
+                      automaticallyImplyLeading: false,
+                      largeTitle: Text('Post a Donation'),
+                      leading: GestureDetector(
+                        onTap: () {
+                          showAlertDialog(context);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          showAlertDialog(context);
+                        },
+                      ),
+                    ),
+                    Forms()
+                  ],
                 ),
               ),
             ),
@@ -123,6 +144,8 @@ Widget showAlertDialog(BuildContext context) {
   Widget continueButton = FlatButton(
     child: Text("Yes"),
     onPressed: () {
+      _donationNameController.clear();
+      controllers = [];
       Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
     },
   );
@@ -146,12 +169,12 @@ Widget showAlertDialog(BuildContext context) {
   );
 }
 
-class forms extends StatefulWidget {
+class Forms extends StatefulWidget {
   @override
   _formsState createState() => _formsState();
 }
 
-class _formsState extends State<forms> {
+class _formsState extends State<Forms> {
   final GlobalKey<FormState> _homeKey = GlobalKey<FormState>();
   TextEditingController controller = TextEditingController();
   List<DropdownMenuItem<String>> _dropDownMenuItems2;
@@ -504,6 +527,8 @@ class _formsState extends State<forms> {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => StepThree()));
             postDonation(categArr, qtyArr, _image, donationName);
+            _donationNameController.clear();
+            controllers = [];
           } else {
             //lagyan ng popup na image is required
             _imageRequired(context);

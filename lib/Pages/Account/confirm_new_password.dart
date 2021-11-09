@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:my_app/Pages/Account/Signin.dart';
+import 'package:my_app/Pages/Account/signin.dart';
 
 var _newpassController = TextEditingController();
 var _confirmNewPass = TextEditingController();

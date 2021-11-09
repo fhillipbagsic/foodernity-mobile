@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/Pages/MyDonations/Donation.dart';
+import 'package:my_app/Models/Donation.dart';
 import 'package:my_app/Pages/MyDonations/donation_detail.dart';
 
 class DonationItem extends StatefulWidget {

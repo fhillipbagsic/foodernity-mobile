@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import 'package:my_app/Pages/MyDonations/MyDonations.dart';
-import 'package:my_app/Pages/Home/Listings.dart';
+import 'package:my_app/Pages/MyDonations/my_donations.dart';
 
 import '../Home.dart';
 
