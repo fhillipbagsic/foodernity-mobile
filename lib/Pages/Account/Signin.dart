@@ -310,7 +310,10 @@ void loginUser(context) async {
     await prefs.setString('email', _emailController.text);
     var string = await prefs.getString('email');
     print(string);
-    Navigator.pushNamed(context, Home.routeName);
+   // Navigator.pushNamed(context, Home.routeName);
+
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Home()));
   } else {
     _showErrorMessage(context, message);
   }
@@ -374,7 +377,8 @@ Widget _forgotPassword(context) {
     mainAxisAlignment: MainAxisAlignment.end,
     children: [
       GestureDetector(
-        onTap: () => Navigator.pushNamed(context, ForgotPassword.routeName),
+        onTap: () => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => ForgotPassword())),
         child: Text(
           "Forgot Password? ",
           style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
