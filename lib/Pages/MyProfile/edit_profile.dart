@@ -94,6 +94,23 @@ void saveChangesBtnFnc(context) async {
 
         if (_CurrentPassController.text == _NewPassController.text) {
           //Bawal gamitin ang same pass
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Same password are not allowed',
+                  style: TextStyle(color: Colors.redAccent)),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    _CurrentPassController.clear();
+                    _NewPassController.clear();
+                    Navigator.pop(context, false);
+                  },
+                  child: Text("Close"),
+                ),
+              ],
+            ),
+          );
           print("Bawal gamitin same pass");
         } else {
           CloudinaryResponse responseImg = await cloudinary.uploadFile(
@@ -116,6 +133,10 @@ void saveChangesBtnFnc(context) async {
               }));
 
           print(response.body);
+          var message = response.body;
+          if (message == "Success update default") {
+            _showSuccessEdit(context, "Edit profile successful");
+          }
           print("nagbago ako ng image");
           prefs.setString('profilePicture', responseImg.secureUrl);
           prefs.setString('fullName', _NameController.text);
@@ -125,11 +146,13 @@ void saveChangesBtnFnc(context) async {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Mali Password',
+            title: Text('Current password does not match',
                 style: TextStyle(color: Colors.redAccent)),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
+                  _CurrentPassController.clear();
+                  _NewPassController.clear();
                   Navigator.pop(context, false);
                 },
                 child: Text("Close"),
@@ -153,6 +176,8 @@ void saveChangesBtnFnc(context) async {
               actions: <Widget>[
                 FlatButton(
                   onPressed: () {
+                    _CurrentPassController.clear();
+                    _NewPassController.clear();
                     Navigator.pop(context, false);
                   },
                   child: Text("Close"),
@@ -161,13 +186,6 @@ void saveChangesBtnFnc(context) async {
             ),
           );
         } else {
-          // CloudinaryResponse responseImg = await cloudinary.uploadFile(
-          //   CloudinaryFile.fromFile(_image.path,
-          //       resourceType: CloudinaryResourceType.Image),
-          // );
-
-          // print(responseImg.secureUrl);
-
           http.Response response = await http.post(
               "https://foodernity.herokuapp.com/user/updateUserDetailsDefault",
               headers: <String, String>{
@@ -181,6 +199,10 @@ void saveChangesBtnFnc(context) async {
               }));
 
           print(response.body);
+          var message = response.body;
+          if (message == "Success update default") {
+            _showSuccessEdit(context, "Edit profile successful");
+          }
           print("di ako nagbago ng image");
           prefs.setString('profilePicture', profilePicture);
           prefs.setString('fullName', _NameController.text);
@@ -190,11 +212,13 @@ void saveChangesBtnFnc(context) async {
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Mali Password',
+            title: Text('Current password does not match',
                 style: TextStyle(color: Colors.redAccent)),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
+                  _CurrentPassController.clear();
+                  _NewPassController.clear();
                   Navigator.pop(context, false);
                 },
                 child: Text("Close"),
@@ -395,6 +419,46 @@ class _EditProfileState extends State<EditProfile> {
   }
 }
 
+//alert dialog when success
+void _showSuccessEdit(context, String subtitle) {
+  var subtitle1 = subtitle;
+  Widget continueButton = FlatButton(
+    child: Text(
+      "Close",
+      style: TextStyle(color: Colors.green),
+    ),
+    onPressed: () {
+      _CurrentPassController.clear();
+      _NewPassController.clear();
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Row(
+      children: [
+        Text("Success!", style: TextStyle(color: Colors.greenAccent)),
+      ],
+    ),
+    content: Text(
+      subtitle1,
+      style: TextStyle(color: Colors.black),
+    ),
+    actions: [
+      continueButton,
+    ],
+    backgroundColor: Colors.white,
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 Widget _fullNameTextField(context) {
   var width = MediaQuery.of(context).size.width - 40;
   var height = MediaQuery.of(context).size.height / 14;
@@ -457,7 +521,6 @@ Widget _fullNameTextField(context) {
 }
 
 final passwordValidator = MultiValidator([
-  RequiredValidator(errorText: 'password is required'),
   MinLengthValidator(8, errorText: 'password must be at least 8 digits long'),
   PatternValidator(r'^[a-zA-Z0-9]+$',
       errorText: 'passwords must not have special character')

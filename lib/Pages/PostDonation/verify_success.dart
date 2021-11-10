@@ -37,7 +37,7 @@ class App extends StatelessWidget {
                   height: 50,
                 ),
                 Text(
-                  'Thank You!',
+                  'Success!',
                   style:
                       TextStyle(fontSize: 27.sp, fontWeight: FontWeight.w700),
                 ),

@@ -185,22 +185,7 @@ class Signup extends StatelessWidget {
   }
 }
 
-// void addUser(firstName, lastName, phoneNumber, password, confirmPass) async {
-//   http.Response response = await http.post("http://10.0.2.2:8090/register",
-//       headers: <String, String>{
-//         'Content-Type': 'application/json; charset=UTF-8',
-//       },
-//       body: jsonEncode(<String, String>{
-//         'firstName': firstName,
-//         'lastName': lastName,
-//         'phoneNumber': phoneNumber,
-//         'password': password,
-//         'confirmPass': confirmPass
-//       }));
-//   print(response.body);
-// }
-
-void signUp() async {
+void signUp(context) async {
   final prefs = await SharedPreferences.getInstance();
   var formatter = DateFormat('MM/dd/yyyy');
   String now = formatter.format(new DateTime.now());
@@ -219,16 +204,54 @@ void signUp() async {
             'userStatus': 'active',
           }));
   print(response.body);
-  var hashCode = response.body;
-  await prefs.setString('vc', hashCode);
+  var message = response.body;
+  var hashCode = '';
+  if (message == 'email is already taken') {
+    _emailTakenError(context, "Email is already taken");
+  } else {
+    hashCode = response.body;
+    await prefs.setString('vc', hashCode);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => Verification()));
+  }
 }
 
-// Widget _nameField(width) {
-//   return (Row(
-//     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//     children: [_firstNameField(width), _lastNameField(width)],
-//   ));
-// }
+void _emailTakenError(context, String subtitle) {
+  var subtitle1 = subtitle;
+  Widget continueButton = FlatButton(
+    child: Text(
+      "Close",
+      style: TextStyle(color: Colors.red),
+    ),
+    onPressed: () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Row(
+      children: [
+        Text("Sign up Error", style: TextStyle(color: Colors.redAccent)),
+      ],
+    ),
+    content: Text(
+      subtitle1,
+      style: TextStyle(color: Colors.black),
+    ),
+    actions: [
+      continueButton,
+    ],
+    backgroundColor: Colors.white,
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
 Widget _nameHelper() {
   return Padding(
@@ -480,13 +503,11 @@ Widget _signupButton(context) {
         return;
       }
       _homeKey.currentState.save();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Verification()));
       print(fullName);
       print(phoneNumber);
       print(password);
       print(confirmPass);
-      signUp();
+      signUp(context);
       _FNameController.clear();
       _emailController.clear();
       _passwordController.clear();

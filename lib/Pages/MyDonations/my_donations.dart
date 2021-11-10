@@ -125,7 +125,11 @@ class _AppState extends State<App> {
                           ),
                         );
                       },
-                      child: Text('Back', style: TextStyle(color: Colors.blue)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child:
+                            Text('Back', style: TextStyle(color: Colors.blue)),
+                      ),
                     ),
                     largeTitle: Text('My Donations'),
                   ),

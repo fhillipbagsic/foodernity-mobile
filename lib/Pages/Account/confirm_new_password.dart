@@ -158,7 +158,7 @@ void successfulPassUpdate(context) {
       actions: <Widget>[
         FlatButton(
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Signin()));
             //   Navigator.of(context, rootNavigator: true).pop();
           },

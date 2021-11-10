@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dbcrypt/dbcrypt.dart';
+import 'package:my_app/Pages/PostDonation/verify_success.dart';
 
 class Verification extends StatefulWidget {
   static String routeName = "/verification";
@@ -137,10 +138,14 @@ class _AppState extends State<App> {
                         print(result);
                         if (result == true) {
                           verify();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => VerifySuccess()));
                         } else {
                           print('result is false');
+                          showError(context);
                         }
-                        showAlertDialog(context);
                       },
                     ),
                   ),
@@ -209,32 +214,26 @@ void verify() async {
   print(response.body);
 }
 
-Widget showAlertDialog(BuildContext context) {
+Widget showError(BuildContext context) {
   // set up the buttons
   Widget continueButton = FlatButton(
     child: Text(
-      "Proceed",
+      "Close",
       style: TextStyle(color: Colors.blue),
     ),
     onPressed: () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Signin()));
+      Navigator.of(context, rootNavigator: true).pop();
     },
   );
 
   AlertDialog alert = AlertDialog(
     title: Row(
       children: [
-        Icon(
-          Icons.check_circle,
-          size: 20.0,
-          color: Colors.green,
-        ),
-        Text("Verification Successful!", style: TextStyle(color: Colors.green)),
+        Text("Verification Error", style: TextStyle(color: Colors.redAccent)),
       ],
     ),
     content: Text(
-      "You can now proceed to Sign In",
+      "Invalid code please try again",
       style: TextStyle(color: Colors.black),
     ),
     actions: [

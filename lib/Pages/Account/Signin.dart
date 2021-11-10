@@ -199,20 +199,7 @@ class _SigninState extends State<Signin> {
 String email = '';
 String fullname = '';
 
-// void signInUser() async {
-//   http.Response response =
-//       await http.post("https://foodernity.herokuapp.com/login/googleLogin",
-//           headers: <String, String>{
-//             'Content-Type': 'application/json; charset=UTF-8',
-//           },
-//           body: jsonEncode(<String, String>{
-//             'email': email,
-//             'password': password,
-//           }));
-//   print(response.body);
-// }
-
-void googleSignin(context) async {
+Future<bool> googleSignin(context) async {
   final prefs = await SharedPreferences.getInstance();
   var formatter = DateFormat('MM/dd/yyyy');
   String now = formatter.format(new DateTime.now());
@@ -234,14 +221,62 @@ void googleSignin(context) async {
   var message = response.body;
   if (message == "Email is in use in different login method.") {
     _showErrorMessage(context, "Email is in use in different login method.");
+    return false;
   } else if (message == "Logged in") {
     await prefs.setString('email', email);
     var string = await prefs.getString('email');
     print(string);
-    Navigator.pushNamed(context, Home.routeName);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    return true;
+  } else if (message == "new user added successfully via google login") {
+    _showSuccess(context, "Successfully Registered via google login");
+    await prefs.setString('email', email);
+    var string = await prefs.getString('email');
+    print(string);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    return true;
   } else {
     _showErrorMessage(context, message);
+    return false;
   }
+}
+
+//alert dialog when success
+void _showSuccess(context, String subtitle) {
+  var message = subtitle;
+  Widget continueButton = FlatButton(
+    child: Text(
+      "Close",
+      style: TextStyle(color: Colors.black),
+    ),
+    onPressed: () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Row(
+      children: [
+        Text("Success!", style: TextStyle(color: Colors.greenAccent)),
+      ],
+    ),
+    content: Text(
+      message,
+      style: TextStyle(color: Colors.black),
+    ),
+    actions: [
+      continueButton,
+    ],
+    backgroundColor: Colors.white,
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 
 //alert dialog when user doesnt exists
@@ -310,7 +345,7 @@ void loginUser(context) async {
     await prefs.setString('email', _emailController.text);
     var string = await prefs.getString('email');
     print(string);
-    Navigator.pushNamed(context, Home.routeName);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   } else {
     _showErrorMessage(context, message);
   }
@@ -374,7 +409,8 @@ Widget _forgotPassword(context) {
     mainAxisAlignment: MainAxisAlignment.end,
     children: [
       GestureDetector(
-        onTap: () => Navigator.pushNamed(context, ForgotPassword.routeName),
+        onTap: () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => ForgotPassword())),
         child: Text(
           "Forgot Password? ",
           style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
@@ -426,16 +462,29 @@ class _GoogleButtonState extends State<GoogleButton> {
         children: [
           (OutlinedButton(
               onPressed: () {
-                _googleSignIn.signIn().then((userData) {
+                _googleSignIn.signOut().then((value) {
                   setState(() {
+                    _isLoggedIn = false;
+                  });
+                }).catchError((e) {});
+                _googleSignIn.signIn().then((userData) {
+                  setState(() async {
                     _isLoggedIn = true;
                     _userObj = userData;
                     email = _userObj.email;
                     fullname = _userObj.displayName;
-                    googleSignin(context);
                     print(_userObj);
                     print(_userObj.displayName);
                     print(_userObj.email);
+                    var val = await googleSignin(context);
+                    if (val == true) {
+                    } else {
+                      _googleSignIn.signOut().then((value) {
+                        setState(() {
+                          _isLoggedIn = false;
+                        });
+                      }).catchError((e) {});
+                    }
                   });
                 }).catchError((e) {
                   print(e);
