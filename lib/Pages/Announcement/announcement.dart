@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:my_app/Models/Item.dart';
 import 'package:my_app/Models/Announcement.dart';
 import 'package:my_app/Pages/Announcement/announcement_item.dart';
+import 'package:my_app/Pages/PostDonation/post_a_donation.dart';
 import 'package:my_app/Pages/PostDonation/post_donation.dart';
 import 'package:my_app/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -327,7 +328,7 @@ Future<void> showInformationDialog(BuildContext context) async {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => PostDonation()));
+                              builder: (context) => PostADonation()));
                     },
                     child:
                         Text("Proceed", style: TextStyle(color: Colors.blue)),

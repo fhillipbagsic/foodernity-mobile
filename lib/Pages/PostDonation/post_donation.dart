@@ -18,6 +18,9 @@ import 'package:my_app/Pages/PostDonation/step_three.dart';
 var donationName = "";
 File _image;
 var _donationNameController = TextEditingController();
+Map<int, Widget> forms = {};
+int formsLength = 0;
+List<CategoryForm> listDynamic = [];
 List<TextEditingController> controllers = [];
 List _categories = [
   "Eggs",
@@ -31,7 +34,7 @@ List _categories = [
   "Beverages",
   "Snacks",
 ];
-
+List selected = [];
 List qty = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 class PostDonation extends StatefulWidget {
@@ -137,10 +140,10 @@ Widget showAlertDialog(BuildContext context) {
 
 class Forms extends StatefulWidget {
   @override
-  _formsState createState() => _formsState();
+  _FormsState createState() => _FormsState();
 }
 
-class _formsState extends State<Forms> {
+class _FormsState extends State<Forms> {
   final GlobalKey<FormState> _homeKey = GlobalKey<FormState>();
   TextEditingController controller = TextEditingController();
   List<DropdownMenuItem<String>> _dropDownMenuItems2;
@@ -148,7 +151,7 @@ class _formsState extends State<Forms> {
   final picker = ImagePicker();
   String _dropDownValue;
   final form = GlobalKey<FormState>();
-  List<CategoryForm> listDynamic = [];
+
   List<String> data = [];
   final date = DateFormat("yyyy-MM-dd");
 
@@ -169,7 +172,18 @@ class _formsState extends State<Forms> {
       categoryController: categoryController,
       expiryController: expiryController,
       quantityController: quantityController,
+      index: listDynamic.length,
     ));
+
+    var key = formsLength++;
+
+    forms[key] = new CategoryForm(
+      categoryController: categoryController,
+      expiryController: expiryController,
+      quantityController: quantityController,
+      index: key,
+    );
+    print(key);
   }
 
   void initState() {
@@ -224,11 +238,11 @@ class _formsState extends State<Forms> {
         ));
 
     Widget dynamicForm = Container(
-      height: 280.0 * listDynamic.length,
+      height: 300.0 * formsLength,
       child: new ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: listDynamic.length,
-        itemBuilder: (_, index) => listDynamic[index],
+        itemCount: formsLength,
+        itemBuilder: (_, index) => forms[index],
       ),
     );
 
@@ -321,6 +335,13 @@ class _formsState extends State<Forms> {
                 SizedBox(
                   height: 15.0,
                 ),
+                // Container(
+                //   height: 300,
+                //   child: ListView.builder(
+                //     itemCount: formsLength,
+                //     itemBuilder: (_, index) => forms[index],
+                //   ),
+                // ),
                 data.length == 0 ? dynamicForm : result,
                 Padding(
                   padding: const EdgeInsets.only(top: 20),
@@ -457,17 +478,6 @@ class _formsState extends State<Forms> {
               'status': "pending",
             }));
     print(response.body);
-
-    // http.Response response1 =
-    //     await http.post("https://foodernity.herokuapp.com/stocks/addStocks",
-    //         headers: <String, String>{
-    //           'Content-Type': 'application/json; charset=UTF-8',
-    //         },
-    //         body: jsonEncode(<String, dynamic>{
-    //           'categArr': donationCateg,
-    //           'qtyArr': donationQty,
-    //         }));
-    // print(response1.body);
   }
 
   Widget _submitButton() {
@@ -484,37 +494,34 @@ class _formsState extends State<Forms> {
             return;
           }
 
-          if (_image != null) {
-            print('VALUES');
-            // print(controllers.toString());
-            print(_image);
-            print(donationName);
-            for (var i = 0; i < (controllers.length - 2); i++) {
-              // print(controllers[i].text);
-              if (_categories.contains(controllers[i].text)) {
-                categArr.add(controllers[i].text);
-                dateArr.add(controllers[i + 1].text);
-                qtyArr.add(controllers[i + 2].text);
-              }
+          // if (_image != null) {
+          print('VALUES');
+          print(_image);
+          print(donationName);
+          for (var i = 0; i < (controllers.length - 2); i++) {
+            if (_categories.contains(controllers[i].text)) {
+              categArr.add(controllers[i].text);
+              dateArr.add(controllers[i + 1].text);
+              qtyArr.add(controllers[i + 2].text);
             }
-
-            print(categArr);
-            print(dateArr);
-            print(qtyArr);
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => StepThree()));
-            // Navigator.pushAndRemoveUntil(
-            //     context,
-            //     MaterialPageRoute(builder: (context) => StepThree()),
-            //     ModalRoute.withName("/SuccessDonation"));
-            postDonation(categArr, qtyArr, _image, donationName);
-            _donationNameController.clear();
-            controllers = [];
-          } else {
-            //lagyan ng popup na image is required
-            _imageRequired(context);
-            print("image is required");
           }
+          print(categArr);
+          print(dateArr);
+          print(qtyArr);
+          // Navigator.pushReplacement(
+          //     context, MaterialPageRoute(builder: (context) => StepThree()));
+          // // Navigator.pushAndRemoveUntil(
+          // //     context,
+          // //     MaterialPageRoute(builder: (context) => StepThree()),
+          // //     ModalRoute.withName("/SuccessDonation"));
+          // postDonation(categArr, qtyArr, _image, donationName);
+          // _donationNameController.clear();
+          // controllers = [];
+          // } else {
+          //   //lagyan ng popup na image is required
+          //   _imageRequired(context);
+          //   print("image is required");
+          // }
         },
         color: Colors.blue,
         minWidth: width,
@@ -616,12 +623,14 @@ class CategoryForm extends StatefulWidget {
       {Key key,
       this.categoryController,
       this.expiryController,
-      this.quantityController})
+      this.quantityController,
+      this.index})
       : super(key: key);
 
   final TextEditingController categoryController;
   final TextEditingController expiryController;
   final TextEditingController quantityController;
+  final int index;
 
   @override
   State<CategoryForm> createState() => _CategoryFormState();
@@ -684,9 +693,20 @@ class _CategoryFormState extends State<CategoryForm> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  SizedBox(
-                    height: 5.0,
-                  ),
+                  widget.index != 0
+                      ? Align(
+                          alignment: Alignment.topRight,
+                          child: GestureDetector(
+                              onTap: () {
+                                forms.remove(widget.index);
+
+                                // controllers.removeAt(widget.index * 3);
+                                // controllers.removeAt(widget.index * 3 + 1);
+                                // controllers.removeAt(widget.index * 3 + 2);
+                              },
+                              child: Icon(Icons.close)),
+                        )
+                      : SizedBox(),
                   Container(
                     decoration: BoxDecoration(
                         color: Colors.grey[100],

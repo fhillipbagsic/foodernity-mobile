@@ -107,7 +107,7 @@ Widget _recipients(String beneficiaries) {
           color: Colors.blue[400],
         ),
         title: Text(
-          'Benefiaries: Residents of ' + beneficiaries + '.',
+          'Benefiaries: Residents of ' + beneficiaries.trim() + '.',
           style: TextStyle(fontSize: 16, color: Colors.blue[400]),
         ),
       ),
@@ -131,7 +131,7 @@ Widget _date(String date) {
           color: Colors.green[400],
         ),
         title: Text(
-          'Donated on ' + date + '.',
+          'Donated on ' + date.trim() + '.',
           style: TextStyle(fontSize: 16, color: Colors.green[400]),
         ),
       ),
@@ -155,7 +155,7 @@ Widget _location(String recipientLocation) {
           color: Colors.orange[400],
         ),
         title: Text(
-          recipientLocation,
+          recipientLocation.trim(),
           style: TextStyle(fontSize: 16, color: Colors.orange[400]),
         ),
       ),
