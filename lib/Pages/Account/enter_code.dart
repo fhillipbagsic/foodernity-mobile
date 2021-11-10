@@ -35,7 +35,45 @@ void checkCode(context) async {
     Navigator.push(context, MaterialPageRoute(builder: (context) => NewPass()));
   } else {
     print("the fpcode and user input code did not matched");
+    errorCode(context);
   }
+}
+
+Widget errorCode(BuildContext context) {
+  // set up the buttons
+  Widget continueButton = FlatButton(
+    child: Text(
+      "Close",
+      style: TextStyle(color: Colors.blue),
+    ),
+    onPressed: () {
+      Navigator.of(context, rootNavigator: true).pop();
+    },
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Row(
+      children: [
+        Text("Verification Error", style: TextStyle(color: Colors.redAccent)),
+      ],
+    ),
+    content: Text(
+      "Invalid code please try again",
+      style: TextStyle(color: Colors.black),
+    ),
+    actions: [
+      continueButton,
+    ],
+    backgroundColor: Colors.white,
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
 
 class Design extends StatefulWidget {

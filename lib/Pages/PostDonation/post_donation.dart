@@ -73,9 +73,12 @@ class _PostDonationState extends State<PostDonation> {
                           showAlertDialog(context);
                           Navigator.pop(context);
                         },
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: Colors.blue),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.blue),
+                          ),
                         ),
                       ),
                       trailing: GestureDetector(
@@ -94,21 +97,6 @@ class _PostDonationState extends State<PostDonation> {
       );
     });
   }
-}
-
-Widget _navigationBar(context) {
-  return CupertinoSliverNavigationBar(
-    largeTitle: Text('Post a Donation'),
-    trailing: GestureDetector(
-      onTap: () {
-        showAlertDialog(context);
-      },
-      child: Text(
-        'Cancel',
-        style: TextStyle(color: Colors.blue),
-      ),
-    ),
-  );
 }
 
 Widget showAlertDialog(BuildContext context) {
@@ -245,7 +233,6 @@ class _formsState extends State<Forms> {
     );
 
     var width = MediaQuery.of(context).size.width - 30;
-    var height = MediaQuery.of(context).size.height / 4;
     var imageWidth = MediaQuery.of(context).size.width - 25;
 
     return SliverToBoxAdapter(
@@ -471,16 +458,16 @@ class _formsState extends State<Forms> {
             }));
     print(response.body);
 
-    http.Response response1 =
-        await http.post("https://foodernity.herokuapp.com/stocks/addStocks",
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, dynamic>{
-              'categArr': donationCateg,
-              'qtyArr': donationQty,
-            }));
-    print(response1.body);
+    // http.Response response1 =
+    //     await http.post("https://foodernity.herokuapp.com/stocks/addStocks",
+    //         headers: <String, String>{
+    //           'Content-Type': 'application/json; charset=UTF-8',
+    //         },
+    //         body: jsonEncode(<String, dynamic>{
+    //           'categArr': donationCateg,
+    //           'qtyArr': donationQty,
+    //         }));
+    // print(response1.body);
   }
 
   Widget _submitButton() {
@@ -514,8 +501,12 @@ class _formsState extends State<Forms> {
             print(categArr);
             print(dateArr);
             print(qtyArr);
-            Navigator.push(
+            Navigator.pushReplacement(
                 context, MaterialPageRoute(builder: (context) => StepThree()));
+            // Navigator.pushAndRemoveUntil(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => StepThree()),
+            //     ModalRoute.withName("/SuccessDonation"));
             postDonation(categArr, qtyArr, _image, donationName);
             _donationNameController.clear();
             controllers = [];
@@ -574,7 +565,6 @@ void _imageRequired(context) {
         FlatButton(
           onPressed: () {
             Navigator.of(context, rootNavigator: true).pop();
-            //   Navigator.of(context, rootNavigator: true).pop();
           },
           child: Text("Close"),
         ),
@@ -860,193 +850,4 @@ class _CategoryFormState extends State<CategoryForm> {
 //   }
 // }
 
- // Container(
-                //   margin: EdgeInsets.only(top: 20.0),
-                //   child: SizedBox(
-                //     width: width,
-                //     child: TextFormField(
-                //       validator: (String value) {
-                //         if (value.isEmpty) {
-                //           return 'Donation Name Can\'t Be Empty';
-                //         }
-                //         return null;
-                //       },
-                //       onSaved: (value) {
-                //         donationName = value;
-                //       },
-                //       decoration: InputDecoration(
-                //           border: OutlineInputBorder(),
-                //           labelText: 'Donation Name*'),
-                //     ),
-                //   ),
-                // ),
-                // Container(
-                //   margin: EdgeInsets.only(top: 20.0),
-                //   width: width,
-                //   child: new DropdownButtonFormField(
-                //     value: _currentCategory,
-                //     items: _dropDownMenuItems2,
-                //     onChanged: changedDropDownItem2,
-                //     decoration: const InputDecoration(
-                //         border: OutlineInputBorder(), labelText: 'Category*'),
-                //   ),
-                // ),
-                // Container(
-                //   width: width,
-                //   margin: EdgeInsets.only(top: 20.0),
-                //   child: Column(
-                //     children: <Widget>[
-                //       // Text('Basic date field (${format.pattern})'),
-                //       DateTimeField(
-                //         format: date,
-                //         validator: (value) {
-                //           if (value == null) {
-                //             return ('Pickup Date Can\'t Be Empty');
-                //           }
-                //           if (!value.isAfter(DateTime.now())) {
-                //             return ('Pickup Date Can\'t Be In The Past');
-                //           }
-                //           return null;
-                //         },
-                //         onShowPicker: (context, currentValue) {
-                //           return showDatePicker(
-                //               context: context,
-                //               firstDate: DateTime(1900),
-                //               initialDate: currentValue ?? DateTime.now(),
-                //               lastDate: DateTime(2100));
-                //         },
-                //         decoration: const InputDecoration(
-                //             border: OutlineInputBorder(),
-                //             labelText: 'Select Pick up Date*'),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   margin: EdgeInsets.only(top: 20.0),
-                //   child: Column(
-                //     children: <Widget>[
-                //       Row(
-                //         children: [
-                //           Padding(
-                //             padding:
-                //                 const EdgeInsets.only(left: 20.0, top: 10.0),
-                //             child: Text(
-                //               "How do you want your donation to be claimed? ",
-                //               style: TextStyle(
-                //                   fontSize: 17, fontWeight: FontWeight.bold),
-                //               textAlign: TextAlign.left,
-                //             ),
-                //           ),
-                //         ],
-                //       ),
-                //       ListTile(
-                //         title: const Text('Pick Up'),
-                //         leading: Radio<SingingCharacter>(
-                //           value: SingingCharacter.pickup,
-                //           groupValue: _character,
-                //           onChanged: (SingingCharacter value) {
-                //             setState(() {
-                //               _character = value;
-                //             });
-                //           },
-                //         ),
-                //       ),
-                //       ListTile(
-                //         title: const Text('Deliver'),
-                //         leading: Radio<SingingCharacter>(
-                //           value: SingingCharacter.deliver,
-                //           groupValue: _character,
-                //           onChanged: (SingingCharacter value) {
-                //             setState(() {
-                //               _character = value;
-                //             });
-                //           },
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   width: width,
-                //   margin: EdgeInsets.only(top: 20.0),
-                //   child: Column(
-                //     children: <Widget>[
-                //       // Text('Basic date field (${format.pattern})'),
-                //       DateTimeField(
-                //         format: time,
-                //         validator: (value) {
-                //           if (value == null) {
-                //             return ('Pickup Time Can\'t Be Empty');
-                //           }
-                //           return null;
-                //         },
-                //         onShowPicker: (context, currentValue) async {
-                //           final time = await showTimePicker(
-                //             context: context,
-                //             initialTime: TimeOfDay.fromDateTime(
-                //                 currentValue ?? DateTime.now()),
-                //           );
-                //           return DateTimeField.convert(time);
-                //         },
-                //         decoration: const InputDecoration(
-                //             border: OutlineInputBorder(),
-                //             labelText: 'Select Pick up Time'),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   margin: EdgeInsets.only(top: 20.0),
-                //   child: SizedBox(
-                //     width: width,
-                //     child: TextFormField(
-                //       validator: (String value) {
-                //         if (value.isEmpty) {
-                //           return 'Donation Notes Can\'t Be Empty';
-                //         }
-                //         return null;
-                //       },
-                //       decoration: InputDecoration(
-                //           // contentPadding: new EdgeInsets.symmetric(vertical: 50.0),
-                //           border: OutlineInputBorder(),
-                //           labelText: 'Donation Notes*'),
-                //       maxLines: 6,
-                //       minLines: 4,
-                //     ),
-                //   ),
-                // ),
-                // Container(
-                //   margin: EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
-                //   child: FlatButton(
-                //     onPressed: () {
-                //       if (!_homeKey.currentState.validate()) {
-                //         return;
-                //       }
-                //       // if (controller.text.isEmpty
-                //       //     ? _validate = true
-                //       //     : _validate = false) {
-                //       //   return;
-                //       // }
-                //       // setState(() {
-                //       //   controller.text.isEmpty
-                //       //       ? _validate = true
-                //       //       : _validate = false;
-                //       // });
-                //       Navigator.pushNamed(
-                //           context, PostDonationSummary.routeName);
-                //       _homeKey.currentState.save();
-                //     },
-                //     color: Colors.blue,
-                //     minWidth: width,
-                //     height: 45,
-                //     child:
-                //         Text('Proceed', style: TextStyle(color: Colors.white)),
-                //     shape: RoundedRectangleBorder(
-                //         side: BorderSide(
-                //             color: Colors.blue,
-                //             width: 2,
-                //             style: BorderStyle.solid),
-                //         borderRadius: BorderRadius.circular(10)),
-                //   ),
-                // ),
+ 

@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:my_app/Guidelines/AddListingGuidelines.dart';
 import 'package:my_app/Pages/Account/signin.dart';
 import 'package:my_app/Pages/MyDonations/my_donations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_app/Pages/MyProfile/profile_list_item.dart';
-import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'edit_profile.dart';
 
 var refreshKey = GlobalKey<RefreshIndicatorState>();
@@ -150,9 +151,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       text: 'Edit Profile',
                     ),
                   ),
-                  ProfileListItem(
-                    icon: Icons.help,
-                    text: 'Frequently Asked Questions',
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddListing()));
+                    },
+                    child: ProfileListItem(
+                      icon: Icons.help,
+                      text: 'Frequently Asked Questions',
+                    ),
                   ),
                   InkWell(
                     onTap: () {
@@ -172,28 +181,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       },
     );
   }
-}
 
-void logout() async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.clear();
-}
+  void logout() async {
+    GoogleSignIn _googleSignIn = GoogleSignIn();
+    bool _isLoggedIn = false;
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    _googleSignIn.signOut().then((value) {
+      setState(() {
+        _isLoggedIn = false;
+      });
+    }).catchError((e) {});
+  }
 
-void _confirmLogoutDialog(context) {
-  showDialog(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: Text('Confirm Logout', style: TextStyle(color: Colors.redAccent)),
-      actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            logout();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Signin()));
-          },
-          child: Text("Confirm"),
-        ),
-      ],
-    ),
-  );
+  void _confirmLogoutDialog(context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title:
+            Text('Confirm Logout', style: TextStyle(color: Colors.redAccent)),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              logout();
+
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Signin()));
+            },
+            child: Text("Confirm"),
+          ),
+        ],
+      ),
+    );
+  }
 }

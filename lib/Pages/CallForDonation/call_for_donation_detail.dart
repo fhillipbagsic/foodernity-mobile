@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:my_app/Models/CallForDonation.dart';
 import 'package:sizer/sizer.dart';
 import 'package:my_app/Pages/CallForDonation/call_for_donations.dart';
+import 'package:my_app/Pages/Announcement/announcement.dart';
 
 class CallForDonationDetails extends StatefulWidget {
   final CallForDonation callForDonation;
@@ -64,7 +65,8 @@ class _CallForDonationDetailsState extends State<CallForDonationDetails> {
                       _image(widget.callForDonation.imgPath),
                       _title(widget.callForDonation.title),
                       _description(widget.callForDonation.description),
-                      _date(widget.callForDonation.date)
+                      _date(widget.callForDonation.date),
+                      _donateBtn(context)
                     ],
                   ),
                 )),
@@ -73,6 +75,25 @@ class _CallForDonationDetailsState extends State<CallForDonationDetails> {
       );
     });
   }
+}
+
+Widget _donateBtn(context) {
+  var btnWidth = MediaQuery.of(context).size.width - 40;
+  return Container(
+      margin: EdgeInsets.only(top: 200),
+      child: FlatButton(
+        onPressed: () {
+          showInformationDialog(context);
+        },
+        color: Colors.blue,
+        minWidth: btnWidth,
+        height: 45,
+        child: Text('Donate Now', style: TextStyle(color: Colors.white)),
+        shape: RoundedRectangleBorder(
+            side: BorderSide(
+                color: Colors.blue, width: 2, style: BorderStyle.solid),
+            borderRadius: BorderRadius.circular(10)),
+      ));
 }
 
 Widget _image(String image) {

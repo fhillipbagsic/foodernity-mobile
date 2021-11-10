@@ -7,7 +7,6 @@ import 'package:my_app/Pages/Account/signup.dart';
 import 'package:my_app/Guidelines/AddListingGuidelines.dart';
 import 'package:my_app/Pages/Announcement/announcement_detail.dart';
 import 'package:my_app/Pages/PostDonation/post_donation.dart';
-import 'package:my_app/Pages/RequestGuidelines.dart';
 import 'package:my_app/Pages/splash/splash_screen.dart';
 import 'package:my_app/Pages/DonationDetails.dart';
 import 'package:my_app/Pages/Announcement/announcement.dart';
@@ -25,7 +24,6 @@ final Map<String, WidgetBuilder> routes = {
   PostDonationSummary.routeName: (context) => PostDonationSummary(),
   ListingDetails.routeName: (context) => ListingDetails(),
   Listings.routeName: (context) => Listings(),
-  RequestGuidelines.routeName: (context) => RequestGuidelines(),
   FrequentlyAsk.routeName: (context) => FrequentlyAsk(),
   RequestDetails.routeName: (context) => RequestDetails(),
   Verification.routeName: (context) => Verification()

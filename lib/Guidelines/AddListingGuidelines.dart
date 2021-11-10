@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/Models/Item.dart';
+import 'package:my_app/Pages/MyProfile/profile_page.dart';
 import 'package:my_app/Widgets/NavigationBar.dart';
 import 'package:my_app/Pages/PostDonation/post_donation.dart';
 
@@ -30,13 +31,16 @@ class _AddListingState extends State<AddListing> {
 
 Widget _navigationBar(context) {
   return CupertinoSliverNavigationBar(
-    largeTitle: Text('Add a Listing'),
-    trailing: GestureDetector(
+    largeTitle: Text('FAQs'),
+    leading: GestureDetector(
       onTap: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => PostDonation())),
-      child: Text(
-        'Next',
-        style: TextStyle(color: Colors.blue),
+          context, MaterialPageRoute(builder: (context) => ProfilePage())),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Text(
+          'Back',
+          style: TextStyle(color: Colors.blue),
+        ),
       ),
     ),
   );
@@ -139,6 +143,17 @@ List<Item> agreementItems = [
         'Beverages - Water, tea, coffee, soft drinks, juice drinks (alcoholic are prohibited).',
     expandedValue5:
         "Others - Other non-perishable foods that don't require refrigeration (e.g., condiments).",
+    expandedValue6: '',
+  ),
+  Item(
+    headerValue: 'All about MHTP',
+    expandedValue:
+        'Located at: Calabash Rd., Balic-Balic, 1008 Manila, Philippines',
+    expandedValue2:
+        'Working days and working hours: Tuesday to Sunday, 9:00AM to 6:00PM',
+    expandedValue3: '',
+    expandedValue4: '',
+    expandedValue5: '',
     expandedValue6: '',
   ),
 ];
